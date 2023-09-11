@@ -7,14 +7,15 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { MenuSidebarComponent } from './shared/menu.sidebar/menu.sidebar.component';
+
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     PageNotFoundComponent,
-    MenuSidebarComponent,
+    
     
   ],
   imports: [
