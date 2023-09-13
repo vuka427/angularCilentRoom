@@ -20,33 +20,33 @@
                             <form class="user" name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !username.valid}">
                                     <input type="text" class="form-control form-control-user"
-                                        id="exampleInputEmail" aria-describedby="emailHelp"
+                                        id="username" aria-describedby="emailHelp"
                                         placeholder="Tài khoản"
                                         name="username" [(ngModel)]="model.username" #username="ngModel" required
                                         >
-                                    <div *ngIf="f.submitted && !username.valid" class="help-block text-danger">Vui lòng nhập tên tài khoản !</div>
+                                    <div *ngIf="f.submitted && !username.valid " class="help-block text-danger">Vui lòng nhập tên tài khoản !</div>
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !username.valid}">
                                     <input type="email" class="form-control form-control-user"
-                                        id="exampleInputEmail" aria-describedby="emailHelp"
+                                        id="email" aria-describedby="emailHelp"
                                         placeholder="Địa chi email"
-                                        name="username" [(ngModel)]="model.username" #username="ngModel" required
+                                        name="email" [(ngModel)]="model.email" #email="ngModel" required
                                         >
-                                    <div *ngIf="f.submitted && !username.valid" class="help-block text-danger">Vui lòng nhập email !</div>
+                                    <div *ngIf="f.submitted && !email.valid" class="help-block text-danger">Vui lòng nhập email !</div>
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
                                     <input type="password" class="form-control form-control-user"
-                                        id="exampleInputPassword" placeholder="Mật khẩu"
+                                        id="password" placeholder="Mật khẩu"
                                         name="password" [(ngModel)]="model.password" #password="ngModel" required
                                         >
                                     <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập mật khẩu !</div>
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
                                     <input type="password" class="form-control form-control-user"
-                                        id="exampleInputPassword" placeholder="Nhập lại mật khẩu"
-                                        name="password" [(ngModel)]="model.password" #password="ngModel" required
+                                        id="repassword" placeholder="Nhập lại mật khẩu"
+                                        name="repassword" [(ngModel)]="model.repassword" #repassword="ngModel" required
                                         >
-                                    <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập lại mật khẩu !</div>
+                                    <div *ngIf="f.submitted && !repassword.valid" class="help-block text-danger">Vui lòng nhập lại mật khẩu !</div>
                                 </div>
                                 <hr>
                                 <div class="text-center">
@@ -54,38 +54,43 @@
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
                                     <input type="text" class="form-control form-control-user"
-                                        id="exampleInputPassword" placeholder="Họ và tên"
-                                        name="password" [(ngModel)]="model.password" #password="ngModel" required
+                                        id="fullname" placeholder="Họ và tên"
+                                        name="fullname" [(ngModel)]="model.fullname" #fullname="ngModel" required
                                         >
-                                    <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập Họ tên !</div>
+                                    <div *ngIf="f.submitted && !fullname.valid" class="help-block text-danger">Vui lòng nhập Họ tên !</div>
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
                                     <input type="date" class="form-control form-control-user"
-                                        id="exampleInputPassword" placeholder="Ngày sinh"
-                                        name="password" [(ngModel)]="model.password" #password="ngModel" required
+                                        id="dateofbirth" placeholder="Ngày sinh"
+                                        name="dateofbirth" [(ngModel)]="model.dateofbirth" #dateofbirth="ngModel" required
                                         >
-                                    <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập ngày sinh !</div>
+                                    <div *ngIf="f.submitted && !dateofbirth.valid" class="help-block text-danger">Vui lòng nhập ngày sinh !</div>
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
                                     <input type="text" class="form-control form-control-user"
-                                        id="exampleInputPassword" placeholder="Số căn cước công dân"
-                                        name="password" [(ngModel)]="model.password" #password="ngModel" required
+                                        id="cccd" placeholder="Số căn cước công dân"
+                                        name="cccd" [(ngModel)]="model.cccd" #cccd="ngModel" required minlength="12" maxlength="12"
                                         >
-                                    <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập số căn cước công dân !</div>
+                                    <div *ngIf="f.submitted && !cccd.valid" class="help-block text-danger">Vui lòng nhập số căn cước công dân !</div>
+                                    <div *ngIf="cccd.errors?.['minlength']" class="help-block text-danger">Số căn cước công dân phải đủ 12 ký tự!</div>
+                                    <div *ngIf="cccd.errors?.['maxlength']" class="help-block text-danger">Số căn cước công dân phải đủ 12 ký tự!</div>
+                                    
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
                                     <input type="text" class="form-control form-control-user"
-                                        id="exampleInputPassword" placeholder="Số điện thoại"
-                                        name="password" [(ngModel)]="model.password" #password="ngModel" required
+                                        id="phone" placeholder="Số điện thoại"
+                                        name="phone" [(ngModel)]="model.phone" #phone="ngModel" required maxlength="10" minlength="10" 
                                         >
-                                    <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập số điện thoại !</div>
+                                    <div *ngIf="f.submitted && !phone.valid" class="help-block text-danger">Vui lòng nhập số điện thoại !</div>
+                                    <div *ngIf="phone.errors?.['minlength']" class="help-block text-danger">Số điện thoại không hợp lệ!</div>
+                                    <div *ngIf="phone.errors?.['maxlength']" class="help-block text-danger">Số điện thoại không hợp lệ!!</div>
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
                                     <input type="text" class="form-control form-control-user"
-                                        id="exampleInputPassword" placeholder="Địa chỉ"
-                                        name="password" [(ngModel)]="model.password" #password="ngModel" required
+                                        id="address" placeholder="Địa chỉ"
+                                        name="address" [(ngModel)]="model.address" #address="ngModel" required
                                         >
-                                    <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập địa chỉ !</div>
+                                    <div *ngIf="f.submitted && !address.valid" class="help-block text-danger">Vui lòng nhập địa chỉ !</div>
                                 </div>
                                 <button [disabled]="loading" href="index.html" class="btn btn-primary btn-user btn-block">
                                     Đăng Ký

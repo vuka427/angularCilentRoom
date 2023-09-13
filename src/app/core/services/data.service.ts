@@ -77,9 +77,15 @@ export class DataService {
       this._notify.printErrorMessage(MessageContstants.FORBIDDEN);
       this._utility.navigateToLogin();
     }
+    if (error.status == 400) {
+      
+      this._notify.printErrorMessage("bị j đó rồi");
+      
+    }
     else {
       let errMsg = JSON.parse(error._body).Message;
       this._notify.printErrorMessage(errMsg);
+      
 
       return throwError(() => new Error(errMsg) );
     }
