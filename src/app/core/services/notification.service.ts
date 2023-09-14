@@ -42,7 +42,7 @@ private _notifier:any = alertify;
       // auto-dismiss wait time (in seconds)  
           delay:5,
       // default position
-          position:'top-right',
+          position:'top-center',
       // adds a close button to notifier messages
           closeButton: false,
       // provides the ability to rename notifier classes

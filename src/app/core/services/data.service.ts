@@ -7,6 +7,7 @@ import { MessageContstants } from '../common/message.constants';
 import { Observable,throwError } from 'rxjs';
 import { NotificationService } from './notification.service';
 import { UtilityService } from './utility.service';
+import { error } from 'jquery';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,8 @@ export class DataService {
     this.headers?.delete("Authorization");
     this.headers?.append("Authorization", "Bearer" + this._authen.getLoggedInUser()?.access_token);
 
-    return this._http.post<Response>(SystemConstants.BASE_API + uri, data, { headers: this.headers }).subscribe(this.extractData);
+    return this._http.post<Response>(SystemConstants.BASE_API + uri, data, { headers: this.headers })
+        
   }
 
   put(uri: string, data?: any) {
@@ -51,7 +53,14 @@ export class DataService {
     this.headers?.delete("Authorization");
     this.headers?.append("Authorization", "Bearer" + this._authen.getLoggedInUser()?.access_token);
 
-    return this._http.delete<Response>(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: this.headers }).subscribe(this.extractData);
+    return this._http.delete<Response>(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: this.headers })
+    .subscribe({
+      next: this.extractData,
+      error: err => { this._notify.printErrorMessage("bị j đó rồi"); console.log("sdfdsf");}
+       ,
+      complete: () => this._notify.printErrorMessage("ok rồi đó "),
+
+    });
   }
 
   postFile(uri: string, data?: string) {
@@ -65,6 +74,12 @@ export class DataService {
     let body = res.json();
     return body || {};
   }
+
+  private errorData(err: any) {
+    console.log(err.error);
+    return err.error.errors || {};
+  }
+ 
 
   public handleError(error: any ): any {
     if (error.status == 401) {

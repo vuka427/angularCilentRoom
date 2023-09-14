@@ -27,15 +27,22 @@ export class IndexComponent {
   login(): any{
     this.loading = true;
     this._authen.login(this.model.username,this.model.password).then( data => {
+      this._notify.printSuccessMessage("Đăng nhập thành công!");
        this._router.navigate([UrlConstants.HOME]);
       },
-      error=>{
-        console.log(" promise fail ");
-        this._notify.printErrorMessage(MessageContstants.SYSTEM_ERROR_MSG);
+      error =>{ 
+
+        if(error.status == 401){
+          this._notify.printErrorMessage("Tài khoản hoặc mật khẩu không đúng!");
+        }else{
+          console.log(" promise fail ", error);
+          this._notify.printErrorMessage(MessageContstants.SYSTEM_ERROR_MSG);
+        }
+        
         this.loading = false;
       }
     );
     
-  }
+  } 
 
 }
