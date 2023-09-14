@@ -8,14 +8,6 @@
       "submenu": []
     },
     {
-      "title": "Người thuê trọ",
-      "parentLink": "/tenant",
-      "awesomeIcon":"fas fa-fw fa-wrench",
-      "type": "",
-      "menu": false,
-      "submenu": []
-    },
-    {
       "title": "Codepens",
       "parentLink": "",
       "awesomeIcon":"fas fa-fw fa-wrench",

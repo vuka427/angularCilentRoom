@@ -82,7 +82,7 @@ export class AuthenService {
         userData.username,
         userData.fullName,
         userData.email,
-        userData.avatar, userData.roles, userData.permissions);
+        userData.avatar, userData.roles, userData.permissions,userData.usertype);
     }
     else {
       return null;
