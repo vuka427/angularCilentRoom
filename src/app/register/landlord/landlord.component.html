@@ -83,7 +83,7 @@
                                         >
                                     <div *ngIf="f.submitted && !phone.valid" class="help-block text-danger">Vui lòng nhập số điện thoại !</div>
                                     <div *ngIf="phone.errors?.['minlength']" class="help-block text-danger">Số điện thoại không hợp lệ!</div>
-                                    <div *ngIf="phone.errors?.['maxlength']" class="help-block text-danger">Số điện thoại không hợp lệ!!</div>
+                                    <div *ngIf="phone.errors?.['maxlength']" class="help-block text-danger">Số điện thoại không hợp lệ!</div>
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
                                     <input type="text" class="form-control form-control-user"

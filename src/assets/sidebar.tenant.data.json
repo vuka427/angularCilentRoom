@@ -1,0 +1,50 @@
+[
+   
+    {
+      "title": "Người thuê trọ",
+      "parentLink": "/tenant",
+      "awesomeIcon":"fas fa-fw fa-wrench",
+      "type": "",
+      "menu": false,
+      "submenu": []
+    },
+    {
+      "title": "Codepens",
+      "parentLink": "",
+      "awesomeIcon":"fas fa-fw fa-wrench",
+      "type": "",
+      "menu": true,
+      "submenu": [
+        {
+          "childtitle": "Link 1",
+          "link": "https://codepen.io/UX_Dev/live/5c88e99d0e9a03834dc2d113c24f9daa",
+          "islink": true
+        },
+        {
+          "childtitle": "Link 2",
+          "link": "https://codepen.io/UX_Dev/pen/LmxqKa",
+          "islink": true
+        }
+      ]
+    },
+    {
+      "title": "Navigation",
+      "parentLink": "",
+      "awesomeIcon":"fas fa-fw fa-wrench",
+      "type": "",
+      "menu": false,
+      "submenu": [
+        {
+          "childtitle": "Pure CSS Menu",
+          "link": "https://codepen.io/UX_Dev/pen/VMwxmQ",
+          "islink": true
+        },
+        {
+          "childtitle": "User Selection",
+          "link": "https://codepen.io/UX_Dev/live/ZXYLyV",
+          "islink": true
+        }
+      ]
+    }
+  ]
+  

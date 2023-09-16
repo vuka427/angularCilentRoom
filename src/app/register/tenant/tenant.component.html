@@ -13,43 +13,56 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4 font-weight-bold">Đăng ký</h1>
                             </div>
-                            <form class="user" name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate>
+                            <form class="user" name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate [appMatchPassword]="['password', 'confirmpassword']" >
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !username.valid}">
                                     <input type="text" class="form-control form-control-user"
                                         id="username" aria-describedby="emailHelp"
                                         placeholder="Tài khoản"
-                                        name="username" [(ngModel)]="model.username" #username="ngModel" required
+                                        name="username" [(ngModel)]="model.username" #username="ngModel" required appValidUsername minlength="3" maxlength="256"
                                         >
-                                    <div *ngIf="f.submitted && !username.valid " class="help-block text-danger">Vui lòng nhập tên tài khoản !</div>
+                                    <div *ngIf="f.submitted && !username.valid && username.errors?.['required'] " class="help-block text-danger">Vui lòng nhập tên tài khoản !</div>
+                                    <div *ngIf="username.errors?.['usernamevalid']" class="help-block text-danger">Tên tài khoản không hợp lệ !<br> Tài khoản hợp lệ chỉ chưa các ký tự a-z, A-Z, 0-9 </div>
+                                    <div *ngIf="username.errors?.['minlength']" class="help-block text-danger">Tên tài khoản tối thiểu 3 ký tự</div>
+                                    <div *ngIf="username.errors?.['maxlength']" class="help-block text-danger">Tên tài khoản tối đa 256 ký tự</div>
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
                                     <input type="text" class="form-control form-control-user"
                                         id="fullname" placeholder="Họ và tên"
-                                        name="fullname" [(ngModel)]="model.fullname" #fullname="ngModel" required
+                                        name="fullname" [(ngModel)]="model.fullname" #fullname="ngModel" required maxlength="256"
                                         >
                                     <div *ngIf="f.submitted && !fullname.valid" class="help-block text-danger">Vui lòng nhập Họ tên !</div>
+                                    <div *ngIf="username.errors?.['maxlength']" class="help-block text-danger">Họ tên tối đa 256 ký tự</div>
+
                                 </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !username.valid}">
+                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !email.valid}">
                                     <input type="email" class="form-control form-control-user"
                                         id="email" aria-describedby="emailHelp"
                                         placeholder="Địa chi email"
-                                        name="email" [(ngModel)]="model.email" #email="ngModel" required
+                                        name="email" [(ngModel)]="model.email" #email="ngModel" required appValidEmail
                                         >
                                     <div *ngIf="f.submitted && !email.valid" class="help-block text-danger">Vui lòng nhập email !</div>
+                                    <div *ngIf="email.errors?.['emailvalid']" class="help-block text-danger">Địa chỉ email không hợp lệ !</div>
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
                                     <input type="password" class="form-control form-control-user"
                                         id="password" placeholder="Mật khẩu"
-                                        name="password" [(ngModel)]="model.password" #password="ngModel" required
+                                        name="password" [(ngModel)]="model.password" #password="ngModel" required appValidPassword minlength="6" maxlength="50"
                                         >
                                     <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập mật khẩu !</div>
+                                    <div *ngIf="password.errors?.['minlength']" class="help-block text-danger">Mật khẩu tối thiểu 6 ký tự</div>
+                                    <div *ngIf="password.errors?.['maxlength']" class="help-block text-danger">Mật khẩu tối đa 50 ký tự</div>
+                                    <div *ngIf="password.errors?.['passwordvalid']" class="help-block text-danger">
+                                        Mật khẩu phải chứa ít nhất một chữ số, chữ hoa, chữ thường và ký tự đặc biệt (@$!%*?&)
+                                    </div>
+                                    
                                 </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
+                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !confirmpassword.valid}">
                                     <input type="password" class="form-control form-control-user"
-                                        id="repassword" placeholder="Nhập lại mật khẩu"
-                                        name="repassword" [(ngModel)]="model.repassword" #repassword="ngModel" required
+                                        id="confirmpassword" placeholder="Nhập lại mật khẩu"
+                                        name="confirmpassword" [(ngModel)]="model.confirmpassword" #confirmpassword="ngModel" required 
                                         >
-                                    <div *ngIf="f.submitted && !repassword.valid" class="help-block text-danger">Vui lòng nhập lại mật khẩu !</div>
+                                    <div *ngIf="f.submitted && !confirmpassword.valid" class="help-block text-danger">Vui lòng nhập lại mật khẩu !</div>
+                                    <div *ngIf="confirmpassword.errors?.['matching']" class="help-block text-danger">Mật khẩu không khớp !</div>
                                 </div>
                               
                                 <button [disabled]="loading" href="index.html" class="btn btn-primary btn-user btn-block">

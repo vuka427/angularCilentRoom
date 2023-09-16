@@ -7,6 +7,10 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ValidUsernameDirective } from './shared/validation/valid.username.directive';
+import { ValidEmailDirective } from './shared/validation/valid.email.directive';
+import { ValidPasswordDirective } from './shared/validation/valid.password.directive';
+import { ValidMatchpasswordDirective } from './shared/validation/valid.matchpassword.directive';
 
 
 
@@ -14,7 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
-    PageNotFoundComponent,
+    PageNotFoundComponent
+    
     
     
   ],
