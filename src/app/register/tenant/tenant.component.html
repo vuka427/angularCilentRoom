@@ -11,9 +11,13 @@
                     <div class="card border-0 shadow-lg col-lg-6  ">
                         <div class="card-body p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4 font-weight-bold">Đăng ký</h1>
+                                <h4 class="h4 text-gray-900 mb-4 font-weight-bold">Đăng ký tài khoản thuê trọ</h4>
                             </div>
+                            <hr>
                             <form class="user" name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate [appMatchPassword]="['password', 'confirmpassword']" >
+                                <div class="text-primary">
+                                    <h6 class="h6 font-weight-bold">Tên tài khoản<sup class="text-danger">(*)</sup></h6>
+                                </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !username.valid}">
                                     <input type="text" class="form-control form-control-user"
                                         id="username" aria-describedby="emailHelp"
@@ -25,6 +29,9 @@
                                     <div *ngIf="username.errors?.['minlength']" class="help-block text-danger">Tên tài khoản tối thiểu 3 ký tự</div>
                                     <div *ngIf="username.errors?.['maxlength']" class="help-block text-danger">Tên tài khoản tối đa 256 ký tự</div>
                                 </div>
+                                <div class="text-primary">
+                                    <h6 class="h6 font-weight-bold">Họ tên<sup class="text-danger">(*)</sup></h6>
+                                </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
                                     <input type="text" class="form-control form-control-user"
                                         id="fullname" placeholder="Họ và tên"
@@ -33,6 +40,9 @@
                                     <div *ngIf="f.submitted && !fullname.valid" class="help-block text-danger">Vui lòng nhập Họ tên !</div>
                                     <div *ngIf="username.errors?.['maxlength']" class="help-block text-danger">Họ tên tối đa 256 ký tự</div>
 
+                                </div>
+                                <div class="text-primary">
+                                    <h6 class="h6 font-weight-bold">Email<sup class="text-danger">(*)</sup></h6>
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !email.valid}">
                                     <input type="email" class="form-control form-control-user"
@@ -43,11 +53,22 @@
                                     <div *ngIf="f.submitted && !email.valid" class="help-block text-danger">Vui lòng nhập email !</div>
                                     <div *ngIf="email.errors?.['emailvalid']" class="help-block text-danger">Địa chỉ email không hợp lệ !</div>
                                 </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
-                                    <input type="password" class="form-control form-control-user"
+                                <div class="text-primary">
+                                    <h6 class="h6 font-weight-bold">Mật khẩu<sup class="text-danger">(*)</sup></h6>
+                                </div>
+                                <div class="form-group position-relative" [ngClass]="{'has-error':f.submitted && !password.valid}">
+                                    <input [type]="fieldTextType ? 'text' : 'password'" class="form-control form-control-user"
                                         id="password" placeholder="Mật khẩu"
                                         name="password" [(ngModel)]="model.password" #password="ngModel" required appValidPassword minlength="6" maxlength="50"
                                         >
+                                        <span class="showpaswdbtn ">
+                                            <i class="fa"
+                                            [ngClass]="{
+                                              'fa-eye-slash': !fieldTextType,
+                                              'fa-eye': fieldTextType
+                                            }"
+                                            (click)="toggleFieldTextType()"></i>
+                                        </span>
                                     <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập mật khẩu !</div>
                                     <div *ngIf="password.errors?.['minlength']" class="help-block text-danger">Mật khẩu tối thiểu 6 ký tự</div>
                                     <div *ngIf="password.errors?.['maxlength']" class="help-block text-danger">Mật khẩu tối đa 50 ký tự</div>
@@ -56,16 +77,27 @@
                                     </div>
                                     
                                 </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !confirmpassword.valid}">
-                                    <input type="password" class="form-control form-control-user"
+                                <div class="text-primary">
+                                    <h6 class=" font-weight-bold">Nhập lại mật khẩu<sup class="text-danger">(*)</sup></h6>
+                                </div>
+                                <div class="form-group position-relative" [ngClass]="{'has-error':f.submitted && !confirmpassword.valid}">
+                                    <input [type]="fieldTextType ? 'text' : 'password'" class="form-control form-control-user"
                                         id="confirmpassword" placeholder="Nhập lại mật khẩu"
                                         name="confirmpassword" [(ngModel)]="model.confirmpassword" #confirmpassword="ngModel" required 
                                         >
+                                        <span class="showpaswdbtn ">
+                                            <i class="fa"
+                                            [ngClass]="{
+                                              'fa-eye-slash': !fieldTextType,
+                                              'fa-eye': fieldTextType
+                                            }"
+                                            (click)="toggleFieldTextType()"></i>
+                                        </span>
                                     <div *ngIf="f.submitted && !confirmpassword.valid" class="help-block text-danger">Vui lòng nhập lại mật khẩu !</div>
                                     <div *ngIf="confirmpassword.errors?.['matching']" class="help-block text-danger">Mật khẩu không khớp !</div>
                                 </div>
                               
-                                <button [disabled]="loading" href="index.html" class="btn btn-primary btn-user btn-block">
+                                <button [disabled]="loading" href="index.html" class="btn btn-primary btn-user btn-block font-weight-bold">
                                     Đăng Ký
                                 </button>
                                 <img class="text-center" *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="

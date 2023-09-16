@@ -11,6 +11,10 @@ import { ValidUsernameDirective } from './shared/validation/valid.username.direc
 import { ValidEmailDirective } from './shared/validation/valid.email.directive';
 import { ValidPasswordDirective } from './shared/validation/valid.password.directive';
 import { ValidMatchpasswordDirective } from './shared/validation/valid.matchpassword.directive';
+import { ValidPhoneDirective } from './shared/validation/valid.phone.directive';
+import { ValidCccdDirective } from './shared/validation/valid.cccd.directive';
+import { ValidDateofbirthDirective } from './shared/validation/valid.dateofbirth.directive';
+import { OnlyNumberDirective } from './shared/validation/only.number.directive';
 
 
 
@@ -18,7 +22,8 @@ import { ValidMatchpasswordDirective } from './shared/validation/valid.matchpass
 @NgModule({
   declarations: [
     AppComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+
     
     
     

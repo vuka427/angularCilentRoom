@@ -8,6 +8,10 @@ import { ValidUsernameDirective } from '../shared/validation/valid.username.dire
 import { ValidEmailDirective } from '../shared/validation/valid.email.directive';
 import { ValidPasswordDirective } from '../shared/validation/valid.password.directive';
 import { ValidMatchpasswordDirective } from '../shared/validation/valid.matchpassword.directive';
+import { ValidDateofbirthDirective } from '../shared/validation/valid.dateofbirth.directive';
+import { ValidCccdDirective } from '../shared/validation/valid.cccd.directive';
+import { ValidPhoneDirective } from '../shared/validation/valid.phone.directive';
+import { OnlyNumberDirective } from '../shared/validation/only.number.directive';
 
 
 @NgModule({
@@ -18,6 +22,10 @@ import { ValidMatchpasswordDirective } from '../shared/validation/valid.matchpas
     ValidEmailDirective,
     ValidPasswordDirective,
     ValidMatchpasswordDirective,
+    ValidPhoneDirective,
+    ValidCccdDirective,
+    ValidDateofbirthDirective,
+    OnlyNumberDirective,
   ],
   imports: [
     CommonModule,

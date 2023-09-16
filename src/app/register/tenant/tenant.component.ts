@@ -11,6 +11,7 @@ import { UtilityService } from 'src/app/core/services/utility.service';
 export class TenantComponent {
   loading = false;
   model: any = {};
+  fieldTextType: boolean =false;
 
   constructor(private _dataService : DataService, private _notify : NotificationService, private _utility: UtilityService){}
 
@@ -32,6 +33,11 @@ export class TenantComponent {
     console.log(err.error);
     this._notify.printErrorMessage("kjk");
     return err.error.errors || {};
+  }
+
+  
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
   }
 
 }

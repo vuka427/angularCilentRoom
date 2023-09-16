@@ -14,6 +14,9 @@
                                 <h1 class="h4 text-gray-900 mb-4">Đăng nhập</h1>
                             </div>
                             <form class="user" name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+                                <div class="text-primary">
+                                    <h6 class="h6 font-weight-bold">Tên tài khoản <sup class="text-danger">(*)</sup></h6>
+                                </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !username.valid}">
                                     <input type="email" class="form-control form-control-user"
                                         id="exampleInputEmail" aria-describedby="emailHelp"
@@ -22,11 +25,23 @@
                                         >
                                     <div *ngIf="f.submitted && !username.valid" class="help-block text-danger">Vui lòng nhập tài khoản !</div>
                                 </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
-                                    <input type="password" class="form-control form-control-user"
+                                <div class="text-primary">
+                                    <h6 class="h6 font-weight-bold">Mật khẩu<sup class="text-danger">(*)</sup></h6>
+                                </div>
+                                <div class="form-group position-relative" [ngClass]="{'has-error':f.submitted && !password.valid}">
+                                    <input [type]="fieldTextType ? 'text' : 'password'" class="form-control form-control-user "
                                         id="exampleInputPassword" placeholder="Mật khẩu"
                                         name="password" [(ngModel)]="model.password" #password="ngModel" required
                                         >
+                                    <span class="showpaswdbtn ">
+                                        <i class="fa"
+                                        [ngClass]="{
+                                          'fa-eye-slash': !fieldTextType,
+                                          'fa-eye': fieldTextType
+                                        }"
+                                        (click)="toggleFieldTextType()"></i>
+                                    </span>
+                                        
                                     <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập mật khẩu !</div>
                                 </div>
                                 <div class="form-group">
@@ -35,18 +50,12 @@
                                         <label class="custom-control-label" for="customCheck">Nhớ mật khẩu</label>
                                     </div>
                                 </div>
-                                <button [disabled]="loading" href="index.html" class="btn btn-primary btn-user btn-block">
+                                <button [disabled]="loading" href="index.html" class="btn btn-primary btn-user btn-block font-weight-bold">
                                     Đăng nhập
                                 </button>
                                 <img class="text-center" *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
                                 />
-                                <hr>
-                                <a href="index.html" class="btn btn-google btn-user btn-block">
-                                    <i class="fab fa-google fa-fw"></i> Đăng nhập với Google
-                                </a>
-                                <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                                    <i class="fab fa-facebook-f fa-fw"></i> Đăng nhập với Facebook
-                                </a>
+                               
                             </form>
                             <hr>
                             <div class="text-center">

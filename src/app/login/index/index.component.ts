@@ -14,6 +14,7 @@ import { Router } from '@angular/router'
 })
 export class IndexComponent {
   loading = false;
+  fieldTextType: boolean =false;
   model: any = {};
 
   constructor( 
@@ -42,7 +43,11 @@ export class IndexComponent {
         this.loading = false;
       }
     );
-    
   } 
+
+  toggleFieldTextType() {
+    this.fieldTextType = !this.fieldTextType;
+  }
+
 
 }
