@@ -1,48 +1,134 @@
 [
     {
-      "title": "Chủ trọ",
+      "title": "Thông tin chung",
       "parentLink": "/landlord",
-      "awesomeIcon":"fas fa-fw fa-wrench",
+      "awesomeIcon":"fas fa-sliders-h",
       "type": "",
       "menu": false,
       "submenu": []
     },
     {
-      "title": "Codepens",
+      "title": "Quản lý phòng",
       "parentLink": "",
-      "awesomeIcon":"fas fa-fw fa-wrench",
+      "awesomeIcon":"fas fa-home",
       "type": "",
       "menu": true,
       "submenu": [
         {
           "childtitle": "Link 1",
-          "link": "https://codepen.io/UX_Dev/live/5c88e99d0e9a03834dc2d113c24f9daa",
+          "link": "#",
           "islink": true
         },
         {
           "childtitle": "Link 2",
-          "link": "https://codepen.io/UX_Dev/pen/LmxqKa",
+          "link": "#",
           "islink": true
         }
       ]
     },
     {
-      "title": "Navigation",
+      "title": "Quản lý khách trọ",
       "parentLink": "",
-      "awesomeIcon":"fas fa-fw fa-wrench",
+      "awesomeIcon":"fas fa-user-friends",
       "type": "",
-      "menu": false,
+      "menu": true,
       "submenu": [
         {
-          "childtitle": "Pure CSS Menu",
-          "link": "https://codepen.io/UX_Dev/pen/VMwxmQ",
+          "childtitle": "Link 1",
+          "link": "#",
           "islink": true
         },
         {
-          "childtitle": "User Selection",
-          "link": "https://codepen.io/UX_Dev/live/ZXYLyV",
+          "childtitle": "Link 2",
+          "link": "#",
           "islink": true
         }
+      ]
+    },
+    {
+      "title": "Quản lý Điện nước",
+      "parentLink": "",
+      "awesomeIcon":"fas fa-charging-station",
+      "type": "",
+      "menu": true,
+      "submenu": [
+        {
+          "childtitle": "Link 1",
+          "link": "#",
+          "islink": true
+        },
+        {
+          "childtitle": "Link 2",
+          "link": "#",
+          "islink": true
+        }
+      ]
+    },
+    {
+      "title": "Quản lý giao dịch",
+      "parentLink": "",
+      "awesomeIcon":"fas fa-comments-dollar",
+      "type": "",
+      "menu": true,
+      "submenu": [
+        {
+          "childtitle": "Link 1",
+          "link": "#",
+          "islink": true
+        },
+        {
+          "childtitle": "Link 2",
+          "link": "#",
+          "islink": true
+        }
+      ]
+    },
+    {
+      "title": "Quản lý tin đăng",
+      "parentLink": "",
+      "awesomeIcon":"fas fa-tasks",
+      "type": "",
+      "menu": true,
+      "submenu": [
+        {
+          "childtitle": "Link 1",
+          "link": "#",
+          "islink": true
+        },
+        {
+          "childtitle": "Link 2",
+          "link": "#",
+          "islink": true
+        }
+      ]
+    },
+    {
+      "title": "Quản lý yêu cầu gớp ý",
+      "parentLink": "",
+      "awesomeIcon":"fas fa-comment-dots",
+      "type": "",
+      "menu": true,
+      "submenu": [
+        {
+          "childtitle": "Link 1",
+          "link": "#",
+          "islink": true
+        },
+        {
+          "childtitle": "Link 2",
+          "link": "#",
+          "islink": true
+        }
+      ]
+    },
+    {
+      "title": "Xem lịch sử gửi mail",
+      "parentLink": "#",
+      "awesomeIcon":"fas fa-mail-bulk",
+      "type": "",
+      "menu": false,
+      "submenu": [
+        
       ]
     }
   ]

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { LandlordRoutingModule } from './landlord-routing.module';
+import { ProfileComponent } from './profile/profile.component';
 
 
 
@@ -9,7 +10,7 @@ import { LandlordRoutingModule } from './landlord-routing.module';
 
 @NgModule({
   declarations: [
-    
+    ProfileComponent
   ],
   imports: [
     CommonModule,

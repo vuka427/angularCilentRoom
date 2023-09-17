@@ -32,7 +32,7 @@ export class DataService {
     this.headers?.delete("Authorization");
     this.headers?.append("Authorization", "Bearer" + this._authen.getLoggedInUser()?.access_token);
 
-    return this._http.get<Response>(SystemConstants.BASE_API + uri, { headers: this.headers }).subscribe(this.extractData);
+    return this._http.get<Response>(SystemConstants.BASE_API + uri, { headers: this.headers });
   }
 
   post(uri: string, data?: any) {

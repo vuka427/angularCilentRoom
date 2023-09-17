@@ -10,10 +10,40 @@ import { LoggedInUser } from '../core/domain/loggedin.user';
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements AfterContentInit {
+export class MainComponent implements AfterContentInit, OnInit {
 
-   public user? : LoggedInUser;
+  public user? : LoggedInUser;
+  public userTypeBg : string = 'bg-gradient-primary';
+  public profileLink : string = '';
+
+
+
   constructor(private elementRef: ElementRef,private _utility : UtilityService){
+    
+  }
+
+  ngOnInit(): void {
+    this.user = JSON.parse( localStorage.getItem(SystemConstants.CURRENT_USER)?? "" );
+    
+    switch (this.user?.usertype) {
+        case "landlord":
+            console.log("giao diện chủ trọ");
+            this.userTypeBg = "bg-gradient-primary" ;
+            this.profileLink = "/landlord/profile";
+            break;
+        case "tenant":
+            console.log("giao diện người thuê trọ");
+            this.userTypeBg = "bg-gradient-success";
+            this.profileLink = "/tenant/profile";
+            break;
+        case "admin":
+            console.log("giao diện admin");
+            this.userTypeBg = "bg-gradient-warning";
+            this.profileLink = "/admin/profile";
+            break;
+    }
+    
+
     
   }
 
@@ -26,8 +56,8 @@ export class MainComponent implements AfterContentInit {
     s.src = "../assets/js/sb-admin-2.min.js"
     this.elementRef.nativeElement.appendChild(s);
 
-    this.user = JSON.parse( localStorage.getItem(SystemConstants.CURRENT_USER)?? "" );
-    console.log(this.user);
+   
+    
   }
 
   public Logout(){
