@@ -11,7 +11,7 @@ export class LoggedInUser {
         this.usertype = usertype;
     }
 
-    public id?: string;
+    public userid?: string;
     public access_token: string;
     public username: string;
     public fullname: string;

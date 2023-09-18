@@ -20,13 +20,12 @@ export class LandlordComponent {
     this._dataService.post('/api/Auth/registerlandlord',this.model).subscribe({
       next: this.extractData,
       error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại"); this.errorData(err) } ,
-      complete: () => {this._notify.printSuccessMessage(" Đăng ký tài khoản thành công!"); this._utility.navigateToLogin();} ,
+      complete: () => {this._notify.printSuccessMessage("Đăng ký tài khoản thành công!"); this._utility.navigateToLogin();} ,
     });
     console.log('result');
   }
 
   private extractData(res: Response) {
-
     return {};
   }
 

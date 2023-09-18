@@ -25,21 +25,28 @@
                       <div class="form-group">
                           <div class="col-xs-6">
                               <label for="username"><h5>Tên tài khoản</h5></label>
-                              <input type="text" class="form-control form-control-user" name="username" id="username" p >
+                              <input type="text" class="form-control form-control-user" 
+                              name="username" id="username" 
+                              [(ngModel)]="userProfile.userName" disabled
+                               >
                           </div>
                       </div>
                       <div class="form-group">
                           
                           <div class="col-xs-6">
                             <label for="fullname"><h5>Họ tên</h5></label>
-                              <input type="text" class="form-control" name="fullname" id="fullname" placeholder="Họ tên" >
+                              <input type="text" class="form-control" name="fullname" id="fullname" placeholder="Họ tên"
+                              [(ngModel)]="userProfile.fullName"
+                               >
                           </div>
                       </div>
                       <div class="form-group">
                           
                         <div class="col-xs-6">
                             <label for="dateofbirth"><h5>Ngày sinh</h5></label>
-                            <input type="date" class="form-control" name="dateofbirth" id="dateofbirth" placeholder="Ngày sinh" >
+                            <input type="date" class="form-control" name="dateofbirth" id="dateofbirth" placeholder="Ngày sinh"
+                            [(ngModel)]="userProfile.dateOfBirth"
+                             >
                         </div>
                     </div>
           
@@ -47,27 +54,34 @@
                           
                           <div class="col-xs-6">
                               <label for="email"><h5>Email</h5></label>
-                              <input type="text" class="form-control" name="email" id="email" placeholder="địa chỉ email" >
+                              <input type="text" class="form-control" name="email" id="email" placeholder="địa chỉ email" 
+                              [(ngModel)]="userProfile.email"
+                              >
                           </div>
                       </div>
           
                       <div class="form-group">
                           <div class="col-xs-6">
                              <label for="phone"><h5>Số điện thoại</h5></label>
-                              <input type="text" class="form-control" name="phone" id="phone" placeholder="Số điện thoại" >
+                              <input type="text" class="form-control" name="phone" id="phone" placeholder="Số điện thoại" 
+                              [(ngModel)]="userProfile.phone"
+                              >
                           </div>
                       </div>
                       <div class="form-group">
                           <div class="col-xs-6">
                               <label for="cccd"><h5>Số căn cước công dân</h5></label>
-                              <input type="text" class="form-control" name="cccd" id="cccd" placeholder="Số căn cước công dân" >
+                              <input type="text" class="form-control" name="cccd" id="cccd" placeholder="Số căn cước công dân" 
+                              [(ngModel)]="userProfile.ccccd"
+                              >
                           </div>
                       </div>
                       <div class="form-group">
-                          
                           <div class="col-xs-6">
                               <label for="address"><h5>Địa chỉ</h5></label>
-                              <input type="address" class="form-control" id="address" placeholder="Địa chỉ" >
+                              <input type="text" class="form-control" name="address" id="address" placeholder="Địa chỉ" 
+                              [(ngModel)]="userProfile.address"
+                              >
                           </div>
                       </div>
                       <hr>

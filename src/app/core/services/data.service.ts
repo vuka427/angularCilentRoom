@@ -14,7 +14,7 @@ import { error } from 'jquery';
 })
 export class DataService {
 
-  private headers?: HttpHeaders;
+  
 
   constructor(
     private _http: HttpClient, 
@@ -27,33 +27,35 @@ export class DataService {
 
   }
 
-
   get(uri: string): any {
-    this.headers?.delete("Authorization");
-    this.headers?.append("Authorization", "Bearer" + this._authen.getLoggedInUser()?.access_token);
-
-    return this._http.get<Response>(SystemConstants.BASE_API + uri, { headers: this.headers });
+    const headers= new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
+    return this._http.get<Response>(SystemConstants.BASE_API + uri, { headers: headers });
   }
 
   post(uri: string, data?: any) {
-    this.headers?.delete("Authorization");
-    this.headers?.append("Authorization", "Bearer" + this._authen.getLoggedInUser()?.access_token);
+    const headers= new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
 
-    return this._http.post<Response>(SystemConstants.BASE_API + uri, data, { headers: this.headers })
+    return this._http.post<Response>(SystemConstants.BASE_API + uri, data, { headers: headers });
         
   }
 
   put(uri: string, data?: any) {
-    this.headers?.delete("Authorization");
-    this.headers?.append("Authorization", "Bearer" + this._authen.getLoggedInUser()?.access_token);
+    const headers= new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
 
-    return this._http.put<Response>(SystemConstants.BASE_API + uri, data, { headers: this.headers }).subscribe(this.extractData);
+    return this._http.put<Response>(SystemConstants.BASE_API + uri, data, { headers: headers }).subscribe(this.extractData);
   }
   delete(uri: string, key: string, id: string) {
-    this.headers?.delete("Authorization");
-    this.headers?.append("Authorization", "Bearer" + this._authen.getLoggedInUser()?.access_token);
+    const headers= new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
 
-    return this._http.delete<Response>(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: this.headers })
+    return this._http.delete<Response>(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: headers })
     .subscribe({
       next: this.extractData,
       error: err => { this._notify.printErrorMessage("bị j đó rồi"); console.log("sdfdsf");}
@@ -82,6 +84,8 @@ export class DataService {
  
 
   public handleError(error: any ): any {
+    console.log("call api có lỗi rồi");
+    console.log(error);
     if (error.status == 401) {
       localStorage.removeItem(SystemConstants.CURRENT_USER);
       this._notify.printErrorMessage(MessageContstants.LOGIN_AGAIN_MSG);
