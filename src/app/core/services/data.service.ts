@@ -32,13 +32,13 @@ export class DataService {
     .set('content-type', 'application/json')
     .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
     return this._http.get<Response>(SystemConstants.BASE_API + uri, { headers: headers });
+    
   }
 
   post(uri: string, data?: any) {
     const headers= new HttpHeaders()
     .set('content-type', 'application/json')
     .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
-
     return this._http.post<Response>(SystemConstants.BASE_API + uri, data, { headers: headers });
         
   }
@@ -65,11 +65,10 @@ export class DataService {
     });
   }
 
-  postFile(uri: string, data?: string) {
-    let postFileHeaders = new HttpHeaders();
-    postFileHeaders.delete("Authorization");
-    postFileHeaders.append("Authorization", "Bearer" + this._authen.getLoggedInUser()?.access_token);
-    return this._http.post<Response>(SystemConstants.BASE_API + uri, data, { headers: postFileHeaders }).subscribe(this.extractData);
+  postFile(uri: string, data: any) {
+    const headers= new HttpHeaders()
+    .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
+    return this._http.post<Response>(SystemConstants.BASE_API + uri, data, { headers: headers });
   }
 
   private extractData(res: Response) {
@@ -98,7 +97,7 @@ export class DataService {
     }
     if (error.status == 400) {
       
-      this._notify.printErrorMessage("bị j đó rồi");
+      this._notify.printErrorMessage("có lỗi xảy ra !");
       
     }
     else {
