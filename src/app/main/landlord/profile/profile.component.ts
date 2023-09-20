@@ -44,7 +44,6 @@ export class ProfileComponent implements OnInit  {
     this.loadData();
   }
  
-  
    loadData(): void{
 
     this.currentUser = JSON.parse( localStorage.getItem(SystemConstants.CURRENT_USER)?? "" );
@@ -53,15 +52,18 @@ export class ProfileComponent implements OnInit  {
     this._data.get('/api/User/getuserprofile?userid='+this.currentUser?.userid).subscribe({
     next: (res:Response)=>{
         this.userProfile = res ;
+        if(this.userProfile.avatarUrl != null){
+          this.fileName = this.userProfile.avatarUrl;
+          this.imageSrc = SystemConstants.BASE_API+"/contents/avatar/"+  this.userProfile.avatarUrl;
+        }
+          
         this.userProfile.dateOfBirth = this._datePipe.transform(this.userProfile.dateOfBirth, "yyyy-MM-dd");
-        this.userProfile.avatarUrl = "#";
-        console.log("user profile ", this.userProfile);
+        console.log("user profile", this.userProfile);
       },
       error: this._data.handleError,
       complete: () => {console.log("get user profile success !");} 
     });
   }
-
 
   public updateUserProfile(){
     this.loading = true;
@@ -83,24 +85,26 @@ export class ProfileComponent implements OnInit  {
 
  
   onFileSelected(event:any) {
-
-    const file:File = event.target.files[0];
+    this.currentUser = JSON.parse( localStorage.getItem(SystemConstants.CURRENT_USER)?? "" );
+    const file :File = event.target.files[0];
 
     if (file) {
 
       this.fileName = file;
       console.log (this.fileName);
-      const formData = new FormData();
 
       const reader = new FileReader();
       reader.onload = e => this.imageSrc = reader.result;
       reader.readAsDataURL(file);
 
-      formData.append("thumbnail", file);
+      
+      let formData:FormData = new FormData();
+    
+      formData.append('fileUpload', file);
 
-      this._data.postFile("/api/User/uploadavatar", formData).subscribe({
+      this._data.postFile("/api/User/uploadavatar?userid="+this.currentUser?.userid, formData ).subscribe({
         next: this.extractData,
-        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err);  } ,
+        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err);} ,
         complete: () => { this._notify.printSuccessMessage("Upload avatar thành công !");} ,
       });;
 

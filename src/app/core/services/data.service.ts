@@ -68,6 +68,8 @@ export class DataService {
   postFile(uri: string, data: any) {
     const headers= new HttpHeaders()
     .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
+    console.log("header",headers);
+    //headers.append('Accept', 'application/json');
     return this._http.post<Response>(SystemConstants.BASE_API + uri, data, { headers: headers });
   }
 

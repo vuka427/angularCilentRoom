@@ -11,6 +11,8 @@ import { ValidPhoneDirective } from 'src/app/shared/validation/valid.phone.direc
 import { ValidDateofbirthDirective } from 'src/app/shared/validation/valid.dateofbirth.directive';
 import { ValidCccdDirective } from 'src/app/shared/validation/valid.cccd.directive';
 import { OnlyNumberDirective } from 'src/app/shared/validation/only.number.directive';
+import { RegisterModule } from 'src/app/register/register.module';
+import { ValidationModule } from 'src/app/shared/validation/validation.module';
 
 
 
@@ -19,19 +21,14 @@ import { OnlyNumberDirective } from 'src/app/shared/validation/only.number.direc
 @NgModule({
   declarations: [
     ProfileComponent,
-    ValidUsernameDirective,
-    ValidEmailDirective,
-    ValidPasswordDirective,
-    ValidMatchpasswordDirective,
-    ValidPhoneDirective,
-    ValidCccdDirective,
-    ValidDateofbirthDirective,
-    OnlyNumberDirective,
+    
   ],
   imports: [
     CommonModule,
     LandlordRoutingModule,
-    FormsModule
+    FormsModule,
+    ValidationModule
   ]
+  
 })
 export class LandlordModule { }
