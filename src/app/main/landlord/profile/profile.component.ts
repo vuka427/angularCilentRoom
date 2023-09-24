@@ -49,12 +49,12 @@ export class ProfileComponent implements OnInit  {
     this.currentUser = JSON.parse( localStorage.getItem(SystemConstants.CURRENT_USER)?? "" );
     
 
-    this._data.get('/api/User/getuserprofile?userid='+this.currentUser?.userid).subscribe({
+    this._data.get('/api/user/getuserprofile?userid='+this.currentUser?.userid).subscribe({
     next: (res:Response)=>{
         this.userProfile = res ;
         if(this.userProfile.avatarUrl != null){
           this.fileName = this.userProfile.avatarUrl;
-          this.imageSrc = SystemConstants.BASE_API+"/contents/avatar/"+  this.userProfile.avatarUrl;
+          this.imageSrc = SystemConstants.BASE_API +  this.userProfile.avatarUrl;
         }
           
         this.userProfile.dateOfBirth = this._datePipe.transform(this.userProfile.dateOfBirth, "yyyy-MM-dd");
@@ -68,7 +68,7 @@ export class ProfileComponent implements OnInit  {
   public updateUserProfile(){
     this.loading = true;
     console.log("datasend",this.userProfile);
-    this._data.post('/api/User/updateuserprofile',this.userProfile).subscribe({
+    this._data.post('/api/user/updateuserprofile',this.userProfile).subscribe({
       next: this.extractData,
       error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err);  this.loading = false;} ,
       complete: () => { this._notify.printSuccessMessage("Cập nhật tài khoản thành công !"); this.loading = false;} ,

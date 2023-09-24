@@ -15,15 +15,21 @@ export class MainComponent implements AfterContentInit, OnInit {
   public user? : LoggedInUser;
   public userTypeBg : string = 'bg-gradient-primary';
   public profileLink : string = '';
+  public avatarUrl: string = "";
 
 
 
-  constructor(private elementRef: ElementRef,private _utility : UtilityService){
+  constructor(private elementRef: ElementRef, private _utility : UtilityService){
     
   }
 
   ngOnInit(): void {
     this.user = JSON.parse( localStorage.getItem(SystemConstants.CURRENT_USER)?? "" );
+    if(this.user?.avatar){
+      this.avatarUrl = SystemConstants.BASE_API + this.user?.avatar;
+      
+    }
+    
     
     switch (this.user?.usertype) {
         case "landlord":

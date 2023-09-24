@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
+import { DataTablesModule } from "angular-datatables";
 import { SystemConstants } from './core/common/system.constants';
 import { JwtModule } from "@auth0/angular-jwt";
 

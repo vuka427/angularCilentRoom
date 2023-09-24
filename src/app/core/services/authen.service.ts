@@ -26,7 +26,7 @@ export class AuthenService {
     headers.set('Content-Type', 'application/json');
     headers.set("cache-control", "no-cache");
     let promise = new Promise((resolve, reject) => {
-        this._http.post(SystemConstants.BASE_API + '/api/Auth/login',  bodyj, {headers: headers})
+        this._http.post(SystemConstants.BASE_API + '/api/auth/login',  bodyj, {headers: headers})
           .subscribe( {
             
             next: (response: any) => {

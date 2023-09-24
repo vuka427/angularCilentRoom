@@ -3,16 +3,17 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LandlordRoutingModule } from './landlord-routing.module';
 import { ProfileComponent } from './profile/profile.component';
-import { ValidUsernameDirective } from 'src/app/shared/validation/valid.username.directive';
-import { ValidEmailDirective } from 'src/app/shared/validation/valid.email.directive';
-import { ValidPasswordDirective } from 'src/app/shared/validation/valid.password.directive';
-import { ValidMatchpasswordDirective } from 'src/app/shared/validation/valid.matchpassword.directive';
-import { ValidPhoneDirective } from 'src/app/shared/validation/valid.phone.directive';
-import { ValidDateofbirthDirective } from 'src/app/shared/validation/valid.dateofbirth.directive';
-import { ValidCccdDirective } from 'src/app/shared/validation/valid.cccd.directive';
-import { OnlyNumberDirective } from 'src/app/shared/validation/only.number.directive';
-import { RegisterModule } from 'src/app/register/register.module';
 import { ValidationModule } from 'src/app/shared/validation/validation.module';
+import { RoomComponent } from './room/room.component';
+import { CustomerComponent } from './customer/customer.component';
+import { TransactComponent } from './transact/transact.component';
+import { FeedbackComponent } from './feedback/feedback.component';
+import { EmailhistoryComponent } from './emailhistory/emailhistory.component';
+
+import { UtilitesComponent } from './utilites/utilites.component';
+import { BranchComponent } from './room/branch/branch.component';
+import { AreaComponent } from './room/area/area.component';
+import { DataTablesModule } from 'angular-datatables';
 
 
 
@@ -21,13 +22,22 @@ import { ValidationModule } from 'src/app/shared/validation/validation.module';
 @NgModule({
   declarations: [
     ProfileComponent,
+    RoomComponent,
+    CustomerComponent,
+    TransactComponent,
+    FeedbackComponent,
+    EmailhistoryComponent,
+    UtilitesComponent,
+    BranchComponent,
+    AreaComponent,
     
   ],
   imports: [
     CommonModule,
     LandlordRoutingModule,
     FormsModule,
-    ValidationModule
+    ValidationModule,
+    DataTablesModule
   ]
   
 })

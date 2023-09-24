@@ -8,6 +8,7 @@ import { Observable,throwError } from 'rxjs';
 import { NotificationService } from './notification.service';
 import { UtilityService } from './utility.service';
 import { error } from 'jquery';
+import { DataTablesResponse } from '../domain/datatable/datatable.response';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,14 @@ export class DataService {
     .set('content-type', 'application/json')
     .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
     return this._http.post<Response>(SystemConstants.BASE_API + uri, data, { headers: headers });
+        
+  }
+
+  postForDataTable(uri: string, data?: any) {
+    const headers= new HttpHeaders()
+    .set('content-type', 'application/json')
+    .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
+    return this._http.post<DataTablesResponse>(SystemConstants.BASE_API + uri, data, { headers: headers });
         
   }
 
@@ -89,7 +98,7 @@ export class DataService {
     console.log(error);
     if (error.status == 401) {
       localStorage.removeItem(SystemConstants.CURRENT_USER);
-      this._notify.printErrorMessage(MessageContstants.LOGIN_AGAIN_MSG);
+      //this._notify.printErrorMessage(MessageContstants.LOGIN_AGAIN_MSG);
       this._utility.navigateToLogin();
     }
     else if (error.status == 403) {

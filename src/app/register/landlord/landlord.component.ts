@@ -17,7 +17,7 @@ export class LandlordComponent {
   constructor(private _dataService : DataService, private _notify : NotificationService, private _utility: UtilityService){}
 
   public register(){
-    this._dataService.post('/api/Auth/registerlandlord',this.model).subscribe({
+    this._dataService.post('/api/auth/registerlandlord',this.model).subscribe({
       next: this.extractData,
       error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại"); this.errorData(err) } ,
       complete: () => {this._notify.printSuccessMessage("Đăng ký tài khoản thành công!"); this._utility.navigateToLogin();} ,
