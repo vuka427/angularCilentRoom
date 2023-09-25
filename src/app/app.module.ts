@@ -20,9 +20,6 @@ export function tokenGetter() {
     AppComponent,
     PageNotFoundComponent,
 
-    
-    
-    
   ],
   imports: [
     BrowserModule,

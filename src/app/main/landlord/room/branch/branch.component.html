@@ -1,5 +1,157 @@
-<p>branch works!</p>
+<div  [ngStyle]="{'display': styleTable}" >
+    <button class="btn btn-primary" (click)="CreateOn()" >Thêm nhà trọ</button>
+    <hr>
 
-<table datatable [dtOptions]="dtOptions" class="row-border hover">
-    
-</table>
+    <table  datatable [dtOptions]="dtOptions" class="row-border hover"></table>
+
+</div>
+
+
+
+
+<div *ngIf="displayCreate"  id="create-branch-page"  class="container-fluid justify-content-center  bg-white p-0 m-0">
+    <div id="error-message"></div>
+    <div class="row  justify-content-center m-0">
+        <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 card p-0 shadow border ">
+            <div class="card-header form-header p-0 ">
+                <h4 class="text-center font-weight-bold m-3 ">Thêm nhà trọ</h4>
+            </div>
+            <div class="card-body">
+                <form class="form" name="form" (ngSubmit)="f.form.valid " #f="ngForm">
+                    <div class="text-center">
+                        <h6 class=" text-primary" >Thông tin chung</h6>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="branchname"><h5>Tên nhà trọ<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="text" class="form-control form-control-user"  placeholder="Tên nhà trọ"
+                            name="branchname" id="branchname" 
+                             >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="internalregulation"><h5>Kiểu nhà trọ<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="text" class="form-control" name="internalregulation" id="internalregulation" placeholder="Kiểu nhà trọ" 
+                             required  
+                            >
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                          <label for="description"><h5>Mô tả</h5></label>
+                            <input type="text" class="form-control" name="description" id="description" placeholder="Mô tả"
+                              required
+                             >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="internalregulation"><h5>Quy định nhà trọ<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="text" class="form-control" name="internalregulation" id="internalregulation" placeholder="Quy định nhà trọ" 
+                             required  
+                            >
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h6 class=" text-primary" >Thông tin địa chỉ</h6>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <div *ngIf="vietnamdata != []" class="col-xs-6">
+                            <label for="description"><h5>Tỉnh thành</h5></label>
+                             <select class="form-control" (change)="setDistrict($event)">
+                              <option *ngFor="let data of vietnamdata" > {{data.Name}} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div *ngIf="vietnamdata != []" class="col-xs-6">
+                            <label for="description"><h5>Quận, huyện</h5></label>
+                            <select class="form-control" (change)="setWard($event)">
+                              <option *ngFor="let data of District" > {{data.Name}} </option>
+                            </select>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div *ngIf="vietnamdata != []" class="col-xs-6">
+                            <label for="description"><h5>Xã, phường</h5></label>
+                            <select class="form-control" >
+                              <option *ngFor="let data of Wards" > {{data.Name}} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-xs-6">
+                          <label for="address"><h5>Số nhà, đường<sup class="text-danger">(*)</sup></h5></label>
+                          <input type="text" class="form-control" name="address" id="address" placeholder="Địa chỉ"
+                          required 
+                           >
+                      </div>
+                    </div>
+                 
+
+                    <div class="text-center">
+                        <h6 class="text-primary " >Thông tin dịch vụ</h6>
+                    </div>
+                    <hr>
+        
+                    <div class="form-group">
+                        
+                        <div class="col-xs-6">
+                            <label for="electricitycost"><h5>Giá điện<sup class="text-danger">(*)</sup><sub>(vnđ/kWh)</sub></h5></label>
+                            <input type="text" class="form-control" name="electricitycost" id="electricitycost" 
+                            placeholder="Giá điện" 
+                            >
+                        </div>
+                    </div>
+        
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                           <label for="watercost"><h5>Giá nước<sup class="text-danger">(*)</sup><sub>(vnđ/m<sup>3</sup>)</sub></h5></label>
+                            <input type="text" class="form-control" name="watercost" id="watercost" placeholder="Giá nước" 
+                            required  appOnlyNumber
+                            >
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="garbagecf"><h5>Tiền đổ rác<sup class="text-danger">(*)</sup><sub>(vnđ/tháng)</sub></h5></label>
+                            <input type="text" class="form-control" name="garbagecf" id="garbagecf" placeholder="Tiền đổ rác" 
+                             required  appOnlyNumber
+                            >
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="internetcost"><h5>Tiền Internet/wifi<sup class="text-danger">(*)</sup><sub>(vnđ/tháng)</sub></h5></label>
+                            <input type="text" class="form-control" name="internetcost" id="internetcost" placeholder="Internet/wifi" 
+                             required  appOnlyNumber
+                            >
+
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="mutibleservice">
+
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                         <div class="col-xs-12">
+                            <input type="submit" class="btn btn-primary" value="Thêm">
+                            <button type="button" class="btn btn-outline-primary ml-2" (click)="CreateOff()" >Hủy</button>
+                          </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

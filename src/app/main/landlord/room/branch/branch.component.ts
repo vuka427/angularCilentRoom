@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { DiagioihanhchinhService } from 'src/app/core/services/diagioihanhchinh.service';
 @Component({
   selector: 'app-branch',
   templateUrl: './branch.component.html',
@@ -10,13 +11,23 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 export class BranchComponent implements OnInit {
 
   dtOptions: DataTables.Settings = {};
+  public displayCreate :boolean = false;
+  public styleTable: string = "block";
+
+  public vietnamdata : any[] =[];
+  public District: any[] =[];
+  public Wards: any[] =[];
 
 constructor(
   private _http : HttpClient,
   private _data : DataService,
-  private _notify : NotificationService
+  private _notify : NotificationService,
+  private _diagioi : DiagioihanhchinhService
 ){
 
+  this._diagioi.getdata().subscribe((res) => {
+       this.vietnamdata = res;
+    });;
 }
 
   
@@ -38,7 +49,7 @@ constructor(
                   data: resp.data
                 });
               },
-              error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại"); console.log("error=> ", err)} ,
+              error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại"); this._data.handleError(err)} ,
               
             });
            
@@ -54,8 +65,30 @@ constructor(
         data: 'lastName'
       }]
     };
+
+   
   }
  
+  CreateOn(){
+    this.displayCreate = true;
+    this.styleTable = "none";
+  }
+
+  CreateOff(){
+    this.displayCreate = false;
+    this.styleTable = "block";
+  }
+
+  public setDistrict(event: any): void{
+    
+    console.log(event.target.value);
+    this.District = this.vietnamdata.find(data => data.Name == event.target.value).Districts;
+  }
+
+  public setWard(event: any): void{
+    console.log(event.target.value);
+    this.Wards = this.District.find(data => data.Name == event.target.value).Wards;
+  }
 
 
 }

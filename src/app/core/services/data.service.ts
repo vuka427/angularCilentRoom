@@ -28,9 +28,9 @@ export class DataService {
 
   }
 
-  get(uri: string): any {
+  get(uri: string) {
     const headers= new HttpHeaders()
-    .set('content-type', 'application/json')
+    
     .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
     return this._http.get<Response>(SystemConstants.BASE_API + uri, { headers: headers });
     
