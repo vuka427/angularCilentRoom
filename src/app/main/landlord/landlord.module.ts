@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LandlordRoutingModule } from './landlord-routing.module';
 import { ProfileComponent } from './profile/profile.component';
 import { ValidationModule } from 'src/app/shared/validation/validation.module';
@@ -36,6 +36,7 @@ import { DataTablesModule } from 'angular-datatables';
     CommonModule,
     LandlordRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     ValidationModule,
     DataTablesModule
   ]
