@@ -59,19 +59,14 @@ export class DataService {
 
     return this._http.put<Response>(SystemConstants.BASE_API + uri, data, { headers: headers }).subscribe(this.extractData);
   }
+  
   delete(uri: string, key: string, id: string) {
     const headers= new HttpHeaders()
     .set('content-type', 'application/json')
     .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
 
-    return this._http.delete<Response>(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: headers })
-    .subscribe({
-      next: this.extractData,
-      error: err => { this._notify.printErrorMessage("bị j đó rồi"); console.log("sdfdsf");}
-       ,
-      complete: () => this._notify.printErrorMessage("ok rồi đó "),
-
-    });
+    return this._http.delete<Response>(SystemConstants.BASE_API + uri + "/?" + key + "=" + id, { headers: headers });
+    
   }
 
   postFile(uri: string, data: any) {

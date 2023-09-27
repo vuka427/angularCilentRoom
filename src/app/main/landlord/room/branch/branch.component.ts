@@ -6,6 +6,7 @@ import { DiagioihanhchinhService } from 'src/app/core/services/diagioihanhchinh.
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import {DataTableLanguage} from '../../../../core/domain/datatable/datatable.language';
 
 @Component({
   selector: 'app-branch',
@@ -72,6 +73,7 @@ constructor(
             });
            
       },
+      language: DataTableLanguage.vietnam_datatables,
       columns: [{
           title: 'ID',
           data: 'id'
@@ -200,7 +202,13 @@ constructor(
 
   public deleteBranch(Id :number){
    
-    this.rerender();
+   this._data.delete('/api/branch/delete','branchid',Id.toString()).subscribe({
+    next: () => {},
+    error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại"); console.log("122");},
+    complete: () => {this._notify.printSuccessMessage("Xóa nhà trọ thành công"); this.rerender();},
+
+  });
+
 
     
   }
