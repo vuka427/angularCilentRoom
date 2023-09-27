@@ -1,5 +1,6 @@
 <div  [ngStyle]="{'display': styleTable}" >
     <button class="btn btn-primary" (click)="CreateOn()" >Thêm nhà trọ</button>
+    <button class="btn btn-primary" (click)="rerender()" >Thêm </button>
     <hr>
 
     <table  datatable [dtOptions]="dtOptions" class="row-border hover"></table>
@@ -9,7 +10,7 @@
 
 
 
-<div *ngIf="displayCreate"  id="create-branch-page"  class="container-fluid justify-content-center  bg-white p-0 m-0">
+<div *ngIf="displayCreate"  id="create-branch-page"  class="container-fluid justify-content-center  p-0 m-0 mb-3">
     <div id="error-message"></div>
     <div class="row  justify-content-center m-0">
         <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 card p-0 shadow border ">
@@ -29,8 +30,8 @@
                             name="branchname" id="branchname"  formControlName="branchname"
                              >
                         </div>
-                        <div  *ngIf="frbranch.invalid && frbranch.controls['branchname']?.hasError('required')
-                        && frbranch.controls['branchname']?.touched" class="help-block text-danger"
+                        <div  *ngIf=" frbranch.controls['branchname']?.hasError('required')
+                        && ( frbranch.controls['branchname']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                         >Vui lòng nhập tên nhà trọ !</div>
                     </div>
                     <div class="form-group">
@@ -38,13 +39,13 @@
                             <label for="internalregulation"><h5>Kiểu nhà trọ<sup class="text-danger">(*)</sup></h5></label>
                             <div>
                                 <span>
-                                    <input type="radio" id="house-row" name="housetype" value="0" checked class="mr-1"
+                                    <input type="radio" id="house-row" name="housetype" value="row" checked class="mr-1"
                                     formControlName="housetype"
                                     >
                                     <label for="house-row" class="mr-3" >Nhà dãy</label>
                                 </span>
                                 <span>
-                                    <input type="radio" id="house-floor" name="housetype" value="1" class="mr-1"  
+                                    <input type="radio" id="house-floor" name="housetype" value="floor" class="mr-1"  
                                     formControlName="housetype"
                                     >
                                     <label for="house-floor" class="mr-3" >Nhà tầng</label>
@@ -52,7 +53,7 @@
                             
                             </div>
                             <div  *ngIf="frbranch.controls['housetype']?.hasError('required')
-                                && frbranch.controls['housetype']?.touched" class="help-block text-danger"
+                                && (frbranch.controls['housetype']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" class="help-block text-danger"
                                 >Vui lòng chọn kiểu nhà trọ !</div>
                             
                         </div>
@@ -85,7 +86,8 @@
                               <option *ngFor="let data of vietnamdata" [value]="data.Id"> {{data.Name}} </option>
                             </select>
                             <div  *ngIf="frbranch.controls['province']?.hasError('required')
-                                && frbranch.controls['province']?.touched" class="help-block text-danger"
+                                && (frbranch.controls['province']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted)) " 
+                                class="help-block text-danger"
                                 >Vui lòng chọn tỉnh thành !</div>
                         </div>
                     </div>
@@ -96,7 +98,8 @@
                               <option *ngFor="let data of District" [value]="data.Id" > {{data.Name}} </option>
                             </select>
                             <div  *ngIf="frbranch.controls['district']?.hasError('required')
-                                && frbranch.controls['district']?.touched" class="help-block text-danger"
+                                && (frbranch.controls['district']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))"
+                                class="help-block text-danger"
                                 >Vui lòng chọn quận, huyện !</div>
                                 
                         </div>
@@ -108,7 +111,8 @@
                               <option *ngFor="let data of Wards" [value]="data.Id"> {{data.Name}} </option>
                             </select>
                             <div  *ngIf="frbranch.controls['wards']?.hasError('required')
-                                && frbranch.controls['wards']?.touched" class="help-block text-danger"
+                                && (frbranch.controls['wards']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" 
+                                class="help-block text-danger"
                                 >Vui lòng chọn xã, phường !</div>
                         </div>
                         
@@ -121,7 +125,8 @@
                            >
                       </div>
                       <div  *ngIf="frbranch.controls['address']?.hasError('required')
-                            && frbranch.controls['address']?.touched" class="help-block text-danger"
+                            && (frbranch.controls['address']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted)) " 
+                            class="help-block text-danger"
                             >Vui lòng nhập số nhà, tên đường !</div>
                                
                     </div>
@@ -136,67 +141,75 @@
                         
                         <div class="col-xs-6">
                             <label for="electricitycost"><h5>Giá điện<sup class="text-danger">(*)</sup><sub>(vnđ/kWh)</sub></h5></label>
-                            <input type="text" class="form-control" name="electricitycost" id="electricitycost" 
-                            placeholder="Giá điện" appOnlyNumber formControlName="electricitycost"
+                            <input type="number" class="form-control" name="electricitycosts" id="electricitycosts" 
+                            placeholder="Giá điện" appOnlyNumber formControlName="electricitycosts"
                             >
                         </div>
-                        <div  *ngIf="frbranch.controls['electricitycost']?.hasError('required')
-                            && frbranch.controls['electricitycost']?.touched" class="help-block text-danger"
+                        <div  *ngIf="frbranch.controls['electricitycosts']?.hasError('required')
+                            && (frbranch.controls['electricitycosts']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" 
+                            class="help-block text-danger"
                             >Vui lòng nhập giá điện!</div>
                     </div>
         
                     <div class="form-group">
                         <div class="col-xs-6">
-                           <label for="watercost"><h5>Giá nước<sup class="text-danger">(*)</sup><sub>(vnđ/m<sup>3</sup>)</sub></h5></label>
-                            <input type="text" class="form-control" name="watercost" id="watercost" placeholder="Giá nước" 
-                            appOnlyNumber formControlName="watercost"
+                           <label for="watercosts"><h5>Giá nước<sup class="text-danger">(*)</sup><sub>(vnđ/m<sup>3</sup>)</sub></h5></label>
+                            <input type="number" class="form-control" name="watercosts" id="watercosts" placeholder="Giá nước" 
+                            appOnlyNumber formControlName="watercosts"
                             >
                         </div>
-                        <div  *ngIf="frbranch.controls['watercost']?.hasError('required')
-                            && frbranch.controls['watercost']?.touched" class="help-block text-danger"
+                        <div  *ngIf="frbranch.controls['watercosts']?.hasError('required')
+                            && (frbranch.controls['watercosts']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" 
+                            class="help-block text-danger"
                             >Vui lòng nhập giá nước !</div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="garbagecf"><h5>Tiền đổ rác<sup class="text-danger">(*)</sup><sub>(vnđ/tháng)</sub></h5></label>
-                            <input type="text" class="form-control" name="garbagecf" id="garbagecf" placeholder="Tiền đổ rác" 
-                             required  appOnlyNumber formControlName="garbagecf"
+                            <label for="garbagecolletionfee"><h5>Tiền đổ rác<sup class="text-danger">(*)</sup><sub>(vnđ/tháng)</sub></h5></label>
+                            <input type="number" class="form-control" name="garbagecolletionfee" id="garbagecolletionfee" placeholder="Tiền đổ rác" 
+                             required  appOnlyNumber formControlName="garbagecolletionfee"
                             >
                         </div>
-                        <div  *ngIf="frbranch.controls['garbagecf']?.hasError('required')
-                            && frbranch.controls['garbagecf']?.touched" class="help-block text-danger"
+                        <div  *ngIf="frbranch.controls['garbagecolletionfee']?.hasError('required')
+                            && (frbranch.controls['garbagecolletionfee']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" 
+                            class="help-block text-danger"
                             >Vui lòng nhập tiền đổ rác !</div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="internetcost"><h5>Tiền Internet/wifi<sup class="text-danger">(*)</sup><sub>(vnđ/tháng)</sub></h5></label>
-                            <input type="text" class="form-control" name="internetcost" id="internetcost" placeholder="Tiền Internet/wifi" 
-                             required  appOnlyNumber formControlName="internetcost"
+                            <label for="internetcosts"><h5>Tiền Internet/wifi<sup class="text-danger">(*)</sup><sub>(vnđ/tháng)</sub></h5></label>
+                            <input type="number" class="form-control" name="internetcosts" id="internetcost" placeholder="Tiền Internet/wifi" 
+                             required  appOnlyNumber formControlName="internetcosts"
                             >
                         </div>
-                        <div  *ngIf="frbranch.controls['internetcost']?.hasError('required')
-                            && frbranch.controls['internetcost']?.touched" class="help-block text-danger"
+                        <div  *ngIf="frbranch.controls['internetcosts']?.hasError('required')
+                            && (frbranch.controls['internetcosts']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" 
+                            class="help-block text-danger"
                             >Vui lòng nhập tiền internet/wifi !</div>
                     </div>
                     <ng-container formArrayName="services">
                         <div *ngFor="let _ of services.controls; index as i"  class="form-group">
-                            <label for=""><h5>Dịch vụ {{i+1}}</h5></label>
+                            <label for=""><h5>Dịch vụ {{i+1}} <button type="button" (click)="RemoveService(i)"  class="btn btn-sm btn-danger" >Xóa</button></h5> </label>
   
                           <ng-container [formGroupName]="i">
                             <div class="col-xs-6 mb-3">
-                                <label for=""><h5 class="h6" >Tên dịch vụ<sup class="text-danger"> (*)</sup></h5></label>
+                                <label for="">
+                                    <h5 class="h6" >Tên dịch vụ<sup class="text-danger"> (*)</sup> </h5>
+                                </label>
                                 <input type="text" class="form-control"  formControlName="name" placeholder="Tên dịch vụ" />
                                 <div  *ngIf="services.controls[i].get('name')?.hasError('required')
-                                    && services.controls[i].get('name')?.touched" class="help-block text-danger"
+                                    && (services.controls[i].get('name')?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" 
+                                    class="help-block text-danger"
                                     >Vui lòng nhập tên dịch vụ !</div>
                             </div>
                            
 
                             <div class="col-xs-6">
                                 <label for=""><h5 class="h6" >Giá dịch vụ<sup class="text-danger"> (*)</sup><sub>(vnđ/tháng)</sub></h5></label>
-                                <input type="text" class="form-control" formControlName="price" placeholder="Giá dịch vụ"/>
+                                <input type="number" class="form-control" formControlName="price" placeholder="Giá dịch vụ" appOnlyNumber/>
                                 <div  *ngIf="services.controls[i].get('price')?.hasError('required')
-                                    && services.controls[i].get('price')?.touched" class="help-block text-danger"
+                                    && (services.controls[i].get('price')?.touched|| (isValidFormSubmitted != null && !isValidFormSubmitted))" 
+                                    class="help-block text-danger"
                                     >Vui lòng nhập giá dịch vụ !</div>
                             </div>
                             
@@ -206,13 +219,9 @@
                     </ng-container>
 
 
-                    <div class="mutibleservice">
-
-                    </div>
-
                     <div class="form-group">
                         <div class="col-xs-6 text-center">
-                            <button class="btn btn-sm btn-primary" (click)="AddService()">+ Thêm dịch vụ</button>
+                            <button type="button" class="btn btn-sm btn-primary" (click)="AddService()">+ Thêm dịch vụ</button>
                         </div>
                     </div>
                     <hr>

@@ -1,22 +1,31 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit,  Renderer2, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { DiagioihanhchinhService } from 'src/app/core/services/diagioihanhchinh.service';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
+
 @Component({
   selector: 'app-branch',
   templateUrl: './branch.component.html',
   styleUrls: ['./branch.component.css']
 })
-export class BranchComponent implements OnInit {
+export class BranchComponent implements OnInit,OnDestroy, AfterViewInit {
 
+  @ViewChild(DataTableDirective, {static: false})
+  dtElement: DataTableDirective ;
+  datatableElement: any = DataTableDirective;
 
   dtOptions: DataTables.Settings = {};
+  dtTrigger: Subject<any> = new Subject<any>();
+
   public displayCreate :boolean = false;
   public styleTable: string = "block";
 
   public frbranch : FormGroup ;
+  public isValidFormSubmitted: boolean | null = null;
 
   public vietnamdata : any[] =[];
   public District: any[] =[];
@@ -29,13 +38,15 @@ constructor(
   private _data : DataService,
   private _notify : NotificationService,
   private _diagioi : DiagioihanhchinhService,
-  private _elementRef: ElementRef
+  private _elementRef: ElementRef,
+  private _render: Renderer2
 ){
 
   this._diagioi.getdata().subscribe((res) => {
        this.vietnamdata = res;
     });;
 }
+ 
 
   
   ngOnInit(): void {
@@ -62,40 +73,66 @@ constructor(
            
       },
       columns: [{
-        title: 'ID',
-        data: 'id'
-      }, {
-        title: 'First name',
-        data: 'firstName'
-      }, {
-        title: 'Last name',
-        data: 'lastName'
-      }]
+          title: 'ID',
+          data: 'id'
+        }, {
+          title: 'Tên nhà trọ',
+          data: 'branchName'
+        }, {
+          title: 'Mô tả',
+          data: 'description'
+        }, {
+          title: 'Địa chỉ',
+          data: 'address'
+        }, {
+          title: 'Tác vụ',
+          data: null,
+          defaultContent: '',
+          render: function (data: any, type: any,row: any, full: any) {
+            return '<button type="button" deletebtn branchid="'+row.id+'" class="btn btn-sm btn-danger" >Xóa </button>';
+          }
+        }
+      ]
     };
 
 
 
     this.frbranch = new FormGroup({
       branchname: new FormControl('',Validators.required),
-      housetype : new FormControl('',Validators.required),
+      housetype : new FormControl('row',Validators.required),
       description: new FormControl(''),
       internalregulation: new FormControl(''),
       province: new FormControl('',Validators.required),
       district: new FormControl('',Validators.required),
       wards: new FormControl('',Validators.required),
       address: new FormControl('',Validators.required),
-      electricitycost: new FormControl('',Validators.required),
-      watercost: new FormControl('',Validators.required),
-      garbagecf: new FormControl('',Validators.required),
-      internetcost: new FormControl('',Validators.required),
+      electricitycosts: new FormControl('',Validators.required),
+      watercosts: new FormControl('',Validators.required),
+      garbagecolletionfee: new FormControl('',Validators.required),
+      internetcosts: new FormControl('',Validators.required),
       services: new FormArray([])
-
-
 
     });
 
   }
+
+  ngAfterViewInit(): void {
+
+    this.dtTrigger.next('');
+
+    this._render.listen('document', 'click', (event) => {
+      if (event.target.hasAttribute("branchid") || event.target.hasAttribute("deletebtn") ) {
+        this.deleteBranch(event.target.getAttribute("branchid"))
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
+
   
+
   get branchname(){ return this.frbranch.get('branchname');}
 
 
@@ -123,7 +160,7 @@ constructor(
   }
 
   public AddService(){
-    console.log("sfsf");
+    console.log("add service");
     const group = new FormGroup({
       name: new FormControl('',Validators.required),
       price: new FormControl('',Validators.required)
@@ -131,7 +168,12 @@ constructor(
     
     let s = this.frbranch.get('services') as FormArray;
     s.push(group);
-    console.log("sfsf",s);
+  }
+  public RemoveService(index:number){
+    console.log("remove service");
+    
+    let s = this.frbranch.get('services') as FormArray;
+    s.removeAt(index);
   }
   get services() {
     return this.frbranch.get('services') as FormArray;
@@ -140,11 +182,40 @@ constructor(
 
   public onSubmit(){
     console.log('submit');
+    this.isValidFormSubmitted = false;
     if (this.frbranch.invalid) {
 			return;
 		}
-    console.log('submited');
+    this.isValidFormSubmitted = true;
+    console.log('submited',this.frbranch.value );
+    this._data.post('/api/branch/add',this.frbranch.value).subscribe(
+      {
+        next: res => { console.log("repone ", res);},
+        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err);},
+        complete: () => { this._notify.printSuccessMessage("Thêm nhà trọ thành công !"); this.CreateOff();},
+      }
+    );
+
   }
 
+  public deleteBranch(Id :number){
+   
+    this.rerender();
+
+    
+  }
+
+  public rerender(): void {
+    
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      //dtInstance.destroy();
+      dtInstance.ajax.reload(); 
+      // Call the dtTrigger to rerender again
+
+      this.dtTrigger.next('');
+      
+    });
+  }
 
 }
