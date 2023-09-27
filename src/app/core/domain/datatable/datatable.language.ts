@@ -7,9 +7,9 @@ export class DataTableLanguage {
       infoEmpty: "Danh sách rỗng.",
       infoFiltered: "(filtrado _MAX_ elementos total)",
       infoPostFix: "",
-      loadingRecords: "Cargando registros...",
-      zeroRecords: "No se encontraron registros",
-      emptyTable: "No hay datos disponibles en la tabla",
+      loadingRecords: "Dang tải...",
+      zeroRecords: "Danh sách rỗng",
+      emptyTable: "Danh sách rỗng",
       paginate: {
         first: "Trang đầu",
         previous: "Trang trước",

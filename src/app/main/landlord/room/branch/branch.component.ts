@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit,  Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit,  Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
@@ -7,6 +7,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import {DataTableLanguage} from '../../../../core/domain/datatable/datatable.language';
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-branch',
@@ -15,8 +16,10 @@ import {DataTableLanguage} from '../../../../core/domain/datatable/datatable.lan
 })
 export class BranchComponent implements OnInit,OnDestroy, AfterViewInit {
 
-  @ViewChild(DataTableDirective, {static: false})
-  dtElement: DataTableDirective ;
+  @ViewChild(DataTableDirective, {static: false}) dtElement: DataTableDirective ; 
+
+  @ViewChild('editModal') deleteModal : TemplateRef<any>; // Note: TemplateRef
+  
   datatableElement: any = DataTableDirective;
 
   dtOptions: DataTables.Settings = {};
@@ -32,7 +35,7 @@ export class BranchComponent implements OnInit,OnDestroy, AfterViewInit {
   public District: any[] =[];
   public Wards: any[] =[];
 
-
+  public deleteBranchId: Number;
 
 constructor(
   private _http : HttpClient,
@@ -40,7 +43,8 @@ constructor(
   private _notify : NotificationService,
   private _diagioi : DiagioihanhchinhService,
   private _elementRef: ElementRef,
-  private _render: Renderer2
+  private _render: Renderer2,
+  private _modalService: NgbModal
 ){
 
   this._diagioi.getdata().subscribe((res) => {
@@ -91,12 +95,11 @@ constructor(
           data: null,
           defaultContent: '',
           render: function (data: any, type: any,row: any, full: any) {
-            return '<button type="button" deletebtn branchid="'+row.id+'" class="btn btn-sm btn-danger" >Xóa </button>';
+            return '<button type="button" deletebtn branchid="'+row.id+'" class="btn btn-sm btn-danger"   >Xóa </button>';
           }
         }
       ]
     };
-
 
 
     this.frbranch = new FormGroup({
@@ -118,16 +121,27 @@ constructor(
 
   }
 
+
+
   ngAfterViewInit(): void {
 
     this.dtTrigger.next('');
 
     this._render.listen('document', 'click', (event) => {
-      if (event.target.hasAttribute("branchid") || event.target.hasAttribute("deletebtn") ) {
-        this.deleteBranch(event.target.getAttribute("branchid"))
+      if (event.target.hasAttribute("branchid") || event.target.hasAttribute("deletebtn")) {
+        //this.deleteBranch(event.target.getAttribute("branchid"))
+        
+        this.deleteBranchId = event.target.getAttribute("branchid");
+        this.openModal();
+       
       }
     });
   }
+
+  openModal(){
+    this._modalService.open(this.deleteModal);
+  }
+
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
@@ -194,15 +208,15 @@ constructor(
       {
         next: res => { console.log("repone ", res);},
         error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err);},
-        complete: () => { this._notify.printSuccessMessage("Thêm nhà trọ thành công !"); this.CreateOff();},
+        complete: () => { this._notify.printSuccessMessage("Thêm nhà trọ thành công !"); this.CreateOff(); this.rerender();},
       }
     );
 
   }
 
-  public deleteBranch(Id :number){
+  public deleteBranch(){
    
-   this._data.delete('/api/branch/delete','branchid',Id.toString()).subscribe({
+   this._data.delete('/api/branch/delete','branchid',this.deleteBranchId.toString()).subscribe({
     next: () => {},
     error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại"); console.log("122");},
     complete: () => {this._notify.printSuccessMessage("Xóa nhà trọ thành công"); this.rerender();},
