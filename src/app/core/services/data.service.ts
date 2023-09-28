@@ -102,9 +102,7 @@ export class DataService {
       this._utility.navigateToLogin();
     }
     if (error.status == 400) {
-      
-      this._notify.printErrorMessage("có lỗi xảy ra !");
-      
+      this._notify.printErrorMessage(error.error.message);
     }
     else {
       let errMsg = JSON.parse(error._body).Message;

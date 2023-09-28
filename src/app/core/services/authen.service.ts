@@ -13,13 +13,10 @@ export class AuthenService {
   constructor(private _http: HttpClient) { }
 
   login(username: string, password:string){
-    let body = "Username="+ encodeURIComponent(username) +
-                "&Password="+ encodeURIComponent(password)+
-                "&grant_type=password";
-
+    
     let bodyj = {
-      Username : encodeURIComponent(username),
-      Password : encodeURIComponent(password)
+      Username : username,
+      Password : password
     }
     const headers = new HttpHeaders();
     headers.set('accept', '*/*');

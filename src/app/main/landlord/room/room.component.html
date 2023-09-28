@@ -1,31 +1,85 @@
-<div>
-    title
-</div>
 
 
-<div>
+
+<div class="card shadow p-3" >
+    <h5>Danh sách phòng trọ </h5>
     <ul class="nav nav-tabs" id="example-tabs" role="tablist">
-        <li class="nav-item">
-            <a id="tab1" class="nav-link active" data-toggle="tab" role="tab"  href="#pane-tab-1">Tab1dasasasasa</a>
+        <li *ngFor="let branch of branches; index as i " class="nav-item">
+            <a attr.id="tab{{i+1}}" [ngClass]="{'nav-link': true,'active' : i==0}" (click)="setCurrentBranch(branch.id)"  data-toggle="tab" role="tab"  attr.href="#pane-tab-{{i+1}}">{{(i+1)+'-'+ branch.branchName}}</a>
         </li>
-        <li class="nav-item">
-            <a id="tab2" class="nav-link" data-toggle="tab" role="tab"  href="#pane-tab-2">Tab2sasasasas</a>
-        </li>
-        <li class="nav-item">
-            <a id="tab3" class="nav-link" data-toggle="tab" role="tab"  href="#pane-tab-3">Tab3asasasasas</a>
-        </li>
-        
     </ul>
 
     <div class="tab-content">
-        <div class="tab-pane fade show active" id="pane-tab-1" role="tabpanel" aria-labelledby="tab1">
-            Nội dung Tab1 - HTML code
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <h5 class="navbar-brand active">Tùy chọn</h5>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="" role="button"><i class="fas fa-tools text-primary"></i></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item ">
+                    <button type="button" class="btn btn-sm btn-outline-primary ml-1"> + Thêm phòng</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button"  class="btn btn-sm btn-outline-primary ml-1" (click)="openAddAreaModal()"> + Thêm khu vực</button>
+                </li>
+               
+                <li class="nav-item">
+                    <button type="button" class="btn btn-sm btn-outline-primary ml-1"> abc </button>
+                </li>
+              </ul>
+              <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Tìm kiếm</button>
+              </form>
+            </div>
+        </nav>
+        <hr>
+        <div *ngFor="let branch of branches; index as i " [ngClass]="{'tab-pane fade': true,'show active' : i==0}"  attr.id="pane-tab-{{i+1}}" role="tabpanel" attr.aria-labelledby="tab{{i+1}}">
+            Nội dung Tab1 - {{branch.branchName}}
         </div>
-        <div class="tab-pane fade" id="pane-tab-2" role="tabpanel" aria-labelledby="tab2">
-            Nội dung Tab2 - HTML code
-        </div>
-        <div class="tab-pane fade" id="pane-tab-3" role="tabpanel" aria-labelledby="tab3">
-            Nội dung Tab3 - HTML code
-        </div>
+        
     </div>
 </div>
+<!--modal thêm khu vực-->
+<ng-template #addAreaModal let-modal  >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="exampleModalLabel">Thêm khu vực mới</h5>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      
+       <form>
+        <div class="form-group">
+            <div class="col-xs-6">
+                <label for="username"><h5>Tên khu vực</h5></label>
+                <input type="text" class="form-control form-control-user" 
+                name="username" id="username" 
+               
+                 >
+            </div>
+            <div class="col-xs-6">
+                <label for="username"><h5>Mô tả</h5></label>
+                <input type="text" class="form-control form-control-user" 
+                name="username" id="d" 
+               
+                 >
+            </div>
+        </div>
+       </form>
+      
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" (click)="modal.close()" >Hủy</button>
+        <button type="button" class="btn btn-primary" (click)="modal.close()">Thêm</button>
+
+    </div>
+    </ng-template>
+
+
