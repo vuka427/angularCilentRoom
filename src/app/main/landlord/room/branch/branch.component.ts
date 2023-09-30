@@ -199,7 +199,9 @@ constructor(
   public onSubmit(){
     console.log('submit');
     this.isValidFormSubmitted = false;
+    
     if (this.frbranch.invalid) {
+      console.log("is invalid",this.frbranch.errors );
 			return;
 		}
     this.isValidFormSubmitted = true;

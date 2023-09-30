@@ -1,17 +1,17 @@
 
 
 
-<div class="card shadow p-3" >
+<div class="card shadow p-3" [ngClass]="{'d-none': showFormCreateRoom}"  >
     <h5>Danh sách phòng trọ </h5>
     <ul class="nav nav-tabs" id="example-tabs" role="tablist">
         <li *ngFor="let branch of branches; index as i " class="nav-item">
-            <a attr.id="tab{{i+1}}" [ngClass]="{'nav-link': true,'active' : i==0}" (click)="setCurrentBranch(branch.id)"  data-toggle="tab" role="tab"  attr.href="#pane-tab-{{i+1}}">{{(i+1)+'-'+ branch.branchName}}</a>
+            <a attr.id="tab{{i+1}}" [ngClass]="{'nav-link': true,'active' : i==0}" (click)="setCurrentBranch(branch.id, i)"  data-toggle="tab" role="tab"  attr.href="#pane-tab-{{i+1}}">{{(i+1)+'-'+ branch.branchName}}</a>
         </li>
     </ul>
 
     <div class="tab-content">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <h5 class="navbar-brand active">Tùy chọn</h5>
+            <h5 class="navbar-brand active mb-1">Tùy chọn</h5>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="" role="button"><i class="fas fa-tools text-primary"></i></span>
             </button>
@@ -19,14 +19,14 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item ">
-                    <button type="button" class="btn btn-sm btn-outline-primary ml-1"> + Thêm phòng</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary ml-1 mb-1" > + Thêm phòng</button>
                 </li>
                 <li class="nav-item">
-                    <button type="button"  class="btn btn-sm btn-outline-primary ml-1" (click)="openAddAreaModal()"> + Thêm khu vực</button>
+                    <button type="button"  class="btn btn-sm btn-outline-primary ml-1 mb-1" (click)="openAddAreaModal()"> + Thêm dãy-tầng</button>
                 </li>
                
                 <li class="nav-item">
-                    <button type="button" class="btn btn-sm btn-outline-primary ml-1"> abc </button>
+                    <button type="button" class="btn btn-sm btn-outline-primary ml-1 mb-1"> abc </button>
                 </li>
               </ul>
               <form class="form-inline my-2 my-lg-0">
@@ -37,7 +37,32 @@
         </nav>
         <hr>
         <div *ngFor="let branch of branches; index as i " [ngClass]="{'tab-pane fade': true,'show active' : i==0}"  attr.id="pane-tab-{{i+1}}" role="tabpanel" attr.aria-labelledby="tab{{i+1}}">
-            Nội dung Tab1 - {{branch.branchName}}
+            
+            <div *ngFor="let area of branch.areas;index as i "  >
+                
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <h5 class=" h6 navbar-brand active mb-1 font-weight-bold">
+                        <span *ngIf="branch.houseType == 'row'">Dãy </span> 
+                        <span *ngIf="branch.houseType == 'floor'">Tầng </span> 
+                         - {{area.areaName}}
+                    </h5>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="" role="button"><i class="fas fa-tools text-primary"></i></span>
+                    </button>
+                  
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                      <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-sm btn-primary ml-1 mb-1" title="thêm phòng"> +  </button>
+                        </li>
+                      </ul>
+                    </div>
+                </nav>
+
+
+                
+            </div>
+
         </div>
         
     </div>
@@ -46,29 +71,33 @@
 <ng-template #addAreaModal let-modal  >
 
     <div class="modal-header bg-primary">
-        <h5 class="modal-title text-light" id="exampleModalLabel">Thêm khu vực mới</h5>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-        <span aria-hidden="true">&times;</span>
+        <h5 class="modal-title text-light" id="exampleModalLabel">Thêm dãy-tầng mới</h5>
+      <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
       </button>
     </div>
     
-    <div class="modal-body">
+    <div class="modal-body"  >
       
-       <form>
+       <form id="area-form" (ngSubmit)="onAreaSubmit()" [formGroup]="frArea" #areaform = "ngForm">
         <div class="form-group">
             <div class="col-xs-6">
-                <label for="username"><h5>Tên khu vực</h5></label>
+                <label for="areaname"><h5>Tên dãy-tầng</h5></label>
                 <input type="text" class="form-control form-control-user" 
-                name="username" id="username" 
-               
+                name="areaname" id="areaname" formControlName="areaname"
+                placeholder="Nhập tên dãy-tầng"
                  >
+                 <div  *ngIf=" frArea.controls['areaname']?.hasError('required')
+                 && ( frArea.controls['areaname']?.touched || (isValidAreaFormSubmitted != null && !isValidAreaFormSubmitted) )" class="help-block text-danger"
+                 >Vui lòng nhập tên dãy-tầng !</div>
             </div>
-            <div class="col-xs-6">
-                <label for="username"><h5>Mô tả</h5></label>
+            <div class="col-xs-6 mt-3">
+                <label for="description "><h5>Mô tả</h5></label>
                 <input type="text" class="form-control form-control-user" 
-                name="username" id="d" 
-               
+                name="description" id="area-description" formControlName="description"
+                placeholder="Nhập mô tả"
                  >
+                
             </div>
         </div>
        </form>
@@ -76,10 +105,179 @@
     </div>
     
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-danger" (click)="modal.close()" >Hủy</button>
-        <button type="button" class="btn btn-primary" (click)="modal.close()">Thêm</button>
+        <button type="reset" form="area-form" class="btn btn-outline-danger" (click)="modal.close()" >Hủy</button>
+        <button type="submit" form="area-form" class="btn btn-primary" >Thêm</button>
 
     </div>
     </ng-template>
 
+<!-- thêm phòng  -->
+<div *ngIf="showFormCreateRoom"  id="create-branch-page"  class="container-fluid justify-content-center  p-0 m-0 mb-3">
+    <div id="error-message"></div>
+    <div class="row  justify-content-center m-0">
+        <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 card p-0 shadow border ">
+            <div class="card-header form-header p-0 ">
+                <h4 class="text-center font-weight-bold m-3 ">Thêm phòng</h4>
+            </div>
+            <div class="card-body">
+                <form class="form" novalidate  (ngSubmit)="onFormCreateRoomSubmit()" [formGroup]="frRoom"  #f="ngForm" >
+                    <div class="text-center">
+                        <h6 class=" text-primary" >Thông tin nhà trọ</h6>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="branchid"><h5>Nhà trọ<sup class="text-danger">(*)</sup></h5></label>
+                            <select  class="form-control form-control-user"  placeholder="Nhà trọ"
+                            name="branchid" id="branchid"  formControlName="branchid" (change)="setSelectArea($event)" 
+                            >
+                                <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn nhà trọ</option>
+                                <option *ngFor="let branch of  branches; index as i"   [ngValue]="branch.id">{{branch.branchName}} </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="areaid"><h5>Dãy-tầng<sup class="text-danger">(*)</sup></h5></label>
+                            <select class="form-control form-control-user"  placeholder="Tên nhà trọ"
+                            name="areaid" id="areaid" formControlName="areaid"
+                            >
+                             <option  *ngFor="let area of  areaSelect; index as i"  >{{area.areaName}} </option>
+                        
+                            </select>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h6 class=" text-primary " >Thông tin phòng</h6>
+                    </div>
+                    <hr >
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="roomnumber"><h5>Số phòng<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="number" class="form-control form-control-user" placeholder="Số phòng" appOnlyNumber
+                            name="roomnumber" id="roomnumber" formControlName="roomnumber"
+                             >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="ismezzanine"><h5>Phòng có gác<sup class="text-danger">(*)</sup></h5></label>
+                            <div>
+                                <span>
+                                    <input type="radio" id="house-row" name="ismezzanine" value="true" checked class="mr-1"
+                                    formControlName="ismezzanine"
+                                    >
+                                    <label for="house-row" class="mr-3" >Có</label>
+                                </span>
+                                <span>
+                                    <input type="radio" id="house-floor" name="ismezzanine" value="false" class="mr-1"  
+                                    formControlName="ismezzanine"
+                                    >
+                                    <label for="house-floor" class="mr-3" >không</label>
+                                </span>
+                            
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                          <label for="price"><h5>Giá cho thuê</h5></label>
+                            <input type="text" class="form-control" name="price" id="price" placeholder="Giá cho thuê"
+                             formControlName="price"
+                             >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="imaxmember"><h5>Số người ở tối đa</h5></label>
+                            <input type="number" class="form-control" name="maxmember" id="maxmember" placeholder="Số người ở tối đa" appOnlyNumber
+                              formControlName="maxmember"
+                            >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="height"><h5>Chiều cao<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="text" class="form-control form-control-user" placeholder="Chiều cao"
+                            name="height" id="height" formControlName="height" appOnlyNumber
+                             >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="witdh"><h5>Chiều rộng<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="text" class="form-control form-control-user" placeholder="Chiều rộng"
+                            name="witdh" id="witdh"  formControlName="witdh" appOnlyNumber
+                             >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="length"><h5>Chiều dài<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="text" class="form-control form-control-user" placeholder="Chiều dài"
+                            name="length" id="length" 
+                             >
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h6 class=" text-primary" >Thiết bị trong phòng</h6>
+                    </div>
+                    <hr>
 
+                    <ng-container formArrayName="devices">
+                        <div *ngFor="let deviceItem of devices.controls; index as i"  class="form-group">
+                            <label for=""><h5>Thiết bị {{i+1}} <button type="button" (click)="removeDevices(i)"  class="btn btn-sm btn-danger" >Xóa</button></h5> </label>
+  
+                          <ng-container [formGroupName]="i">
+                            <div class="col-xs-6 mb-3">
+                                <label for="">
+                                    <h5 class="h6" >Tên thiết bị<sup class="text-danger"> (*)</sup> </h5>
+                                </label>
+                                <input type="text" class="form-control"  formControlName="devicename" placeholder="Tên thiết bị" />
+                                <div  *ngIf="devices.controls[i].get('devicename')?.hasError('required')
+                                    && (devices.controls[i].get('devicename')?.touched || (isValidRoomFormSubmitted != null && !isValidRoomFormSubmitted))" 
+                                    class="help-block text-danger"
+                                    >Vui lòng nhập tên thiết bị !</div>
+                            </div>
+                           
+
+                            <div class="col-xs-6">
+                                <label for=""><h5 class="h6" >Số lượng<sup class="text-danger"> (*)</sup></h5></label>
+                                <input type="number" class="form-control" formControlName="quantity" placeholder="Số lượng" appOnlyNumber/>
+                                <div  *ngIf="devices.controls[i].get('quantity')?.hasError('required')
+                                    && (devices.controls[i].get('quantity')?.touched|| (isValidRoomFormSubmitted != null && !isValidRoomFormSubmitted))" 
+                                    class="help-block text-danger"
+                                    >Vui lòng nhập số lượng !</div>
+                            </div>
+                            <div class="col-xs-6">
+                                <label for=""><h5 class="h6" >Mô tả</h5></label>
+                                <input type="text" class="form-control" formControlName="description" placeholder="Mô tả" />
+                            </div>
+                            
+                            
+                          </ng-container>
+                        </div>
+                    </ng-container>
+
+
+                    <div class="form-group">
+                        <div class="col-xs-6 text-center">
+                            <button type="button" class="btn btn-sm btn-primary" (click)="addDevices()">+ Thêm thiết bị</button>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="form-group">
+                         <div class="col-xs-12">
+                            <input type="submit" class="btn btn-primary" value="Thêm">
+                            <button type="button" class="btn btn-outline-primary ml-2"  >Hủy</button>
+                          </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
