@@ -36,8 +36,11 @@ export class RoomComponent implements OnInit{
   public isValidRoomFormSubmitted :boolean | null = null;
 
 
-  public showFormCreateRoom: boolean = true;
+  public showFormCreateRoom: boolean = false;
   public areaSelect: any[] =[];
+
+  public fileName : any;
+  public imageSrc: any;
 
   public ngOnInit(): void {
       this.loadData();
@@ -52,7 +55,7 @@ export class RoomComponent implements OnInit{
         branchid: new FormControl(null,Validators.required),
         areaid: new FormControl(null,Validators.required),
         roomnumber: new FormControl('',Validators.required),
-        witdh: new FormControl('',Validators.required),
+        width: new FormControl('',Validators.required),
         height: new FormControl('',Validators.required),
         length: new FormControl('',Validators.required),
         ismezzanine: new FormControl('true',Validators.required),
@@ -142,8 +145,10 @@ export class RoomComponent implements OnInit{
 			return;
 		}
     this.isValidRoomFormSubmitted = true;
+
     console.log('submited',this.frRoom.value );
-    this._data.post('/api/branch/ad',this.frRoom.value).subscribe(
+
+    this._data.post('/api/room/add',this.frRoom.value).subscribe(
       {
         next: res => { console.log("repone ", res);},
         error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err);},
@@ -186,5 +191,54 @@ export class RoomComponent implements OnInit{
     this.showFormCreateRoom= false;
   }
 
-}
+  public ImageUploads : File[] = [];
+  public imagePreviewSrc : any[] = [];
+  public imageNumber : number = 0;
 
+  public  onFileSelected(event:any) {
+    if(this.imageNumber < 6){
+
+     
+      const file :File = event.target.files[0];
+      
+      console.log(this.ImageUploads);
+
+      if (file) {
+        this.imageNumber +=1;
+        this.ImageUploads.push( event.target.files[0]);
+
+        this.fileName = file;
+        console.log (this.fileName);
+
+        const reader = new FileReader();
+
+        reader.onload = e => this.imagePreviewSrc.push(reader.result);
+        reader.readAsDataURL(file);
+
+        console.log(this.imagePreviewSrc);
+
+      }
+    }else{
+      this._notify.printErrorMessage(" Cho phép tải lên tối đa 6 tắm ảnh !");
+    }
+    
+
+  }
+  public removeImageUpload(index: number){
+    this.imageNumber -=1;
+    this.imagePreviewSrc.splice(index,1);
+    this.ImageUploads.splice(index,1);
+  }
+
+  public uploadImage(){
+
+    this.imageNumber = 0;
+    this.imagePreviewSrc=[];
+    this.ImageUploads=[];
+    
+
+
+  }
+
+
+}

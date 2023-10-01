@@ -200,7 +200,7 @@
                     <div class="form-group">
                         <div class="col-xs-6">
                           <label for="price"><h5>Giá cho thuê<sup class="text-danger">(*) </sup><sub>(vnđ/tháng)</sub></h5></label>
-                            <input type="text" class="form-control" name="price" id="price" placeholder="Giá cho thuê" appOnlyNumber
+                            <input type="number" class="form-control" name="price" id="price" placeholder="Giá cho thuê" appOnlyNumber
                              formControlName="price"
                              >
                              <div  *ngIf="frRoom.controls['price']?.hasError('required')
@@ -223,8 +223,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="height"><h5>Chiều cao<sup class="text-danger">(*)</sup></h5></label>
-                            <input type="text" class="form-control form-control-user" placeholder="Chiều cao"
+                            <label for="height"><h5>Chiều cao<sup class="text-danger">(*)</sup><sub>(m)</sub></h5></label>
+                            <input type="number" class="form-control form-control-user" placeholder="Chiều cao"
                             name="height" id="height" formControlName="height" appOnlyNumber
                              > 
                              <div  *ngIf="frRoom.controls['height']?.hasError('required')
@@ -236,21 +236,21 @@
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="witdh"><h5>Chiều rộng<sup class="text-danger">(*)</sup></h5></label>
-                            <input type="text" class="form-control form-control-user" placeholder="Chiều rộng"
-                            name="witdh" id="witdh"  formControlName="witdh" appOnlyNumber
+                            <label for="width"><h5>Chiều rộng<sup class="text-danger">(*)</sup><sub>(m)</sub></h5></label>
+                            <input type="number" class="form-control form-control-user" placeholder="Chiều rộng"
+                            name="width" id="width"  formControlName="width" appOnlyNumber
                              >
-                             <div  *ngIf="frRoom.controls['witdh']?.hasError('required')
-                            && (frRoom.controls['witdh']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                             <div  *ngIf="frRoom.controls['width']?.hasError('required')
+                            && (frRoom.controls['width']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
                             class="help-block text-danger"
                             > Vui lòng nhập chiều rộng!</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="length"><h5>Chiều dài<sup class="text-danger">(*)</sup></h5></label>
-                            <input type="text" class="form-control form-control-user" placeholder="Chiều dài"
-                            name="length" id="length" 
+                            <label for="length"><h5>Chiều dài<sup class="text-danger">(*)</sup><sub>(m)</sub></h5></label>
+                            <input type="number" class="form-control form-control-user" placeholder="Chiều dài"
+                            name="length" id="length" formControlName="length"  appOnlyNumber
                              >
                              <div  *ngIf="frRoom.controls['length']?.hasError('required')
                             && (frRoom.controls['length']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
@@ -258,6 +258,37 @@
                             > Vui lòng nhập chiều dài!</div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="length"><h5>Hình ảnh <sub class="text-primary">(Thêm tối đa 6 tắm ảnh)</sub></h5></label>
+                            
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div *ngFor="let imageItem of imagePreviewSrc; index as i" class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3  imgUp">
+                                        <div  class="imagePreview" [ngStyle]="{'background-image': 'url('+imageItem +')'}">
+                                        </div> 
+                                        <i class="fa fa-times del" (click)="removeImageUpload(i)"></i>
+                                    </div><!-- col-2 -->
+                                    <div>
+                                        <button *ngIf="imageNumber<6" type="button"  
+                                            class=" text-center btn btn-sm btn-outline-primary" 
+                                            (click)="fileUpload.click()"> + Thêm ảnh 
+                                        </button>
+                                        <h6 *ngIf="imageNumber>=6" class=" text-danger" >Số lượng ảnh đã đạt tối đa !</h6>
+                                    </div>
+                                    
+                                </div><!-- row -->
+                            </div><!-- container -->
+
+                              
+                            <input type="file" #fileUpload (change)="onFileSelected($event)"style="display: none;">
+                            
+                        </div>
+                    </div>
+                   
+
+
+
                     <div class="text-center">
                         <h6 class=" text-primary" >Thiết bị trong phòng</h6>
                     </div>
@@ -305,7 +336,7 @@
 
                     <div class="form-group">
                         <div class="col-xs-6 text-center">
-                            <button type="button" class="btn btn-sm btn-primary" (click)="addDevices()">+ Thêm thiết bị</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" (click)="addDevices()">+ Thêm thiết bị</button>
                         </div>
                     </div>
 
