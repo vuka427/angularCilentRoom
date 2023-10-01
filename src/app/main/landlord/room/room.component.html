@@ -19,7 +19,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item ">
-                    <button type="button" class="btn btn-sm btn-outline-primary ml-1 mb-1" > + Thêm phòng</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary ml-1 mb-1" (click)="openFromCreateRoom()" > + Thêm phòng</button>
                 </li>
                 <li class="nav-item">
                     <button type="button"  class="btn btn-sm btn-outline-primary ml-1 mb-1" (click)="openAddAreaModal()"> + Thêm dãy-tầng</button>
@@ -59,8 +59,6 @@
                     </div>
                 </nav>
 
-
-                
             </div>
 
         </div>
@@ -132,8 +130,14 @@
                             name="branchid" id="branchid"  formControlName="branchid" (change)="setSelectArea($event)" 
                             >
                                 <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn nhà trọ</option>
-                                <option *ngFor="let branch of  branches; index as i"   [ngValue]="branch.id">{{branch.branchName}} </option>
+                                <option *ngFor="let branch of  branches; index as i"   [value]="branch.id">{{branch.branchName}} </option>
                             </select>
+                            <div  *ngIf="frRoom.controls['branchid']?.hasError('required')
+                            && (frRoom.controls['branchid']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                            class="help-block text-danger"
+                            >Vui lòng chọn nhà trọ !</div>
+
+
                         </div>
                     </div>
                     <div class="form-group">
@@ -142,9 +146,14 @@
                             <select class="form-control form-control-user"  placeholder="Tên nhà trọ"
                             name="areaid" id="areaid" formControlName="areaid"
                             >
-                             <option  *ngFor="let area of  areaSelect; index as i"  >{{area.areaName}} </option>
+                                <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn dãy tầng</option>
+                                <option  *ngFor="let area of  areaSelect; index as i" [value]="area.id"  >{{area.areaName}} </option>
                         
                             </select>
+                            <div  *ngIf="frRoom.controls['areaid']?.hasError('required')
+                            && (frRoom.controls['areaid']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                            class="help-block text-danger"
+                            >Vui lòng chọn dãy-tầng !</div>
                         </div>
                     </div>
                     <div class="text-center">
@@ -157,6 +166,10 @@
                             <input type="number" class="form-control form-control-user" placeholder="Số phòng" appOnlyNumber
                             name="roomnumber" id="roomnumber" formControlName="roomnumber"
                              >
+                             <div  *ngIf="frRoom.controls['roomnumber']?.hasError('required')
+                             && (frRoom.controls['roomnumber']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                             class="help-block text-danger"
+                             > Vui lòng nhập số phòng !</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -164,37 +177,48 @@
                             <label for="ismezzanine"><h5>Phòng có gác<sup class="text-danger">(*)</sup></h5></label>
                             <div>
                                 <span>
-                                    <input type="radio" id="house-row" name="ismezzanine" value="true" checked class="mr-1"
+                                    <input type="radio" id="ismezzanine-true" name="ismezzanine" value="true" checked class="mr-1"
                                     formControlName="ismezzanine"
                                     >
-                                    <label for="house-row" class="mr-3" >Có</label>
+                                    <label for="ismezzanine-true" class="mr-3" >Có</label>
                                 </span>
                                 <span>
-                                    <input type="radio" id="house-floor" name="ismezzanine" value="false" class="mr-1"  
+                                    <input type="radio" id="ismezzanine-false" name="ismezzanine" value="false" class="mr-1"  
                                     formControlName="ismezzanine"
                                     >
-                                    <label for="house-floor" class="mr-3" >không</label>
+                                    <label for="ismezzanine-false" class="mr-3" >không</label>
                                 </span>
-                            
                             </div>
+                            <div  *ngIf="frRoom.controls['ismezzanine']?.hasError('required')
+                                && (frRoom.controls['ismezzanine']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                                class="help-block text-danger"
+                                > Vui lòng trạng thái gác !</div>
                             
                             
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                          <label for="price"><h5>Giá cho thuê</h5></label>
-                            <input type="text" class="form-control" name="price" id="price" placeholder="Giá cho thuê"
+                          <label for="price"><h5>Giá cho thuê<sup class="text-danger">(*) </sup><sub>(vnđ/tháng)</sub></h5></label>
+                            <input type="text" class="form-control" name="price" id="price" placeholder="Giá cho thuê" appOnlyNumber
                              formControlName="price"
                              >
+                             <div  *ngIf="frRoom.controls['price']?.hasError('required')
+                             && (frRoom.controls['price']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                             class="help-block text-danger"
+                             > Vui lòng nhập giá cho thuê !</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="imaxmember"><h5>Số người ở tối đa</h5></label>
+                            <label for="imaxmember"><h5>Số người ở tối đa<sup class="text-danger">(*) </sup><sub>(người)</sub></h5></label>
                             <input type="number" class="form-control" name="maxmember" id="maxmember" placeholder="Số người ở tối đa" appOnlyNumber
                               formControlName="maxmember"
                             >
+                            <div  *ngIf="frRoom.controls['maxmember']?.hasError('required')
+                            && (frRoom.controls['maxmember']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                            class="help-block text-danger"
+                            > Vui lòng số người ở tối đa !</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -202,8 +226,13 @@
                             <label for="height"><h5>Chiều cao<sup class="text-danger">(*)</sup></h5></label>
                             <input type="text" class="form-control form-control-user" placeholder="Chiều cao"
                             name="height" id="height" formControlName="height" appOnlyNumber
-                             >
+                             > 
+                             <div  *ngIf="frRoom.controls['height']?.hasError('required')
+                            && (frRoom.controls['height']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                            class="help-block text-danger"
+                            > Vui lòng nhập chiều cao!</div>
                         </div>
+                       
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
@@ -211,6 +240,10 @@
                             <input type="text" class="form-control form-control-user" placeholder="Chiều rộng"
                             name="witdh" id="witdh"  formControlName="witdh" appOnlyNumber
                              >
+                             <div  *ngIf="frRoom.controls['witdh']?.hasError('required')
+                            && (frRoom.controls['witdh']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                            class="help-block text-danger"
+                            > Vui lòng nhập chiều rộng!</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -219,6 +252,10 @@
                             <input type="text" class="form-control form-control-user" placeholder="Chiều dài"
                             name="length" id="length" 
                              >
+                             <div  *ngIf="frRoom.controls['length']?.hasError('required')
+                            && (frRoom.controls['length']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                            class="help-block text-danger"
+                            > Vui lòng nhập chiều dài!</div>
                         </div>
                     </div>
                     <div class="text-center">
@@ -243,7 +280,7 @@
                             </div>
                            
 
-                            <div class="col-xs-6">
+                            <div class="col-xs-6  mb-3">
                                 <label for=""><h5 class="h6" >Số lượng<sup class="text-danger"> (*)</sup></h5></label>
                                 <input type="number" class="form-control" formControlName="quantity" placeholder="Số lượng" appOnlyNumber/>
                                 <div  *ngIf="devices.controls[i].get('quantity')?.hasError('required')
@@ -251,10 +288,14 @@
                                     class="help-block text-danger"
                                     >Vui lòng nhập số lượng !</div>
                             </div>
-                            <div class="col-xs-6">
-                                <label for=""><h5 class="h6" >Mô tả</h5></label>
-                                <input type="text" class="form-control" formControlName="description" placeholder="Mô tả" />
+                            <div class="col-xs-6 ">
+                                <label for="">
+                                    <h5 class="h6" >Mô tả</h5>
+                                </label>
+                                <input type="text" class="form-control"  formControlName="description" placeholder="Mô tả" />
+                                
                             </div>
+                            
                             
                             
                           </ng-container>
@@ -272,7 +313,7 @@
                     <div class="form-group">
                          <div class="col-xs-12">
                             <input type="submit" class="btn btn-primary" value="Thêm">
-                            <button type="button" class="btn btn-outline-primary ml-2"  >Hủy</button>
+                            <button type="button" class="btn btn-outline-primary ml-2" (click)="closeFromCreateRoom()"  >Hủy</button>
                           </div>
                     </div>
                 </form>
