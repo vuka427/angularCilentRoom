@@ -11,6 +11,7 @@ import { DataTablesModule } from "angular-datatables";
 import { SystemConstants } from './core/common/system.constants';
 import { JwtModule } from "@auth0/angular-jwt";
 
+
 export function tokenGetter() { 
   return localStorage.getItem(localStorage.getItem(SystemConstants.CURRENT_USER)?? ""); 
 }
@@ -19,6 +20,8 @@ export function tokenGetter() {
   declarations: [
     AppComponent,
     PageNotFoundComponent,
+    
+    
 
   ],
   imports: [

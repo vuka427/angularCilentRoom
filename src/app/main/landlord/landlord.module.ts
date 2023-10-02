@@ -14,6 +14,9 @@ import { UtilitesComponent } from './utilites/utilites.component';
 import { BranchComponent } from './room/branch/branch.component';
 import { AreaComponent } from './room/area/area.component';
 import { DataTablesModule } from 'angular-datatables';
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { RoomstatusPipe } from 'src/app/shared/pipe/roomstatus.pipe';
+import { HousetypePipe } from 'src/app/shared/pipe/housetype.pipe';
 
 
 
@@ -30,6 +33,8 @@ import { DataTablesModule } from 'angular-datatables';
     UtilitesComponent,
     BranchComponent,
     AreaComponent,
+    RoomstatusPipe,
+    HousetypePipe
     
   ],
   imports: [
@@ -38,7 +43,8 @@ import { DataTablesModule } from 'angular-datatables';
     FormsModule,
     ReactiveFormsModule,
     ValidationModule,
-    DataTablesModule
+    DataTablesModule,
+    NgbTooltipModule
   ]
   
 })

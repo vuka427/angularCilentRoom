@@ -5,18 +5,23 @@ import { SystemConstants } from 'src/app/core/common/system.constants';
 import { RoomModel } from 'src/app/core/domain/room/room.model';
 import { AreaModel } from 'src/app/core/domain/room/area.model';
 import { BranchModel } from 'src/app/core/domain/room/branch.model';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, ModalDismissReasons, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+
 
 
 @Component({
   selector: 'app-room',
   templateUrl: './room.component.html',
+ 
+
   styleUrls: ['./room.component.css']
 })
 export class RoomComponent implements OnInit{
 
   @ViewChild('addAreaModal') addAreaModal : TemplateRef<any>; 
+  @ViewChild('deleteAreaModal') deleteAreaModal : TemplateRef<any>; 
+  @ViewChild('editAreaModal') editAreaModal : TemplateRef<any>; 
 
   constructor(
     private _data : DataService,
@@ -31,8 +36,11 @@ export class RoomComponent implements OnInit{
   public currentBranchIndex: number=0;
 
   public frArea : FormGroup ;
+  public frUpdateArea : FormGroup ;
   public frRoom : FormGroup ;
+
   public isValidAreaFormSubmitted :boolean | null = null;
+  public isValidAreaEditFormSubmitted :boolean | null = null;
   public isValidRoomFormSubmitted :boolean | null = null;
 
 
@@ -42,10 +50,19 @@ export class RoomComponent implements OnInit{
   public fileName : any;
   public imageSrc: any;
 
+  public isSearch: boolean = false;
+
   public ngOnInit(): void {
       this.loadData();
 
       this.frArea = new FormGroup({
+        areaname: new FormControl('',Validators.required),
+        description : new FormControl(''),
+        branchId : new FormControl(0),
+      });
+
+      this.frUpdateArea = new FormGroup({
+        areaid: new FormControl(null,Validators.required),
         areaname: new FormControl('',Validators.required),
         description : new FormControl(''),
         branchId : new FormControl(0),
@@ -90,14 +107,30 @@ export class RoomComponent implements OnInit{
         complete: () => { this._notify.printSuccessMessage("load data thành công !"); }, 
       });
   }
-
+ //mở đóng model thêm
   public openAddAreaModal(){
     this._modalService.open(this.addAreaModal);
   }
   public closeAddAreaModal(){
     this._modalService.dismissAll(this.addAreaModal);
   }
-
+  //mở đóng model xóa
+  public openDeleteAreaModal(){
+    this._modalService.open(this.deleteAreaModal);
+  }
+  public closeDeleteAreaModal(){
+    this._modalService.dismissAll(this.deleteAreaModal);
+  }
+   //mở đóng model sửa
+  public openEditAreaModal(branchid:string, areaid:string, areaname: string, description:string){
+    this.frUpdateArea.setValue({areaid: areaid,areaname : areaname, description: description, branchId : branchid});
+    this._modalService.open(this.editAreaModal);
+  }
+  public closeEditAreaModal(){
+    this._modalService.dismissAll(this.editAreaModal);
+  }
+ 
+  //thêm dãy tầng
   public onAreaSubmit(){
     this.isValidAreaFormSubmitted = false;
     if (this.frArea.invalid) {
@@ -117,10 +150,44 @@ export class RoomComponent implements OnInit{
         },
       }
     );
-
-
   }
-
+ //xóa dãy tầng
+  public onDeleteAreaSubmit(){
+    this._data.delete('/api/branch/area/delete',"areaid","").subscribe(
+      {
+        next: res => { console.log("repone ", res);},
+        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err); },
+        complete: () => { 
+          this._notify.printSuccessMessage("Xóa dãy tầng thành công !"); 
+          this.closeAddAreaModal();
+          this.LoadAreaData(this.currentBranchId, this.currentBranchIndex);
+        },
+      }
+    );
+  }
+  // sửa dãy tầng
+  public onEditAreaSubmit(){
+    this.isValidAreaEditFormSubmitted  = false;
+    if (this.frUpdateArea.invalid) {
+      return;
+    }
+    this.isValidAreaEditFormSubmitted  = true;
+    this.frUpdateArea.patchValue({branchId: this.currentBranchId});
+    console.log('submited',this.frUpdateArea.value );
+    this._data.put('/api/branch/area/edit',this.frUpdateArea.value).subscribe(
+      {
+        next: res => { console.log("repone ", res);},
+        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err); },
+        complete: () => { 
+          this._notify.printSuccessMessage("Cập nhật thông tin dãy-tầng thành công !"); 
+          this.closeAddAreaModal();
+          console.log(this.currentBranchId, this.currentBranchIndex);
+          this.LoadAreaData(this.currentBranchId, this.currentBranchIndex);
+        },
+      }
+    );
+  }
+ // load lại branch
   public LoadAreaData(branchId: number, branchIndex : number){
 
       this._data.get('/api/branch/areas?branchId='+branchId).subscribe(
@@ -135,7 +202,7 @@ export class RoomComponent implements OnInit{
         }
       );
   }
-
+ // thêm phòng
   public onFormCreateRoomSubmit(){
     console.log('submit');
     this.isValidRoomFormSubmitted = false;
@@ -156,7 +223,7 @@ export class RoomComponent implements OnInit{
       }
     );
   }
-
+  // thêm phòng -> thêm thiết bị
   public addDevices(){
     console.log("add devices");
     const group = new FormGroup({
@@ -168,6 +235,7 @@ export class RoomComponent implements OnInit{
     let s = this.frRoom.get('devices') as FormArray;
     s.push(group);
   }
+  // thêm phòng -> xóa thiêt bị
   public removeDevices(index:number){
     console.log("remove devices");
     
@@ -178,15 +246,24 @@ export class RoomComponent implements OnInit{
     return this.frRoom.get('devices') as FormArray;
   }
 
+ // thêm phòng -> thiết lập khu vực
   public setSelectArea(event: any): void{
     let a : any[] = this.branches;
     this.areaSelect = a.find((data) =>  data.id == event.target.value).areas ;
 
   }
+//mở form thêm phòng 
+  public openFromCreateRoom(branchId: any, areaId: any){
 
-  public openFromCreateRoom(){
+    this.frRoom.patchValue({branchid: branchId , areaid:areaId });
+    if(branchId){
+       let a : any[] = this.branches;
+       this.areaSelect = a.find((data) =>  data.id == branchId ).areas ;
+    }
+   
     this.showFormCreateRoom= true;
   }
+  //đóng form thêm phòng
   public closeFromCreateRoom(){
     this.showFormCreateRoom= false;
   }

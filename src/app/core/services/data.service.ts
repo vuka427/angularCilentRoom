@@ -57,7 +57,7 @@ export class DataService {
     .set('content-type', 'application/json')
     .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
 
-    return this._http.put<Response>(SystemConstants.BASE_API + uri, data, { headers: headers }).subscribe(this.extractData);
+    return this._http.put<Response>(SystemConstants.BASE_API + uri, data, { headers: headers });
   }
   
   delete(uri: string, key: string, id: string) {
