@@ -1,14 +1,14 @@
 import { RoomModel } from "./room.model"
 
 export class AreaModel {
-    constructor(areaName: string, description: string, room: RoomModel[]) {
+    constructor(areaName: string, description: string, rooms: RoomModel[]) {
         this.areaName = areaName
         this.description = description
-        this.room = room
+        this.rooms = rooms
     }
 
     public areaName: string
     public description: string
-    public room: RoomModel[]
+    public rooms: RoomModel[]
 
 }

@@ -37,6 +37,9 @@ import { HousetypePipe } from 'src/app/shared/pipe/housetype.pipe';
     HousetypePipe
     
   ],
+  providers: [
+    HousetypePipe
+  ],
   imports: [
     CommonModule,
     LandlordRoutingModule,

@@ -90,7 +90,7 @@
                                 </button>
                             </li>
                             <li class="nav-item">
-                                <button type="button" 
+                                <button type="button" (click)="openDeleteAreaModal(area.areaName, branch.houseType, area.id)"
                                 class="btn btn-sm btn-danger ml-1 mb-1" placement="top" ngbTooltip="Xóa {{branch.houseType| housetype: false }} " 
                                 [openDelay]="300" [closeDelay]="500"> Xóa {{branch.houseType| housetype: false }} 
                                 </button>
@@ -119,6 +119,9 @@
                                         <p class="card-text" placement="top" ngbTooltip="Trạng thái phòng" [openDelay]="300" [closeDelay]="500">
                                             <i class="fas fa-toggle-on"></i> : {{room.status | roomstatus }}
                                         </p> 
+                                        <p class="card-text" placement="top" ngbTooltip="Diện tích" [openDelay]="300" [closeDelay]="500"> 
+                                            <i class="fas fa-ruler-combined"></i> : {{room.acreage }} m<sup>2</sup>
+                                        </p>
                                         <p class="card-text" placement="top" ngbTooltip="Tên người thuê" [openDelay]="300" [closeDelay]="500"> 
                                             <i class="fas fa-user"></i> : 
                                         </p>
@@ -235,19 +238,21 @@
 <ng-template #deleteAreaModal let-modal  >
 
     <div class="modal-header bg-primary">
-        <h5 class="modal-title text-light" id="deleteModalLabel">Xóa dãy-tầng </h5>
+        <h5 class="modal-title text-light" id="deleteModalLabel">Xóa {{areaNameDelete}} </h5>
       <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
         <span class="text-light" aria-hidden="true">&times;</span>
       </button>
     </div>
     
-    <div class="modal-body"  >
-      
+    <div class="modal-body text-center"  >
+      <div class="modal-title">Bạn có chắc chắn xóa {{areaNameDelete}} ?</div>
+      <div class="modal-title text-danger">Bạn không thể khôi phục dữ liệu đã xóa ! </div>
     </div>
     
     <div class="modal-footer">
-        <button type="reset" form="area-form" class="btn btn-outline-danger" (click)="modal.close()" >Hủy</button>
-        <button type="submit" form="area-form" class="btn btn-primary" >Thêm</button>
+        <button type="submit" form="area-form" class="btn btn-danger" (click)="onDeleteAreaSubmit()" >Đồng ý</button>
+        <button type="reset" form="area-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+        
 
     </div>
 </ng-template>
@@ -366,41 +371,18 @@
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="height"><h5>Chiều cao<sup class="text-danger">(*)</sup><sub>(m)</sub></h5></label>
-                            <input type="number" class="form-control form-control-user" placeholder="Chiều cao"
-                            name="height" id="height" formControlName="height" appOnlyNumber
+                            <label for="acreage"><h5>Diện tích<sup class="text-danger">(*)</sup><sub>(m<sup>2</sup>)</sub></h5></label>
+                            <input type="number" class="form-control form-control-user" placeholder="Diện tích"
+                            name="acreage" id="acreage" formControlName="acreage" appOnlyNumber
                              > 
-                             <div  *ngIf="frRoom.controls['height']?.hasError('required')
-                            && (frRoom.controls['height']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                             <div  *ngIf="frRoom.controls['acreage']?.hasError('required')
+                            && (frRoom.controls['acreage']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
                             class="help-block text-danger"
-                            > Vui lòng nhập chiều cao!</div>
+                            > Vui lòng nhập diện tích phòng !</div>
                         </div>
                        
                     </div>
-                    <div class="form-group">
-                        <div class="col-xs-6">
-                            <label for="width"><h5>Chiều rộng<sup class="text-danger">(*)</sup><sub>(m)</sub></h5></label>
-                            <input type="number" class="form-control form-control-user" placeholder="Chiều rộng"
-                            name="width" id="width"  formControlName="width" appOnlyNumber
-                             >
-                             <div  *ngIf="frRoom.controls['width']?.hasError('required')
-                            && (frRoom.controls['width']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
-                            class="help-block text-danger"
-                            > Vui lòng nhập chiều rộng!</div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-6">
-                            <label for="length"><h5>Chiều dài<sup class="text-danger">(*)</sup><sub>(m)</sub></h5></label>
-                            <input type="number" class="form-control form-control-user" placeholder="Chiều dài"
-                            name="length" id="length" formControlName="length"  appOnlyNumber
-                             >
-                             <div  *ngIf="frRoom.controls['length']?.hasError('required')
-                            && (frRoom.controls['length']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
-                            class="help-block text-danger"
-                            > Vui lòng nhập chiều dài!</div>
-                        </div>
-                    </div>
+                   
                     <div class="form-group">
                         <div class="col-xs-6">
                             <label for="length"><h5>Hình ảnh <sub class="text-primary">(Thêm tối đa 6 tắm ảnh)</sub></h5></label>
@@ -419,11 +401,9 @@
                                         </button>
                                         <h6 *ngIf="imageNumber>=6" class=" text-danger" >Số lượng ảnh đã đạt tối đa !</h6>
                                     </div>
-                                    
                                 </div><!-- row -->
                             </div><!-- container -->
 
-                              
                             <input type="file" #fileUpload (change)="onFileSelected($event)"style="display: none;">
                             
                         </div>
@@ -487,7 +467,7 @@
                     <div class="form-group">
                          <div class="col-xs-12">
                             <input type="submit" class="btn btn-primary" value="Thêm">
-                            <button type="button" class="btn btn-outline-danger ml-2" (click)="closeFromCreateRoom()"  >Hủy</button>
+                            <button type="reset" class="btn btn-outline-danger ml-2" (click)="closeFromCreateRoom()"  >Hủy</button>
                           </div>
                     </div>
                 </form>

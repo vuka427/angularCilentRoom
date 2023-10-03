@@ -1,27 +1,21 @@
 export class RoomModel {
     constructor(
         roomNumber: string,
-        width: number,
-        height: number,
-        length: number,
+        acreage: number,
         isMezzanine: boolean,
         price: number,
         status: string,
         maxMember: number
     ) {
         this.roomNumber = roomNumber
-        this.width = width
-        this.height = height
-        this.length = length
+        this.acreage = acreage
         this.isMezzanine = isMezzanine
         this.price = price
         this.status = status
         this.maxMember = maxMember
     }
     public roomNumber: string;
-    public width: number;
-    public height: number;
-    public length: number;
+    public acreage: number;
     public isMezzanine: boolean;
     public price: number;
     public status: string;

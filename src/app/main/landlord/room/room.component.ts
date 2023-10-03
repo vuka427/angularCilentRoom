@@ -7,6 +7,7 @@ import { AreaModel } from 'src/app/core/domain/room/area.model';
 import { BranchModel } from 'src/app/core/domain/room/branch.model';
 import {NgbModal, ModalDismissReasons, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { HousetypePipe } from '../../../shared/pipe/housetype.pipe';
 
 
 
@@ -26,7 +27,8 @@ export class RoomComponent implements OnInit{
   constructor(
     private _data : DataService,
     private _notify : NotificationService,
-    private _modalService: NgbModal
+    private _modalService: NgbModal,
+    private _housetypePipe: HousetypePipe
   ){}
 
 
@@ -52,6 +54,9 @@ export class RoomComponent implements OnInit{
 
   public isSearch: boolean = false;
 
+  public areaNameDelete:string;
+  public areaIdDelete: number = 0 ;
+
   public ngOnInit(): void {
       this.loadData();
 
@@ -72,9 +77,7 @@ export class RoomComponent implements OnInit{
         branchid: new FormControl(null,Validators.required),
         areaid: new FormControl(null,Validators.required),
         roomnumber: new FormControl('',Validators.required),
-        width: new FormControl('',Validators.required),
-        height: new FormControl('',Validators.required),
-        length: new FormControl('',Validators.required),
+        acreage: new FormControl('',Validators.required),
         ismezzanine: new FormControl('true',Validators.required),
         price: new FormControl('',Validators.required),
         maxmember: new FormControl('',Validators.required),
@@ -88,12 +91,13 @@ export class RoomComponent implements OnInit{
     return this.frRoom.get('devices') as FormArray;
   }
 
+ //thiết lập nhà trọ hiện tại
   public setCurrentBranch(id: number, index : number){
     console.log('current branch :',id,'current index :',index );
     this.currentBranchId = id;
     this.currentBranchIndex = index;
   }
-
+  // load dữ liệu ban đầu
   public loadData(){
 
     this._data.get("/api/branch/allroom").subscribe(
@@ -104,7 +108,7 @@ export class RoomComponent implements OnInit{
           this.currentBranchId = this.branches[0].id;
         },
         error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err); this._data.handleError(err); },
-        complete: () => { this._notify.printSuccessMessage("load data thành công !"); }, 
+        complete: () => { console.log("load all room"); }, 
       });
   }
  //mở đóng model thêm
@@ -115,7 +119,9 @@ export class RoomComponent implements OnInit{
     this._modalService.dismissAll(this.addAreaModal);
   }
   //mở đóng model xóa
-  public openDeleteAreaModal(){
+  public openDeleteAreaModal(areaName : string , housetype:string, areaId: number){
+    this.areaIdDelete = areaId;
+    this.areaNameDelete = this._housetypePipe.transform(housetype,false) + ' '+  areaName;
     this._modalService.open(this.deleteAreaModal);
   }
   public closeDeleteAreaModal(){
@@ -151,9 +157,11 @@ export class RoomComponent implements OnInit{
       }
     );
   }
+
  //xóa dãy tầng
   public onDeleteAreaSubmit(){
-    this._data.delete('/api/branch/area/delete',"areaid","").subscribe(
+
+    this._data.delete('/api/branch/area/delete',"areaid",this.areaIdDelete.toString()).subscribe(
       {
         next: res => { console.log("repone ", res);},
         error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err); },
@@ -202,6 +210,24 @@ export class RoomComponent implements OnInit{
         }
       );
   }
+ // load lại area
+  public LoadRoomInAreaData( branchIndex : number ,areaId: number){
+
+    this._data.get('/api/branch/area?areaid='+areaId).subscribe(
+      {
+        next: res => { 
+          console.log("repone ", res); 
+          let area : AreaModel| any = res;
+          let areas : any[] = this.branches[branchIndex].areas;
+          areas.find(e => e.id == areaId ).rooms = area.rooms ;
+
+        },
+        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err); },
+        complete: () => { },
+      }
+    );
+  }
+
  // thêm phòng
   public onFormCreateRoomSubmit(){
     console.log('submit');
@@ -219,7 +245,12 @@ export class RoomComponent implements OnInit{
       {
         next: res => { console.log("repone ", res);},
         error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err);},
-        complete: () => { this._notify.printSuccessMessage("Thêm phòng trọ thành công !"); },
+        complete: () => { 
+          this._notify.printSuccessMessage("Thêm phòng trọ thành công !"); 
+          this.LoadRoomInAreaData(this.currentBranchIndex,this.frRoom.controls['areaid'].value);
+          this.closeFromCreateRoom();
+          
+        },
       }
     );
   }
@@ -265,9 +296,13 @@ export class RoomComponent implements OnInit{
   }
   //đóng form thêm phòng
   public closeFromCreateRoom(){
+    this.imageNumber = 0;
+    this.imagePreviewSrc=[];
+    this.ImageUploads=[];
     this.showFormCreateRoom= false;
   }
 
+  // upload file
   public ImageUploads : File[] = [];
   public imagePreviewSrc : any[] = [];
   public imageNumber : number = 0;
@@ -309,6 +344,8 @@ export class RoomComponent implements OnInit{
 
   public uploadImage(){
 
+
+
     this.imageNumber = 0;
     this.imagePreviewSrc=[];
     this.ImageUploads=[];
@@ -316,6 +353,6 @@ export class RoomComponent implements OnInit{
 
 
   }
-
+ // end upload file
 
 }
