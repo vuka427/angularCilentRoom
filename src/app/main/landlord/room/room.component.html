@@ -128,7 +128,7 @@
                                         <hr>
                                         <button type="button" class="btn btn-sm btn-primary mr-1 mb-1">Xem</button>
                                         <button type="button" class="btn btn-sm btn-success mr-1 mb-1">Chỉnh sửa</button>
-                                        <button type="button" class="btn btn-sm btn-danger mb-1 ">Xóa</button>
+                                        <button type="button" class="btn btn-sm btn-danger mb-1 " (click)="openDeleteRoomModal(area.areaName,room.roomNumber,room.id)">Xóa</button>
                                     </div>
                                     
                                 </div>
@@ -404,7 +404,7 @@
                                 </div><!-- row -->
                             </div><!-- container -->
 
-                            <input type="file" #fileUpload (change)="onFileSelected($event)"style="display: none;">
+                            <input type="file" accept="image/*" #fileUpload (change)="onFileSelected($event)"style="display: none;">
                             
                         </div>
                     </div>
@@ -476,3 +476,27 @@
         </div>
     </div>
 </div>
+
+
+ <!--modal xóa phòng-->
+ <ng-template #deleteRoomModal let-modal >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteRoomModalLabel">Xóa phòng {{roomNameDelete}} </h5>
+      <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body text-center"  >
+      <div class="modal-title">Bạn có chắc chắn xóa phòng {{roomNameDelete}} ?</div>
+      <div class="modal-title text-danger">Bạn không thể khôi phục dữ liệu đã xóa ! </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="submit" form="area-form" class="btn btn-danger" (click)="onDeleteRoomSubmit()"  >Đồng ý</button>
+        <button type="reset" form="area-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+        
+
+    </div>
+</ng-template>

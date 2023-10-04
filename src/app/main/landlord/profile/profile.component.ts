@@ -102,7 +102,7 @@ export class ProfileComponent implements OnInit  {
     
       formData.append('fileUpload', file);
 
-      this._data.postFile("/api/User/uploadavatar?userid="+this.currentUser?.userid, formData ).subscribe({
+      this._data.postFile("/api/user/uploadavatar?userid="+this.currentUser?.userid, formData ).subscribe({
         next: this.extractData,
         error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err);} ,
         complete: () => { this._notify.printSuccessMessage("Upload avatar thành công !");} ,

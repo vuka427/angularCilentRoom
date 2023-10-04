@@ -24,6 +24,8 @@ export class RoomComponent implements OnInit{
   @ViewChild('deleteAreaModal') deleteAreaModal : TemplateRef<any>; 
   @ViewChild('editAreaModal') editAreaModal : TemplateRef<any>; 
 
+  @ViewChild('deleteRoomModal') deleteRoomModal : TemplateRef<any>; 
+
   constructor(
     private _data : DataService,
     private _notify : NotificationService,
@@ -56,6 +58,9 @@ export class RoomComponent implements OnInit{
 
   public areaNameDelete:string;
   public areaIdDelete: number = 0 ;
+
+  public roomNameDelete:string;
+  public roomIdDelete: number = 0 ;
 
   public ngOnInit(): void {
       this.loadData();
@@ -111,14 +116,14 @@ export class RoomComponent implements OnInit{
         complete: () => { console.log("load all room"); }, 
       });
   }
- //mở đóng model thêm
+ //mở đóng model thêm khu vực
   public openAddAreaModal(){
     this._modalService.open(this.addAreaModal);
   }
   public closeAddAreaModal(){
     this._modalService.dismissAll(this.addAreaModal);
   }
-  //mở đóng model xóa
+  //mở đóng model xóa khu vực
   public openDeleteAreaModal(areaName : string , housetype:string, areaId: number){
     this.areaIdDelete = areaId;
     this.areaNameDelete = this._housetypePipe.transform(housetype,false) + ' '+  areaName;
@@ -127,13 +132,22 @@ export class RoomComponent implements OnInit{
   public closeDeleteAreaModal(){
     this._modalService.dismissAll(this.deleteAreaModal);
   }
-   //mở đóng model sửa
+   //mở đóng model sửa khu vực
   public openEditAreaModal(branchid:string, areaid:string, areaname: string, description:string){
     this.frUpdateArea.setValue({areaid: areaid,areaname : areaname, description: description, branchId : branchid});
     this._modalService.open(this.editAreaModal);
   }
   public closeEditAreaModal(){
     this._modalService.dismissAll(this.editAreaModal);
+  }
+  //mở đóng model xóa phòng
+  public openDeleteRoomModal(areaName : string , roomNumber:string, roomId: number){
+    this.roomIdDelete = roomId;
+    this.roomNameDelete = areaName +'.'+roomNumber;
+    this._modalService.open(this.deleteRoomModal);
+  }
+  public closeDeleteRoomModal(){
+    this._modalService.dismissAll(this.deleteRoomModal);
   }
  
   //thêm dãy tầng
@@ -243,7 +257,7 @@ export class RoomComponent implements OnInit{
 
     this._data.post('/api/room/add',this.frRoom.value).subscribe(
       {
-        next: res => { console.log("repone ", res);},
+        next: res => { this.uploadImage(res); console.log("repone ", res);},
         error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err);},
         complete: () => { 
           this._notify.printSuccessMessage("Thêm phòng trọ thành công !"); 
@@ -302,6 +316,23 @@ export class RoomComponent implements OnInit{
     this.showFormCreateRoom= false;
   }
 
+
+   //xóa phòng
+   public onDeleteRoomSubmit(){
+
+    this._data.delete('/api/room/delete',"roomid",this.roomIdDelete.toString()).subscribe(
+      {
+        next: res => { console.log("repone ", res);},
+        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err); },
+        complete: () => { 
+          this._notify.printSuccessMessage("Xóa phòng thành công !"); 
+          this.closeAddAreaModal();
+          this.LoadAreaData(this.currentBranchId, this.currentBranchIndex);
+        },
+      }
+    );
+  }
+
   // upload file
   public ImageUploads : File[] = [];
   public imagePreviewSrc : any[] = [];
@@ -331,10 +362,9 @@ export class RoomComponent implements OnInit{
 
       }
     }else{
-      this._notify.printErrorMessage(" Cho phép tải lên tối đa 6 tắm ảnh !");
+      this._notify.printErrorMessage("Cho phép tải lên tối đa 6 tắm ảnh !");
     }
     
-
   }
   public removeImageUpload(index: number){
     this.imageNumber -=1;
@@ -342,17 +372,33 @@ export class RoomComponent implements OnInit{
     this.ImageUploads.splice(index,1);
   }
 
-  public uploadImage(){
+  public uploadImage(roomId: any){
+    if (this.ImageUploads.length>0) {
 
+      let formData:FormData = new FormData();
 
+      this.ImageUploads.forEach(file => {
+        formData.append('fileUpload-'+file.name,file);
+      });
+      
+
+      this._data.postFile("/api/room/uploadimage?roomid="+roomId.toString(), formData ).subscribe({
+        next: ()=>{},
+        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err);} ,
+        complete: () => { this._notify.printSuccessMessage("Upload ảnh thành công !");} ,
+      });;
+
+        
+    }
 
     this.imageNumber = 0;
     this.imagePreviewSrc=[];
     this.ImageUploads=[];
-    
-
 
   }
  // end upload file
+
+
+
 
 }
