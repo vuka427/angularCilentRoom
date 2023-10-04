@@ -1,7 +1,7 @@
 
 
 
-<div class="card shadow p-3" [ngClass]="{'d-none': showFormCreateRoom}"  >
+<div class="card shadow p-3" [ngClass]="{'d-none': !(showFormCreateRoom ==0 )}"  >
     <h5>Danh sách phòng trọ </h5>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
        
@@ -102,8 +102,7 @@
     
                     <div class="container-fluid" >
                         <div class="row ">
-                            <div class="card-deck">
-                                <div *ngFor="let room of area.rooms" class="card " style="width: auto;">
+                                <div *ngFor="let room of area.rooms" class="card m-2" style="width: 230px;">
                                     <div class="card-header bg-primary text-light">
                                         <i class="fas fa-home"></i>
                                         Phòng {{area.areaName}}.{{room.roomNumber}}
@@ -127,12 +126,12 @@
                                         </p>
                                         <hr>
                                         <button type="button" class="btn btn-sm btn-primary mr-1 mb-1">Xem</button>
-                                        <button type="button" class="btn btn-sm btn-success mr-1 mb-1">Chỉnh sửa</button>
+                                        <button type="button" class="btn btn-sm btn-success mr-1 mb-1" (click)="openFromEditRoom(room)">Chỉnh sửa</button>
                                         <button type="button" class="btn btn-sm btn-danger mb-1 " (click)="openDeleteRoomModal(area.areaName,room.roomNumber,room.id)">Xóa</button>
                                     </div>
                                     
                                 </div>
-                            </div>
+                           
                            
                         </div>
                     </div>
@@ -258,7 +257,7 @@
 </ng-template>
 
 <!-- thêm phòng  -->
-<div [ngClass]="{'d-none': !showFormCreateRoom}" id="create-branch-page"  class="container-fluid justify-content-center  p-0 m-0 mb-3">
+<div [ngClass]="{'d-none': !(showFormCreateRoom == 1)}" id="create-branch-page"  class="container-fluid justify-content-center  p-0 m-0 mb-3">
     <div id="error-message"></div>
     <div class="row  justify-content-center m-0">
         <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 card p-0 shadow border ">
@@ -342,7 +341,6 @@
                                 class="help-block text-danger"
                                 > Vui lòng trạng thái gác !</div>
                             
-                            
                         </div>
                     </div>
                     <div class="form-group">
@@ -409,9 +407,6 @@
                         </div>
                     </div>
                    
-
-
-
                     <div class="text-center">
                         <h6 class=" text-primary" >Thiết bị trong phòng</h6>
                     </div>
@@ -449,9 +444,6 @@
                                 <input type="text" class="form-control"  formControlName="description" placeholder="Mô tả" />
                                 
                             </div>
-                            
-                            
-                            
                           </ng-container>
                         </div>
                     </ng-container>
@@ -500,3 +492,217 @@
 
     </div>
 </ng-template>
+
+
+<!-- chỉnh sửa phòng  -->
+<div [ngClass]="{'d-none': !(showFormCreateRoom == 2)}" id="create-branch-page"  class="container-fluid justify-content-center  p-0 m-0 mb-3">
+    <div id="error-message"></div>
+    <div class="row  justify-content-center m-0">
+        <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 card p-0 shadow border ">
+            <div class="card-header form-header p-0 ">
+                <h4 class="text-center font-weight-bold m-3 ">Cập nhật thông tin phòng</h4>
+            </div>
+            <div class="card-body">
+                <form class="form" novalidate  (ngSubmit)="onFormUpdateRoomSubmit()" [formGroup]="frURoom"  #f="ngForm" >
+                    <div class="text-center">
+                        <h6 class=" text-primary" >Thông tin nhà trọ</h6>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="branchid"><h5>Nhà trọ<sup class="text-danger">(*)</sup></h5></label>
+                            <select  class="form-control form-control-user"  placeholder="Nhà trọ"
+                            name="branchid" id="branchid"  formControlName="branchid" (change)="setSelectArea($event)" 
+                            >
+                                <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn nhà trọ</option>
+                                <option *ngFor="let branch of  branches; index as i"   [value]="branch.id">{{branch.branchName}} </option>
+                            </select>
+                            <div  *ngIf="frURoom.controls['branchid']?.hasError('required')
+                            && (frRoom.controls['branchid']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                            class="help-block text-danger"
+                            >Vui lòng chọn nhà trọ !</div>
+
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="areaid"><h5>Dãy-tầng<sup class="text-danger">(*)</sup></h5></label>
+                            <select class="form-control form-control-user"  placeholder="Tên nhà trọ"
+                            name="areaid" id="areaid" formControlName="areaid"
+                            >
+                                <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn dãy tầng</option>
+                                <option  *ngFor="let area of  areaSelect; index as i" [value]="area.id"  >{{area.areaName}} </option>
+                        
+                            </select>
+                            <div  *ngIf="frURoom.controls['areaid']?.hasError('required')
+                            && (frURoom.controls['areaid']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                            class="help-block text-danger"
+                            >Vui lòng chọn dãy-tầng !</div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h6 class=" text-primary " >Thông tin phòng</h6>
+                    </div>
+                    <hr >
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="roomnumber"><h5>Số phòng<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="number" class="form-control form-control-user" placeholder="Số phòng" appOnlyNumber
+                            name="roomnumber" id="roomnumber" formControlName="roomnumber"
+                             >
+                             <div  *ngIf="frURoom.controls['roomnumber']?.hasError('required')
+                             && (frURoom.controls['roomnumber']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                             class="help-block text-danger"
+                             > Vui lòng nhập số phòng !</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="ismezzanine"><h5>Phòng có gác<sup class="text-danger">(*)</sup></h5></label>
+                            <div>
+                                <span>
+                                    <input type="radio" id="ismezzanine-true" name="ismezzanine" value="true" checked class="mr-1"
+                                    formControlName="ismezzanine"
+                                    >
+                                    <label for="ismezzanine-true" class="mr-3" >Có</label>
+                                </span>
+                                <span>
+                                    <input type="radio" id="ismezzanine-false" name="ismezzanine" value="false" class="mr-1"  
+                                    formControlName="ismezzanine"
+                                    >
+                                    <label for="ismezzanine-false" class="mr-3" >không</label>
+                                </span>
+                            </div>
+                            <div  *ngIf="frURoom.controls['ismezzanine']?.hasError('required')
+                                && (frURoom.controls['ismezzanine']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                                class="help-block text-danger"
+                                > Vui lòng trạng thái gác !</div>
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                          <label for="price"><h5>Giá cho thuê<sup class="text-danger">(*) </sup><sub>(vnđ/tháng)</sub></h5></label>
+                            <input type="number" class="form-control" name="price" id="price" placeholder="Giá cho thuê" appOnlyNumber
+                             formControlName="price"
+                             >
+                             <div  *ngIf="frURoom.controls['price']?.hasError('required')
+                             && (frURoom.controls['price']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                             class="help-block text-danger"
+                             > Vui lòng nhập giá cho thuê !</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="imaxmember"><h5>Số người ở tối đa<sup class="text-danger">(*) </sup><sub>(người)</sub></h5></label>
+                            <input type="number" class="form-control" name="maxmember" id="maxmember" placeholder="Số người ở tối đa" appOnlyNumber
+                              formControlName="maxmember"
+                            >
+                            <div  *ngIf="frURoom.controls['maxmember']?.hasError('required')
+                            && (frURoom.controls['maxmember']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                            class="help-block text-danger"
+                            > Vui lòng số người ở tối đa !</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="acreage"><h5>Diện tích<sup class="text-danger">(*)</sup><sub>(m<sup>2</sup>)</sub></h5></label>
+                            <input type="number" class="form-control form-control-user" placeholder="Diện tích"
+                            name="acreage" id="acreage" formControlName="acreage" appOnlyNumber
+                             > 
+                             <div  *ngIf="frURoom.controls['acreage']?.hasError('required')
+                            && (frURoom.controls['acreage']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                            class="help-block text-danger"
+                            > Vui lòng nhập diện tích phòng !</div>
+                        </div>
+                       
+                    </div>
+                   
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="length"><h5>Hình ảnh <sub class="text-primary">(Thêm tối đa 6 tắm ảnh)</sub></h5></label>
+                            
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div *ngFor="let imageItem of imagePreviewSrc; index as i" class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3  imgUp">
+                                        <div  class="imagePreview" [ngStyle]="{'background-image': 'url('+imageItem +')'}">
+                                        </div> 
+                                        <i class="fa fa-times del" (click)="removeImageUpload(i)"></i>
+                                    </div><!-- col-2 -->
+                                    <div>
+                                        <button *ngIf="imageNumber<6" type="button"  
+                                            class=" text-center btn btn-sm btn-outline-primary" 
+                                            (click)="fileUpload.click()"> + Thêm ảnh 
+                                        </button>
+                                        <h6 *ngIf="imageNumber>=6" class=" text-danger" >Số lượng ảnh đã đạt tối đa !</h6>
+                                    </div>
+                                </div><!-- row -->
+                            </div><!-- container -->
+
+                            <input type="file" accept="image/*" #fileUpload (change)="onFileSelected($event)"style="display: none;">
+                            
+                        </div>
+                    </div>
+                   
+                    <div class="text-center">
+                        <h6 class=" text-primary" >Thiết bị trong phòng</h6>
+                    </div>
+                    <hr>
+
+                    <ng-container [formGroup]="frURoom" formArrayName="devices">
+                        <div *ngFor="let deviceItem of udevices.controls; index as i"  class="form-group">
+                            <label for=""><h5>Thiết bị {{i+1}} <button type="button" (click)="removeDevicesEditForm(i)"  class="btn btn-sm btn-danger" >Xóa</button></h5> </label>
+  
+                          <ng-container [formGroupName]="i">
+                            <div class="col-xs-6 mb-3">
+                                <label for="">
+                                    <h5 class="h6" >Tên thiết bị<sup class="text-danger"> (*)</sup> </h5>
+                                </label>
+                                <input type="text" class="form-control"  formControlName="devicename" placeholder="Tên thiết bị" />
+                                <div  *ngIf="udevices.controls[i].get('devicename')?.hasError('required')
+                                    && (udevices.controls[i].get('devicename')?.touched || (isValidRoomEditFormSubmitted  != null && !isValidRoomEditFormSubmitted ))" 
+                                    class="help-block text-danger"
+                                    >Vui lòng nhập tên thiết bị !</div>
+                            </div>
+                           
+
+                            <div class="col-xs-6  mb-3">
+                                <label for=""><h5 class="h6" >Số lượng<sup class="text-danger"> (*)</sup></h5></label>
+                                <input type="number" class="form-control" formControlName="quantity" placeholder="Số lượng" appOnlyNumber/>
+                                <div  *ngIf="udevices.controls[i].get('quantity')?.hasError('required')
+                                    && (udevices.controls[i].get('quantity')?.touched|| (isValidRoomEditFormSubmitted  != null && !isValidRoomEditFormSubmitted ))" 
+                                    class="help-block text-danger"
+                                    >Vui lòng nhập số lượng !</div>
+                            </div>
+                            <div class="col-xs-6 ">
+                                <label for="">
+                                    <h5 class="h6" >Mô tả</h5>
+                                </label>
+                                <input type="text" class="form-control"  formControlName="description" placeholder="Mô tả" />
+                                
+                            </div>
+                          </ng-container>
+                        </div>
+                    </ng-container>
+
+
+                    <div class="form-group">
+                        <div class="col-xs-6 text-center">
+                            <button type="button" class="btn btn-sm btn-outline-primary" (click)="addDevicesEditForm()">+ Thêm thiết bị</button>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="form-group">
+                         <div class="col-xs-12">
+                            <input type="submit" class="btn btn-primary" value="Cập nhật">
+                            <button type="reset" class="btn btn-outline-danger ml-2" (click)="closeFromEditRoom()"  >Hủy</button>
+                          </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

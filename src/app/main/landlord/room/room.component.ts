@@ -42,13 +42,15 @@ export class RoomComponent implements OnInit{
   public frArea : FormGroup ;
   public frUpdateArea : FormGroup ;
   public frRoom : FormGroup ;
+  public frURoom : FormGroup ;
 
   public isValidAreaFormSubmitted :boolean | null = null;
   public isValidAreaEditFormSubmitted :boolean | null = null;
+  public isValidRoomEditFormSubmitted :boolean | null = null;
   public isValidRoomFormSubmitted :boolean | null = null;
 
 
-  public showFormCreateRoom: boolean = false;
+  public showFormCreateRoom: number = 0;
   public areaSelect: any[] =[];
 
   public fileName : any;
@@ -89,11 +91,26 @@ export class RoomComponent implements OnInit{
         devices: new FormArray([])
       });
 
+      this.frURoom= new FormGroup({
+        id: new FormControl(),
+        branchid: new FormControl(null,Validators.required),
+        areaid: new FormControl(null,Validators.required),
+        roomnumber: new FormControl('',Validators.required),
+        acreage: new FormControl('',Validators.required),
+        ismezzanine: new FormControl('true',Validators.required),
+        price: new FormControl('',Validators.required),
+        maxmember: new FormControl('',Validators.required),
+        devices: new FormArray([])
+      });
+
       
   }
 
   get devices() {
     return this.frRoom.get('devices') as FormArray;
+  }
+  get udevices() {
+    return this.frURoom.get('devices') as FormArray;
   }
 
  //thiết lập nhà trọ hiện tại
@@ -187,6 +204,7 @@ export class RoomComponent implements OnInit{
       }
     );
   }
+
   // sửa dãy tầng
   public onEditAreaSubmit(){
     this.isValidAreaEditFormSubmitted  = false;
@@ -209,6 +227,7 @@ export class RoomComponent implements OnInit{
       }
     );
   }
+
  // load lại branch
   public LoadAreaData(branchId: number, branchIndex : number){
 
@@ -224,6 +243,7 @@ export class RoomComponent implements OnInit{
         }
       );
   }
+
  // load lại area
   public LoadRoomInAreaData( branchIndex : number ,areaId: number){
 
@@ -268,6 +288,34 @@ export class RoomComponent implements OnInit{
       }
     );
   }
+
+  // chỉnh sửa phòng
+  public onFormUpdateRoomSubmit(){
+    console.log('submit');
+    this.isValidRoomEditFormSubmitted = false;
+    
+    if (this.frURoom.invalid) {
+      console.log("is invalid");
+			return;
+		}
+    this.isValidRoomEditFormSubmitted = true;
+
+    console.log('submited',this.frURoom.value );
+
+    this._data.post('/api/room/edit',this.frURoom.value).subscribe(
+      {
+        next: res => { this.uploadImage(res); console.log("repone ", res);},
+        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err);},
+        complete: () => { 
+          this._notify.printSuccessMessage("Thêm phòng trọ thành công !"); 
+          this.LoadRoomInAreaData(this.currentBranchIndex,this.frURoom.controls['areaid'].value);
+          this.closeFromCreateRoom();
+          
+        },
+      }
+    );
+  }
+
   // thêm phòng -> thêm thiết bị
   public addDevices(){
     console.log("add devices");
@@ -280,6 +328,7 @@ export class RoomComponent implements OnInit{
     let s = this.frRoom.get('devices') as FormArray;
     s.push(group);
   }
+
   // thêm phòng -> xóa thiêt bị
   public removeDevices(index:number){
     console.log("remove devices");
@@ -291,6 +340,27 @@ export class RoomComponent implements OnInit{
     return this.frRoom.get('devices') as FormArray;
   }
 
+  // chỉnh sửa phòng -> thêm thiết bị
+  public addDevicesEditForm(){
+    console.log("add devices edit form");
+    const group = new FormGroup({
+      devicename: new FormControl('',Validators.required),
+      quantity: new FormControl(1,Validators.required),
+      description: new FormControl('')
+    });
+    
+    let s = this.frURoom.get('devices') as FormArray;
+    s.push(group);
+  }
+  // chỉnh sửa phòng -> xóa thiêt bị
+  public removeDevicesEditForm(index:number){
+    console.log("remove devices edit form");
+    
+    let s = this.frURoom.get('devices') as FormArray;
+    s.removeAt(index);
+  }
+  
+ 
  // thêm phòng -> thiết lập khu vực
   public setSelectArea(event: any): void{
     let a : any[] = this.branches;
@@ -306,15 +376,32 @@ export class RoomComponent implements OnInit{
        this.areaSelect = a.find((data) =>  data.id == branchId ).areas ;
     }
    
-    this.showFormCreateRoom= true;
+    this.showFormCreateRoom= 1;
   }
   //đóng form thêm phòng
   public closeFromCreateRoom(){
     this.imageNumber = 0;
     this.imagePreviewSrc=[];
     this.ImageUploads=[];
-    this.showFormCreateRoom= false;
+    this.showFormCreateRoom= 0;
   }
+
+  //mở form chỉnh sửa phòng 
+  public openFromEditRoom(room :RoomModel){
+
+    
+   
+    this.showFormCreateRoom= 2;
+  }
+  //đóng form chỉnh sửa phòng
+  public closeFromEditRoom(){
+    this.imageNumber = 0;
+    this.imagePreviewSrc=[];
+    this.ImageUploads=[];
+    this.showFormCreateRoom = 0;
+    
+  }
+
 
 
    //xóa phòng
