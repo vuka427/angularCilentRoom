@@ -126,7 +126,7 @@
                                         </p>
                                         <hr>
                                         <button type="button" class="btn btn-sm btn-primary mr-1 mb-1">Xem</button>
-                                        <button type="button" class="btn btn-sm btn-success mr-1 mb-1" (click)="openFromEditRoom(room)">Chỉnh sửa</button>
+                                        <button type="button" class="btn btn-sm btn-success mr-1 mb-1" (click)="openFromEditRoom(room.id,branch.branchName,area.areaName)">Chỉnh sửa</button>
                                         <button type="button" class="btn btn-sm btn-danger mb-1 " (click)="openDeleteRoomModal(area.areaName,room.roomNumber,room.id)">Xóa</button>
                                     </div>
                                     
@@ -321,7 +321,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="ismezzanine"><h5>Phòng có gác<sup class="text-danger">(*)</sup></h5></label>
+                            <label for="ismezzanine"><h5>Phòng có gác lửng<sup class="text-danger">(*)</sup></h5></label>
                             <div>
                                 <span>
                                     <input type="radio" id="ismezzanine-true" name="ismezzanine" value="true" checked class="mr-1"
@@ -339,7 +339,7 @@
                             <div  *ngIf="frRoom.controls['ismezzanine']?.hasError('required')
                                 && (frRoom.controls['ismezzanine']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
                                 class="help-block text-danger"
-                                > Vui lòng trạng thái gác !</div>
+                                > Vui lòng chọn trạng thái gác !</div>
                             
                         </div>
                     </div>
@@ -495,51 +495,35 @@
 
 
 <!-- chỉnh sửa phòng  -->
-<div [ngClass]="{'d-none': !(showFormCreateRoom == 2)}" id="create-branch-page"  class="container-fluid justify-content-center  p-0 m-0 mb-3">
+<div [ngClass]="{'d-none': !(showFormCreateRoom == 2)}" id="create-branch-page" class="container-fluid justify-content-center  p-0 m-0 mb-3">
     <div id="error-message"></div>
     <div class="row  justify-content-center m-0">
-        <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 card p-0 shadow border ">
+        <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 card p-0 shadow border">
             <div class="card-header form-header p-0 ">
                 <h4 class="text-center font-weight-bold m-3 ">Cập nhật thông tin phòng</h4>
             </div>
             <div class="card-body">
                 <form class="form" novalidate  (ngSubmit)="onFormUpdateRoomSubmit()" [formGroup]="frURoom"  #f="ngForm" >
                     <div class="text-center">
-                        <h6 class=" text-primary" >Thông tin nhà trọ</h6>
+                        <h6 class="text-primary" >Thông tin nhà trọ</h6>
                     </div>
                     <hr>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="branchid"><h5>Nhà trọ<sup class="text-danger">(*)</sup></h5></label>
-                            <select  class="form-control form-control-user"  placeholder="Nhà trọ"
-                            name="branchid" id="branchid"  formControlName="branchid" (change)="setSelectArea($event)" 
-                            >
-                                <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn nhà trọ</option>
-                                <option *ngFor="let branch of  branches; index as i"   [value]="branch.id">{{branch.branchName}} </option>
-                            </select>
-                            <div  *ngIf="frURoom.controls['branchid']?.hasError('required')
-                            && (frRoom.controls['branchid']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
-                            class="help-block text-danger"
-                            >Vui lòng chọn nhà trọ !</div>
-
-
+                            <label for="branchid"><h5>Nhà trọ</h5></label>
+                            <input type="text" class="form-control form-control-user "
+                            name="branchid" id="branchid"  formControlName="branchid" 
+                             >
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="areaid"><h5>Dãy-tầng<sup class="text-danger">(*)</sup></h5></label>
-                            <select class="form-control form-control-user"  placeholder="Tên nhà trọ"
-                            name="areaid" id="areaid" formControlName="areaid"
+                            <label for="areaid"><h5>Dãy-tầng</h5></label>
+                            <input type="text" class="form-control form-control-user"
+                            name="areaid" id="areaid" formControlName="areaid" 
                             >
-                                <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn dãy tầng</option>
-                                <option  *ngFor="let area of  areaSelect; index as i" [value]="area.id"  >{{area.areaName}} </option>
-                        
-                            </select>
-                            <div  *ngIf="frURoom.controls['areaid']?.hasError('required')
-                            && (frURoom.controls['areaid']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
-                            class="help-block text-danger"
-                            >Vui lòng chọn dãy-tầng !</div>
                         </div>
+                        
                     </div>
                     <div class="text-center">
                         <h6 class=" text-primary " >Thông tin phòng</h6>
@@ -577,7 +561,7 @@
                             <div  *ngIf="frURoom.controls['ismezzanine']?.hasError('required')
                                 && (frURoom.controls['ismezzanine']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
                                 class="help-block text-danger"
-                                > Vui lòng trạng thái gác !</div>
+                                >Vui lòng chọn trạng thái gác !</div>
                             
                         </div>
                     </div>
@@ -610,7 +594,7 @@
                             <label for="acreage"><h5>Diện tích<sup class="text-danger">(*)</sup><sub>(m<sup>2</sup>)</sub></h5></label>
                             <input type="number" class="form-control form-control-user" placeholder="Diện tích"
                             name="acreage" id="acreage" formControlName="acreage" appOnlyNumber
-                             > 
+                            > 
                              <div  *ngIf="frURoom.controls['acreage']?.hasError('required')
                             && (frURoom.controls['acreage']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
                             class="help-block text-danger"
@@ -679,8 +663,7 @@
                                 <label for="">
                                     <h5 class="h6" >Mô tả</h5>
                                 </label>
-                                <input type="text" class="form-control"  formControlName="description" placeholder="Mô tả" />
-                                
+                                <input type="text" class="form-control"  formControlName="description" placeholder="Mô tả"/>
                             </div>
                           </ng-container>
                         </div>
@@ -692,16 +675,14 @@
                             <button type="button" class="btn btn-sm btn-outline-primary" (click)="addDevicesEditForm()">+ Thêm thiết bị</button>
                         </div>
                     </div>
-
                     <hr>
                     <div class="form-group">
-                         <div class="col-xs-12">
+                        <div class="col-xs-12">
                             <input type="submit" class="btn btn-primary" value="Cập nhật">
                             <button type="reset" class="btn btn-outline-danger ml-2" (click)="closeFromEditRoom()"  >Hủy</button>
-                          </div>
+                        </div>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>

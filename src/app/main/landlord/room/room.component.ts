@@ -93,8 +93,8 @@ export class RoomComponent implements OnInit{
 
       this.frURoom= new FormGroup({
         id: new FormControl(),
-        branchid: new FormControl(null,Validators.required),
-        areaid: new FormControl(null,Validators.required),
+        branchid: new FormControl({value: '', disabled: true},Validators.required),
+        areaid: new FormControl({value: '', disabled: true},Validators.required),
         roomnumber: new FormControl('',Validators.required),
         acreage: new FormControl('',Validators.required),
         ismezzanine: new FormControl('true',Validators.required),
@@ -290,6 +290,7 @@ export class RoomComponent implements OnInit{
   }
 
   // chỉnh sửa phòng
+  public editCurrentAreaId: number;
   public onFormUpdateRoomSubmit(){
     console.log('submit');
     this.isValidRoomEditFormSubmitted = false;
@@ -307,10 +308,9 @@ export class RoomComponent implements OnInit{
         next: res => { this.uploadImage(res); console.log("repone ", res);},
         error: err => { this._data.handleError(err);console.log(err);},
         complete: () => { 
-          this._notify.printSuccessMessage("Thêm phòng trọ thành công !"); 
-          this.LoadRoomInAreaData(this.currentBranchIndex,this.frURoom.controls['areaid'].value);
-          this.closeFromCreateRoom();
-
+          this._notify.printSuccessMessage("Cập nhật thông tin phòng thành công !"); 
+          this.LoadRoomInAreaData(this.currentBranchIndex,this.editCurrentAreaId);
+          this.closeFromEditRoom();
         },
       }
     );
@@ -386,19 +386,39 @@ export class RoomComponent implements OnInit{
     this.imagePreviewSrc=[];
     this.ImageUploads=[];
     this.showFormCreateRoom= 0;
+    let s = this.frRoom.get('devices') as FormArray;
+    s.clear();
   }
 
   //mở form chỉnh sửa phòng 
-  public openFromEditRoom(room :RoomModel){
+  public openFromEditRoom(roomid:number, branchName:string, areaName:string){
 
-    this._data.get('/api/room/detail?roomid='+room.id).subscribe(
+    this._data.get('/api/room/detail?roomid='+roomid).subscribe(
       {
         next: res => { 
           let room : RoomModel| any = res;
           console.log("repone ", room);   
-          this.frURoom.patchValue(room);
-   
+          this.frURoom.patchValue({ id: room.id,
+            branchid: branchName,
+            areaid: areaName,
+            roomnumber: room.roomNumber,
+            acreage: room.acreage,
+            ismezzanine: room.isMezzanine? "true": "false" ,
+            price: room.price ,
+            maxmember: room.maxMember,
+           });
+           this.editCurrentAreaId = room.areaId;
+           let s = this.frURoom.get('devices') as FormArray;
 
+            room.devices.forEach((e:any)=> {
+              const group = new FormGroup({
+                id: new FormControl(e.id),
+                devicename: new FormControl(e.deviceName,Validators.required),
+                quantity: new FormControl(e.quantity,Validators.required),
+                description: new FormControl(e.description)
+              });
+              s.push(group);
+            });
         },
         error: err => { this._data.handleError(err); console.log(err); },
         complete: () => { },
@@ -407,7 +427,6 @@ export class RoomComponent implements OnInit{
 
 
 
-  
     this.showFormCreateRoom= 2;
   }
 
@@ -417,14 +436,12 @@ export class RoomComponent implements OnInit{
     this.imagePreviewSrc=[];
     this.ImageUploads=[];
     this.showFormCreateRoom = 0;
-    
+    let s = this.frURoom.get('devices') as FormArray;
+    s.clear();
   }
-
-
 
    //xóa phòng
    public onDeleteRoomSubmit(){
-
     this._data.delete('/api/room/delete',"roomid",this.roomIdDelete.toString()).subscribe(
       {
         next: res => { console.log("repone ", res);},
@@ -446,7 +463,6 @@ export class RoomComponent implements OnInit{
   public  onFileSelected(event:any) {
     if(this.imageNumber < 6){
 
-     
       const file :File = event.target.files[0];
       
       console.log(this.ImageUploads);
@@ -486,14 +502,11 @@ export class RoomComponent implements OnInit{
         formData.append('fileUpload-'+file.name,file);
       });
       
-
       this._data.postFile("/api/room/uploadimage?roomid="+roomId.toString(), formData ).subscribe({
         next: ()=>{},
         error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err);} ,
         complete: () => { this._notify.printSuccessMessage("Upload ảnh thành công !");} ,
       });;
-
-        
     }
 
     this.imageNumber = 0;
