@@ -302,15 +302,15 @@ export class RoomComponent implements OnInit{
 
     console.log('submited',this.frURoom.value );
 
-    this._data.post('/api/room/edit',this.frURoom.value).subscribe(
+    this._data.put('/api/room/edit',this.frURoom.value).subscribe(
       {
         next: res => { this.uploadImage(res); console.log("repone ", res);},
-        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err);},
+        error: err => { this._data.handleError(err);console.log(err);},
         complete: () => { 
           this._notify.printSuccessMessage("Thêm phòng trọ thành công !"); 
           this.LoadRoomInAreaData(this.currentBranchIndex,this.frURoom.controls['areaid'].value);
           this.closeFromCreateRoom();
-          
+
         },
       }
     );
@@ -367,6 +367,7 @@ export class RoomComponent implements OnInit{
     this.areaSelect = a.find((data) =>  data.id == event.target.value).areas ;
 
   }
+
 //mở form thêm phòng 
   public openFromCreateRoom(branchId: any, areaId: any){
 
@@ -378,6 +379,7 @@ export class RoomComponent implements OnInit{
    
     this.showFormCreateRoom= 1;
   }
+
   //đóng form thêm phòng
   public closeFromCreateRoom(){
     this.imageNumber = 0;
@@ -389,10 +391,26 @@ export class RoomComponent implements OnInit{
   //mở form chỉnh sửa phòng 
   public openFromEditRoom(room :RoomModel){
 
-    
+    this._data.get('/api/room/detail?roomid='+room.id).subscribe(
+      {
+        next: res => { 
+          let room : RoomModel| any = res;
+          console.log("repone ", room);   
+          this.frURoom.patchValue(room);
    
+
+        },
+        error: err => { this._data.handleError(err); console.log(err); },
+        complete: () => { },
+      }
+    );
+
+
+
+  
     this.showFormCreateRoom= 2;
   }
+
   //đóng form chỉnh sửa phòng
   public closeFromEditRoom(){
     this.imageNumber = 0;

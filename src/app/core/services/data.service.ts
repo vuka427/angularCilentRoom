@@ -93,7 +93,7 @@ export class DataService {
     console.log(error);
     if (error.status == 401) {
       localStorage.removeItem(SystemConstants.CURRENT_USER);
-      //this._notify.printErrorMessage(MessageContstants.LOGIN_AGAIN_MSG);
+      this._notify.printErrorMessage(MessageContstants.LOGIN_AGAIN_MSG);
       this._utility.navigateToLogin();
     }
     else if (error.status == 403) {
@@ -104,11 +104,13 @@ export class DataService {
     if (error.status == 400) {
       this._notify.printErrorMessage(error.error.message);
     }
+    if (error.status == 404) {
+      this._notify.printErrorMessage(MessageContstants.NOTFOUND);
+    }
     else {
       let errMsg = JSON.parse(error._body).Message;
       this._notify.printErrorMessage(errMsg);
       
-
       return throwError(() => new Error(errMsg) );
     }
     
