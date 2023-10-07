@@ -8,6 +8,7 @@ import { BranchModel } from 'src/app/core/domain/room/branch.model';
 import {NgbModal, ModalDismissReasons, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HousetypePipe } from '../../../shared/pipe/housetype.pipe';
+import { ImageRoomModel } from 'src/app/core/domain/room/image.room';
 
 
 
@@ -339,6 +340,9 @@ export class RoomComponent implements OnInit{
   get services() {
     return this.frRoom.get('devices') as FormArray;
   }
+  get editRoomId() {
+    return this.frURoom.get('id')?.value;
+  }
 
   // chỉnh sửa phòng -> thêm thiết bị
   public addDevicesEditForm(){
@@ -390,6 +394,7 @@ export class RoomComponent implements OnInit{
     s.clear();
   }
 
+  public imageRooms: ImageRoomModel[];
   //mở form chỉnh sửa phòng 
   public openFromEditRoom(roomid:number, branchName:string, areaName:string){
 
@@ -407,6 +412,8 @@ export class RoomComponent implements OnInit{
             price: room.price ,
             maxmember: room.maxMember,
            });
+
+           this.imageRooms = room.imageRooms;
            this.editCurrentAreaId = room.areaId;
            let s = this.frURoom.get('devices') as FormArray;
 
@@ -426,7 +433,7 @@ export class RoomComponent implements OnInit{
     );
 
 
-
+    
     this.showFormCreateRoom= 2;
   }
 
@@ -439,6 +446,51 @@ export class RoomComponent implements OnInit{
     let s = this.frURoom.get('devices') as FormArray;
     s.clear();
   }
+  // xóa ảnh
+  public deleteImageRoom( index: number,imageid:number){
+    
+
+    this._data.delete('/api/room/image/delete',"imageid",imageid.toString()).subscribe(
+      {
+        next: res => { console.log("repone ", res);},
+        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err); },
+        complete: () => { 
+          this.imageRooms.splice(index,1);
+          this._notify.printSuccessMessage("Xóa ảnh thành công !"); 
+          
+        },
+      }
+    );
+
+  }
+
+  onUploadOnefile(event:any) {
+  
+    const file :File = event.target.files[0];
+    console.log ("àdasfasfafasf");
+    if (file) {
+
+      this.fileName = file;
+      console.log ("àdasfasfafasf",this.fileName);
+
+      const reader = new FileReader();
+      reader.onload = e => this.imageSrc = reader.result;
+      reader.readAsDataURL(file);
+
+      let formData:FormData = new FormData();
+    
+      formData.append('fileUpload', file);
+
+      this._data.postFile('/api/room/uploadoneimage?roomid='+this.editRoomId.toString(), formData ).subscribe({
+        next: ()=>{},
+        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err);} ,
+        complete: () => { this._notify.printSuccessMessage("Thêm ảnh thành công !");} ,
+      });
+
+      event.target.files.clear();
+
+    }
+}
 
    //xóa phòng
    public onDeleteRoomSubmit(){
@@ -487,6 +539,7 @@ export class RoomComponent implements OnInit{
     }
     
   }
+
   public removeImageUpload(index: number){
     this.imageNumber -=1;
     this.imagePreviewSrc.splice(index,1);

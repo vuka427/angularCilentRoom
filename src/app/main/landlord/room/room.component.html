@@ -609,22 +609,22 @@
                             
                             <div class="container-fluid">
                                 <div class="row">
-                                    <div *ngFor="let imageItem of imagePreviewSrc; index as i" class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3  imgUp">
-                                        <div  class="imagePreview" [ngStyle]="{'background-image': 'url('+imageItem +')'}">
+                                    <div *ngFor="let imageItem of imageRooms; index as i" class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3  imgUp">
+                                        <div  class="imagePreview" [ngStyle]="{'background-image': 'url('+imageItem.url+')'}">
                                         </div> 
-                                        <i class="fa fa-times del" (click)="removeImageUpload(i)"></i>
+                                        <i class="fa fa-times del" (click)="deleteImageRoom(i,imageItem.id)"></i>
                                     </div><!-- col-2 -->
                                     <div>
                                         <button *ngIf="imageNumber<6" type="button"  
                                             class=" text-center btn btn-sm btn-outline-primary" 
-                                            (click)="fileUpload.click()"> + Thêm ảnh 
+                                            (click)="editFileUpload.click()"> + Thêm ảnh 
                                         </button>
                                         <h6 *ngIf="imageNumber>=6" class=" text-danger" >Số lượng ảnh đã đạt tối đa !</h6>
                                     </div>
                                 </div><!-- row -->
                             </div><!-- container -->
 
-                            <input type="file" accept="image/*" #fileUpload (change)="onFileSelected($event)"style="display: none;">
+                            <input type="file" accept="image/*" #editFileUpload (change)="onUploadOnefile($event)"style="display: none;">
                             
                         </div>
                     </div>
