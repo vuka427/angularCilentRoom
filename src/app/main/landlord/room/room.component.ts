@@ -395,6 +395,7 @@ export class RoomComponent implements OnInit{
   }
 
   public imageRooms: ImageRoomModel[];
+  public indexEditImageRooms: number =0;
   //mở form chỉnh sửa phòng 
   public openFromEditRoom(roomid:number, branchName:string, areaName:string){
 
@@ -414,6 +415,8 @@ export class RoomComponent implements OnInit{
            });
 
            this.imageRooms = room.imageRooms;
+           this.indexEditImageRooms = room.imageRooms.length;
+         
            this.editCurrentAreaId = room.areaId;
            let s = this.frURoom.get('devices') as FormArray;
 
@@ -443,13 +446,14 @@ export class RoomComponent implements OnInit{
     this.imagePreviewSrc=[];
     this.ImageUploads=[];
     this.showFormCreateRoom = 0;
+    this.indexEditImageRooms =0;
     let s = this.frURoom.get('devices') as FormArray;
     s.clear();
   }
   // xóa ảnh
   public deleteImageRoom( index: number,imageid:number){
     
-
+    
     this._data.delete('/api/room/image/delete',"imageid",imageid.toString()).subscribe(
       {
         next: res => { console.log("repone ", res);},
@@ -457,13 +461,14 @@ export class RoomComponent implements OnInit{
         complete: () => { 
           this.imageRooms.splice(index,1);
           this._notify.printSuccessMessage("Xóa ảnh thành công !"); 
+          this.indexEditImageRooms-=1;
           
         },
       }
     );
 
   }
-
+ // cập nhật ảnh 
   onUploadOnefile(event:any) {
   
     const file :File = event.target.files[0];
@@ -482,12 +487,17 @@ export class RoomComponent implements OnInit{
       formData.append('fileUpload', file);
 
       this._data.postFile('/api/room/uploadoneimage?roomid='+this.editRoomId.toString(), formData ).subscribe({
-        next: ()=>{},
+        next: res => {
+           console.log("edit image repone ", res);
+           let image: ImageRoomModel | any = res;
+           this.imageRooms.push(image);
+
+          },
         error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !"); console.log(err);} ,
-        complete: () => { this._notify.printSuccessMessage("Thêm ảnh thành công !");} ,
+        complete: () => { this._notify.printSuccessMessage("Thêm ảnh thành công !"); this.indexEditImageRooms+=1;} ,
       });
 
-      event.target.files.clear();
+      event.target.files.clear;
 
     }
 }

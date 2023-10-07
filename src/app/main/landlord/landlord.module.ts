@@ -12,7 +12,7 @@ import { EmailhistoryComponent } from './emailhistory/emailhistory.component';
 
 import { UtilitesComponent } from './utilites/utilites.component';
 import { BranchComponent } from './room/branch/branch.component';
-import { AreaComponent } from './room/area/area.component';
+
 import { DataTablesModule } from 'angular-datatables';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { RoomstatusPipe } from 'src/app/shared/pipe/roomstatus.pipe';
@@ -32,7 +32,6 @@ import { HousetypePipe } from 'src/app/shared/pipe/housetype.pipe';
     EmailhistoryComponent,
     UtilitesComponent,
     BranchComponent,
-    AreaComponent,
     RoomstatusPipe,
     HousetypePipe
     

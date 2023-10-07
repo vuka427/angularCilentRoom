@@ -20,16 +20,6 @@
           "islink": true
         },
         {
-          "childtitle": "Thêm phòng",
-          "link": "/landlord/room/create",
-          "islink": true
-        },
-        {
-          "childtitle": "Quản lý khu vực",
-          "link": "/landlord/area",
-          "islink": true
-        },
-        {
           "childtitle": "Quản lý nhà trọ",
           "link": "/landlord/branch",
           "islink": true
@@ -61,7 +51,7 @@
       "awesomeIcon":"fas fa-charging-station",
       "type": "",
       "menu": false,
-      "submenu": [ ]
+      "submenu": []
     },
     {
       "title": "Quản lý giao dịch",

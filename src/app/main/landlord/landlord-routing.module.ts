@@ -9,7 +9,7 @@ import { FeedbackComponent } from './feedback/feedback.component';
 import { EmailhistoryComponent } from './emailhistory/emailhistory.component';
 import { UtilitesComponent } from './utilites/utilites.component';
 import { BranchComponent } from './room/branch/branch.component';
-import { AreaComponent } from './room/area/area.component';
+
 
 const routes: Routes = [
   {path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -22,7 +22,7 @@ const routes: Routes = [
   {path: 'emailhistory', component: EmailhistoryComponent },
   {path: 'utilites', component: UtilitesComponent },
   {path: 'branch', component: BranchComponent },
-  {path: 'area', component: AreaComponent }
+ 
   
 ]
 @NgModule({

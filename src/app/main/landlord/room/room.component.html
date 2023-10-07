@@ -21,7 +21,7 @@
           </ul>
           <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Tìm kiếm</button>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i>Tìm kiếm</button>
           </form>
         </div>
     </nav>
@@ -61,7 +61,7 @@
             </nav>
             
             <div *ngFor="let branch of branches; index as i " [ngClass]="{'tab-pane fade': true,'show active' : i==0}"  attr.id="pane-tab-{{i+1}}" role="tabpanel" attr.aria-labelledby="tab{{i+1}}">
-                <h5 class="h6 ml-3 mb-0 text-primary"><u>Địa chỉ : {{branch.address}}</u> </h5>
+                <h5 class="h6 ml-3 mb-0  text-primary"><u>Địa chỉ : {{branch.address}}</u> </h5>
                 <hr>
                 <div *ngFor="let area of branch.areas;index as i ">
                     
@@ -615,11 +615,11 @@
                                         <i class="fa fa-times del" (click)="deleteImageRoom(i,imageItem.id)"></i>
                                     </div><!-- col-2 -->
                                     <div>
-                                        <button *ngIf="imageNumber<6" type="button"  
+                                        <button *ngIf="indexEditImageRooms<6" type="button"  
                                             class=" text-center btn btn-sm btn-outline-primary" 
                                             (click)="editFileUpload.click()"> + Thêm ảnh 
                                         </button>
-                                        <h6 *ngIf="imageNumber>=6" class=" text-danger" >Số lượng ảnh đã đạt tối đa !</h6>
+                                        <h6 *ngIf="indexEditImageRooms>=6" class=" text-danger" >Số lượng ảnh đã đạt tối đa !</h6>
                                     </div>
                                 </div><!-- row -->
                             </div><!-- container -->
