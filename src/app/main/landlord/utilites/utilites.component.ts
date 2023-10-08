@@ -60,7 +60,29 @@ export class UtilitesComponent implements OnInit {
       });
   }
 
+ 
 
+  public saveElectricNumber(roomid: any,electric: any){
+
+    if(electric == null || electric ==''){
+      this._notify.printErrorMessage("Vui lòng nhập chỉ số điện !");
+      return
+    }
+    
+
+    this._notify.printSuccessMessage("Cập nhật chỉ số điện thành công !");
+    console.log("số điện : ",roomid,electric);
+  }
+  public saveWaterNumber(roomid: any, water: any){
+
+    if(water == null || water ==''){
+      this._notify.printErrorMessage("Vui lòng nhập chỉ số nước !");
+      return;
+    }
+   
+    this._notify.printSuccessMessage("Cập nhật chỉ số nước thành công !");
+    console.log("số nước : ",roomid,water);
+}
 
 
 
