@@ -48,7 +48,7 @@ export class UtilitesComponent implements OnInit {
    // load dữ liệu ban đầu
   public loadData(){
 
-    this._data.get("/api/branch/allroom").subscribe(
+    this._data.get("/api/roomindex/allroomindex").subscribe(
       {
         next: res => { 
           console.log("respone all branch", res);

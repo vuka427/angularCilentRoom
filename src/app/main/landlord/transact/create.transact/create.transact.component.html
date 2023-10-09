@@ -1,0 +1,263 @@
+<div  id="create-branch-page"  class="container-fluid justify-content-center  p-0 m-0 mb-3">
+    <div id="error-message"></div>
+    <div class="row  justify-content-center m-0">
+        <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 card p-0 shadow border ">
+            <div class="card-header form-header p-0 ">
+                <h4 class="text-center font-weight-bold m-3 ">Thêm hợp đồng</h4>
+            </div>
+            <div class="card-body">
+                <form class="form" novalidate  (ngSubmit)=" onSubmit()" [formGroup]="frcontract"  #f="ngForm" >
+                    <div class="text-center">
+                        <h6 class=" text-primary" >Thông tin chung</h6>
+                    </div>
+                    <hr>
+                    <div class="container-fluid   p-0 m-0 ">
+                        <div class="row">
+                            <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12  ">
+                                <div class="text-center font-weight-bold mb-3">
+                                    <h6 class=" text-primary" >Bên A</h6>
+                                    <small>(Bên cho thuê)</small>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <label for="a_lessor"><h5>Tên người cho thuê<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="text" class="form-control form-control-user"  placeholder="Tên người cho thuê"
+                                        name="a_lessor" id="a_lessor"  formControlName="a_lessor"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['a_lessor']?.hasError('required')
+                                    && ( frcontract.controls['a_lessor']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập tên người cho thuê!</div>
+                                </div>
+            
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="a_dateofbirth"><h5>Ngày sinh<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="date" class="form-control" name="a_dateofbirth" id="a_dateofbirth" placeholder="Mô tả"
+                                         formControlName="a_dateofbirth"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['a_dateofbirth']?.hasError('required')
+                                    && ( frcontract.controls['a_dateofbirth']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập ngày sinh !</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="a_cccd"><h5>Căn cước công dân<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="text" class="form-control" name="a_cccd" id="a_cccd" placeholder="Căn cước công dân"
+                                         formControlName="a_cccd"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['a_cccd']?.hasError('required')
+                                    && ( frcontract.controls['a_cccd']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập căn cước công dân !</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="a_dateofissuance"><h5>Ngày cấp cccd<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="date" class="form-control" name="a_dateofissuance" id="a_dateofissuance" 
+                                         formControlName="a_dateofissuance"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['a_dateofissuance']?.hasError('required')
+                                    && ( frcontract.controls['a_dateofissuance']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập ngày cấp căn cước công dân !</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="a_placeofissuance"><h5>Nơi cấp cccd<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="text" class="form-control" name="a_placeofissuance" id="a_placeofissuance" placeholder="Nơi cấp cccd"
+                                         formControlName="a_placeofissuance"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['a_placeofissuance']?.hasError('required')
+                                    && ( frcontract.controls['a_placeofissuance']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập nơi cấp căn cước công dân !</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="a_permanentaddress"><h5>Địa chỉ thường trú<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="text" class="form-control" name="a_permanentaddress" id="a_permanentaddress" placeholder="Địa chỉ thường trú"
+                                         formControlName="a_permanentaddress"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['a_permanentaddress']?.hasError('required')
+                                    && ( frcontract.controls['a_permanentaddress']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập địa chỉ thường trú !</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="a_phone"><h5>Số điện thoại<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="text" class="form-control" name="a_phone" id="a_phone" placeholder="Số điện thoại"
+                                         formControlName="a_phone"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['a_phone']?.hasError('required')
+                                    && ( frcontract.controls['a_phone']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập số điện thoại !</div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12" >
+                                <div class="text-center font-weight-bold mb-3">
+                                    <h6 class=" text-primary">Bên B</h6>
+                                    <small>(Bên thuê)</small>
+                                </div>
+            
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <label for="b_Lessee"><h5>Tên người thuê<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="text" class="form-control form-control-user"  placeholder="Tên người thuê"
+                                        name="b_Lessee" id="b_Lessee"  formControlName="b_Lessee"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['b_Lessee']?.hasError('required')
+                                    && ( frcontract.controls['b_Lessee']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập tên người thuê !</div>
+                                </div>
+            
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="b_dateofbirth"><h5>Ngày sinh<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="date" class="form-control" name="b_dateofbirth" id="b_dateofbirth" placeholder="Ngày sinh"
+                                         formControlName="b_dateofbirth"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['b_dateofbirth']?.hasError('required')
+                                    && ( frcontract.controls['b_dateofbirth']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập ngày sinh !</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="b_cccd"><h5>Căn cước công dân<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="text" class="form-control" name="b_cccd" id="b_cccd" placeholder="Căn cước công dân"
+                                         formControlName="b_cccd"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['b_cccd']?.hasError('required')
+                                    && ( frcontract.controls['b_cccd']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập số căn cước công dân !</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="b_dateofissuance"><h5>Ngày cấp cccd<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="date" class="form-control" name="b_dateofissuance" id="b_dateofissuance" placeholder="Ngày cấp cccd"
+                                         formControlName="b_dateofissuance"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['b_dateofissuance']?.hasError('required')
+                                    && ( frcontract.controls['b_dateofissuance']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập ngày cấp căn cước công dân !</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="b_placeofissuance"><h5>Nơi cấp cccd<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="text" class="form-control" name="b_placeofissuance" id="b_placeofissuance" placeholder="Nơi cấp cccd"
+                                         formControlName="b_placeofissuance"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['b_placeofissuance']?.hasError('required')
+                                    && ( frcontract.controls['b_placeofissuance']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập nơi cấp căn cước công dân !</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="b_permanentaddress"><h5>Địa chỉ thường trú<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="text" class="form-control" name="b_permanentaddress" id="b_permanentaddress" placeholder="Địa chỉ thường trú"
+                                         formControlName="b_permanentaddress"
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['b_permanentaddress']?.hasError('required')
+                                    && ( frcontract.controls['b_permanentaddress']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập địa chỉ thường trú !</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="b_phone"><h5>Số điện thoại<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="text" class="form-control" name="b_phone" id="b_phone" placeholder="Số điện thoại"
+                                         formControlName="b_phone" appOnlyNumber
+                                         >
+                                    </div>
+                                    <div  *ngIf=" frcontract.controls['b_phone']?.hasError('required')
+                                    && ( frcontract.controls['b_phone']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập số điện thoại !</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                  
+
+                   
+
+                    
+                    <div class="text-center">
+                        <h6 class=" text-primary" >Thông tin phòng trọ</h6>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <div *ngIf="vietnamdata != []" class="col-xs-6">
+                            <label for="description"><h5>Tỉnh thành <sup class="text-danger"> (*)</sup></h5></label>
+                             <select class="form-control" (change)="setDistrict($event)" formControlName="province">
+                              <option *ngFor="let data of vietnamdata" [value]="data.Id"> {{data.Name}} </option>
+                            </select>
+                            <div  *ngIf="frcontract.controls['province']?.hasError('required')
+                                && (frcontract.controls['province']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted)) " 
+                                class="help-block text-danger"
+                                >Vui lòng chọn tỉnh thành !</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div *ngIf="vietnamdata != []" class="col-xs-6">
+                            <label for="description"><h5>Quận, huyện <sup class="text-danger"> (*)</sup></h5></label>
+                            <select class="form-control" (change)="setWard($event)" formControlName="district">
+                              <option *ngFor="let data of District" [value]="data.Id" > {{data.Name}} </option>
+                            </select>
+                            <div  *ngIf="frcontract.controls['district']?.hasError('required')
+                                && (frcontract.controls['district']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))"
+                                class="help-block text-danger"
+                                >Vui lòng chọn quận, huyện !</div>
+                                
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div *ngIf="vietnamdata != []" class="col-xs-6">
+                            <label for="description"><h5>Xã, phường<sup class="text-danger"> (*)</sup></h5></label>
+                            <select class="form-control" formControlName="wards">
+                              <option *ngFor="let data of Wards" [value]="data.Id"> {{data.Name}} </option>
+                            </select>
+                            <div  *ngIf="frcontract.controls['wards']?.hasError('required')
+                                && (frcontract.controls['wards']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" 
+                                class="help-block text-danger"
+                                >Vui lòng chọn xã, phường !</div>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group">
+                      <div class="col-xs-6">
+                          <label for="address"><h5>Số nhà, đường<sup class="text-danger">(*)</sup></h5></label>
+                          <input type="text" class="form-control" name="address" id="address" placeholder="Địa chỉ"
+                          formControlName="address"
+                           >
+                      </div>
+                      <div  *ngIf="frcontract.controls['address']?.hasError('required')
+                            && (frcontract.controls['address']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted)) " 
+                            class="help-block text-danger"
+                            >Vui lòng nhập số nhà, tên đường !</div>
+                               
+                    </div>
+                 
+
+                    <hr>
+                    <div class="form-group">
+                         <div class="col-xs-12">
+                            <input type="submit" class="btn btn-primary" value="Thêm">
+                            <button type="button" class="btn btn-outline-primary ml-2"  >Hủy</button>
+                          </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

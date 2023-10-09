@@ -9,6 +9,7 @@ import { FeedbackComponent } from './feedback/feedback.component';
 import { EmailhistoryComponent } from './emailhistory/emailhistory.component';
 import { UtilitesComponent } from './utilites/utilites.component';
 import { BranchComponent } from './room/branch/branch.component';
+import { CreateTransactComponent } from './transact/create.transact/create.transact.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path: 'room', component: RoomComponent },
   {path: 'customer', component: CustomerComponent },
   {path: 'transact', component: TransactComponent },
+  {path: 'room/transact/add', component: CreateTransactComponent },
   {path: 'feedback', component: FeedbackComponent },
   {path: 'emailhistory', component: EmailhistoryComponent },
   {path: 'utilites', component: UtilitesComponent },

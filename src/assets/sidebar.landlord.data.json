@@ -55,19 +55,19 @@
     },
     {
       "title": "Quản lý giao dịch",
-      "parentLink": "/landlord/transact",
+      "parentLink": "",
       "awesomeIcon":"fas fa-comments-dollar",
       "type": "",
       "menu": true,
       "submenu": [
         {
-          "childtitle": "Link 1",
-          "link": "#",
+          "childtitle": "Thêm hợp đồng",
+          "link": "/landlord/room/transact/add",
           "islink": true
         },
         {
-          "childtitle": "Link 2",
-          "link": "#",
+          "childtitle": "Danh sách hợp đồng",
+          "link": "/landlord/transact",
           "islink": true
         }
       ]

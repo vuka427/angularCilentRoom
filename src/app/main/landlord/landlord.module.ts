@@ -17,6 +17,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { RoomstatusPipe } from 'src/app/shared/pipe/roomstatus.pipe';
 import { HousetypePipe } from 'src/app/shared/pipe/housetype.pipe';
+import { CreateTransactComponent } from './transact/create.transact/create.transact.component';
 
 
 
@@ -33,7 +34,8 @@ import { HousetypePipe } from 'src/app/shared/pipe/housetype.pipe';
     UtilitesComponent,
     BranchComponent,
     RoomstatusPipe,
-    HousetypePipe
+    HousetypePipe,
+    CreateTransactComponent
     
   ],
   providers: [
