@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12  ">
                                 <div class="text-center font-weight-bold mb-3">
-                                    <h6 class=" text-primary" >Bên A</h6>
+                                    <h6 class=" text-primary font-weight-bold" >Bên A</h6>
                                     <small>(Bên cho thuê)</small>
                                 </div>
                                 <div class="form-group">
@@ -99,19 +99,19 @@
                             </div>
                             <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12" >
                                 <div class="text-center font-weight-bold mb-3">
-                                    <h6 class=" text-primary">Bên B</h6>
+                                    <h6 class=" text-primary font-weight-bold">Bên B</h6>
                                     <small>(Bên thuê)</small>
                                 </div>
             
                                 <div class="form-group">
                                     <div class="col-xs-6">
-                                        <label for="b_Lessee"><h5>Tên người thuê<sup class="text-danger">(*)</sup></h5></label>
+                                        <label for="b_lessee"><h5>Tên người thuê<sup class="text-danger">(*)</sup></h5></label>
                                         <input type="text" class="form-control form-control-user"  placeholder="Tên người thuê"
-                                        name="b_Lessee" id="b_Lessee"  formControlName="b_Lessee"
+                                        name="b_lessee" id="b_lessee"  formControlName="b_lessee"
                                          >
                                     </div>
-                                    <div  *ngIf=" frcontract.controls['b_Lessee']?.hasError('required')
-                                    && ( frcontract.controls['b_Lessee']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    <div  *ngIf=" frcontract.controls['b_lessee']?.hasError('required')
+                                    && ( frcontract.controls['b_lessee']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                                     >Vui lòng nhập tên người thuê !</div>
                                 </div>
             
@@ -187,72 +187,155 @@
 
                     </div>
                   
-
-                   
-
-                    
                     <div class="text-center">
                         <h6 class=" text-primary" >Thông tin phòng trọ</h6>
                     </div>
                     <hr>
-                    <div class="form-group">
-                        <div *ngIf="vietnamdata != []" class="col-xs-6">
-                            <label for="description"><h5>Tỉnh thành <sup class="text-danger"> (*)</sup></h5></label>
-                             <select class="form-control" (change)="setDistrict($event)" formControlName="province">
-                              <option *ngFor="let data of vietnamdata" [value]="data.Id"> {{data.Name}} </option>
-                            </select>
-                            <div  *ngIf="frcontract.controls['province']?.hasError('required')
-                                && (frcontract.controls['province']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted)) " 
-                                class="help-block text-danger"
-                                >Vui lòng chọn tỉnh thành !</div>
+                    <div class="container-fluid p-0 m-0">
+                        <div class="row">
+                            <div class="col-12 col-xl-4 col-lg-4 col-md-4">
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <label for="branchid"><h5>Nhà trọ<sup class="text-danger">(*)</sup></h5></label>
+                                        <select  class="form-control form-control-user"  placeholder="Nhà trọ"
+                                        name="branchid" id="branchid"  formControlName="branchid" (change)="setSelectArea($event)" 
+                                        >
+                                            <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn nhà trọ</option>
+                                            <option *ngFor="let branch of  branches; index as i"   [value]="branch.id">{{branch.branchName}} </option>
+                                        </select>
+                                        <div  *ngIf="frcontract.controls['branchid']?.hasError('required')
+                                        && (frcontract.controls['branchid']?.touched || (isValidFormSubmitted!= null && !isValidFormSubmitted)) " 
+                                        class="help-block text-danger"
+                                        >Vui lòng chọn nhà trọ !</div>
+            
+            
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-4 col-lg-4 col-md-4">
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <label for="areaid"><h5>Dãy-tầng<sup class="text-danger">(*)</sup></h5></label>
+                                        <select class="form-control form-control-user"  placeholder="Tên nhà trọ"
+                                        name="areaid" id="areaid" formControlName="areaid"
+                                        >
+                                            <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn dãy tầng</option>
+                                            <option  *ngFor="let area of  areaSelect; index as i" [value]="area.id"  >{{area.areaName}} </option>
+                                        </select>
+                                        <div  *ngIf="frcontract.controls['areaid']?.hasError('required')
+                                        && (frcontract.controls['areaid']?.touched || (isValidFormSubmitted!= null && !isValidFormSubmitted)) " 
+                                        class="help-block text-danger"
+                                        >Vui lòng chọn dãy-tầng !</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-4 col-lg-4 col-md-4">
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <label for="roomid"><h5>Phòng<sup class="text-danger">(*)</sup></h5></label>
+                                        <select class="form-control form-control-user"  placeholder="Số phòng"
+                                        name="roomid" id="roomid" formControlName="roomid"
+                                        >
+                                            <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn phòng</option>
+                                            <option  *ngFor="let roomItem of  roomSelect; index as i" [value]="roomItem.id"  >{{roomItem.roomNumber}} </option>
+                                        </select>
+                                        <div  *ngIf="frcontract.controls['roomid']?.hasError('required')
+                                        && (frcontract.controls['roomid']?.touched || (isValidFormSubmitted!= null && !isValidFormSubmitted)) " 
+                                        class="help-block text-danger"
+                                        >Vui lòng chọn phòng !</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div *ngIf="vietnamdata != []" class="col-xs-6">
-                            <label for="description"><h5>Quận, huyện <sup class="text-danger"> (*)</sup></h5></label>
-                            <select class="form-control" (change)="setWard($event)" formControlName="district">
-                              <option *ngFor="let data of District" [value]="data.Id" > {{data.Name}} </option>
-                            </select>
-                            <div  *ngIf="frcontract.controls['district']?.hasError('required')
-                                && (frcontract.controls['district']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))"
-                                class="help-block text-danger"
-                                >Vui lòng chọn quận, huyện !</div>
-                                
+                    <div class="container-fluid p-0 m-0">
+                        <div class="row">
+                            <div class="col-12 col-xl-4 col-lg-4 col-md-4">
+                                <p>Địa chỉ</p>
+                                <p>kiểu nhà trọ</p>
+                            </div>
+                            <div class="col-12 col-xl-4 col-lg-4 col-md-4">
+                                <p>Gác lửng</p>
+                                <p>Diện tích phòng</p>
+
+                            </div>
+                            <div class="col-12 col-xl-4 col-lg-4 col-md-4">
+                                <p>Gác lửng</p>
+                                <p>Diện tích phòng</p>
+                            </div>
                         </div>
+
                     </div>
+                    
+                   
+                   
+                   
+                    <div class="text-center">
+                        <h6 class=" text-primary" >Thông tin thuê trọ</h6>
+                    </div>
+                    <hr>  
+
                     <div class="form-group">
-                        <div *ngIf="vietnamdata != []" class="col-xs-6">
-                            <label for="description"><h5>Xã, phường<sup class="text-danger"> (*)</sup></h5></label>
-                            <select class="form-control" formControlName="wards">
-                              <option *ngFor="let data of Wards" [value]="data.Id"> {{data.Name}} </option>
-                            </select>
-                            <div  *ngIf="frcontract.controls['wards']?.hasError('required')
-                                && (frcontract.controls['wards']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" 
-                                class="help-block text-danger"
-                                >Vui lòng chọn xã, phường !</div>
+                        <div class="col-xs-6">
+                            <label for="rentalprice"><h5>Giá cho thuê<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="text" class="form-control form-control-user"  placeholder="Giá cho thuê"
+                            name="rentalprice" id="rentalprice"  formControlName="rentalprice"
+                             >
                         </div>
-                        
+                        <div  *ngIf=" frcontract.controls['rentalprice']?.hasError('required')
+                        && ( frcontract.controls['rentalprice']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                        >Vui lòng nhập giá cho thuê !</div>
                     </div>
                     <div class="form-group">
-                      <div class="col-xs-6">
-                          <label for="address"><h5>Số nhà, đường<sup class="text-danger">(*)</sup></h5></label>
-                          <input type="text" class="form-control" name="address" id="address" placeholder="Địa chỉ"
-                          formControlName="address"
-                           >
-                      </div>
-                      <div  *ngIf="frcontract.controls['address']?.hasError('required')
-                            && (frcontract.controls['address']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted)) " 
-                            class="help-block text-danger"
-                            >Vui lòng nhập số nhà, tên đường !</div>
-                               
+                        <div class="col-xs-6">
+                            <label for="deposit"><h5>Tiền cọc<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="text" class="form-control form-control-user"  placeholder="Tiền cọc"
+                            name="deposit" id="deposit"  formControlName="deposit"
+                             >
+                        </div>
+                        <div  *ngIf=" frcontract.controls['deposit']?.hasError('required')
+                        && ( frcontract.controls['deposit']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                        >Vui lòng nhập tiền cọc !</div>
                     </div>
-                 
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="durationofhouselease"><h5>Thời hạn thuê nhà <sup class="text-danger">(*)</sup></h5></label>
+                            <input type="number" class="form-control form-control-user"  placeholder="Thời hạn thuê nhà"
+                            name="durationofhouselease" id="durationofhouselease"  formControlName="durationofhouselease" appOnlyNumber
+                             >
+                        </div>
+                        <div  *ngIf=" frcontract.controls['durationofhouselease']?.hasError('required')
+                        && ( frcontract.controls['durationofhouselease']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                        >Vui lòng nhập thời hạn thuê nhà !</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="commencingon"><h5>Ngày bắt đầu<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="date" class="form-control form-control-user"  placeholder="Ngày bắt đầu"
+                            name="commencingon" id="commencingon"  formControlName="commencingon"
+                             >
+                        </div>
+                        <div  *ngIf=" frcontract.controls['commencingon']?.hasError('required')
+                        && ( frcontract.controls['commencingon']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                        >Vui lòng nhập ngày bắt đầu !</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="endingon"><h5>Ngày kết thúc<sup class="text-danger">(*)</sup></h5></label>
+                            <input type="date" class="form-control form-control-user"  placeholder="Ngày kết thúc"
+                            name="endingon" id="endingon"  formControlName="endingon"
+                             >
+                        </div>
+                        <div  *ngIf=" frcontract.controls['endingon']?.hasError('required')
+                        && ( frcontract.controls['endingon']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                        >Vui lòng nhập ngày kết thúc !</div>
+                    </div>
 
                     <hr>
                     <div class="form-group">
                          <div class="col-xs-12">
                             <input type="submit" class="btn btn-primary" value="Thêm">
-                            <button type="button" class="btn btn-outline-primary ml-2"  >Hủy</button>
+                            <button type="button" class="btn btn-outline-primary ml-2" >Hủy</button>
                           </div>
                     </div>
                 </form>

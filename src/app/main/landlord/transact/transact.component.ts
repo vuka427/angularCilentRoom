@@ -26,7 +26,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit  {
    
 
 
-  datatableElement: any = DataTableDirective;
+  datatableElement: any = DataTableDirective ;
 
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();

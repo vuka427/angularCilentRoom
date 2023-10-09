@@ -24,12 +24,17 @@ export class CreateTransactComponent implements OnInit {
   ){}
 
 
-  public frcontract : FormGroup ;
+  public frcontract : FormGroup;
   public isValidFormSubmitted: boolean | null = null;
+
+  public branches: any[] =[];
+  public areaSelect: any[] =[];
+  public roomSelect: any[] =[];
 
   public vietnamdata : any[] =[];
   public District: any[] =[];
   public Wards: any[] =[];
+
 
 
 
@@ -45,7 +50,7 @@ export class CreateTransactComponent implements OnInit {
       a_permanentaddress : new FormControl('',Validators.required),
       a_phone : new FormControl('',Validators.required),
 
-      b_Lessee : new FormControl('',Validators.required),
+      b_lessee : new FormControl('',Validators.required),
       b_dateofbirth : new FormControl('',Validators.required),
       b_cccd : new FormControl('',Validators.required),
       b_dateofissuance : new FormControl('',Validators.required),
@@ -57,13 +62,9 @@ export class CreateTransactComponent implements OnInit {
       durationofhouselease : new FormControl('',Validators.required),
       commencingon : new FormControl('',Validators.required),
       endingon : new FormControl('',Validators.required),
-      roomnumber : new FormControl('',Validators.required),
-      branchname : new FormControl('',Validators.required),
-      branchaddress : new FormControl('',Validators.required),
-      housetype : new FormControl('',Validators.required),
-      areaname : new FormControl('',Validators.required),
-      acreage : new FormControl('',Validators.required),
-      ismezzanine : new FormControl('',Validators.required),
+      roomid : new FormControl('',Validators.required),
+      branchid : new FormControl('',Validators.required),
+      areaid : new FormControl('',Validators.required),
       deposit : new FormControl('',Validators.required),
 
       
@@ -120,6 +121,13 @@ export class CreateTransactComponent implements OnInit {
   }
   get services() {
     return this.frcontract.get('services') as FormArray;
+  }
+
+   // thêm phòng -> thiết lập khu vực
+   public setSelectArea(event: any): void{
+    let a : any[] = this.branches;
+    this.areaSelect = a.find((data) =>  data.id == event.target.value).areas ;
+
   }
 
 
