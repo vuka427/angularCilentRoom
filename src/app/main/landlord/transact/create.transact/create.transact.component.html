@@ -201,7 +201,7 @@
                                         name="branchid" id="branchid"  formControlName="branchid" (change)="setSelectArea($event)" 
                                         >
                                             <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn nhà trọ</option>
-                                            <option *ngFor="let branch of  branches; index as i"   [value]="branch.id">{{branch.branchName}} </option>
+                                            <option *ngFor="let branch of  brancheSelect; index as i"   [value]="branch.id">{{branch.branchName}} </option>
                                         </select>
                                         <div  *ngIf="frcontract.controls['branchid']?.hasError('required')
                                         && (frcontract.controls['branchid']?.touched || (isValidFormSubmitted!= null && !isValidFormSubmitted)) " 
@@ -217,7 +217,7 @@
                                     <div class="col-xs-6">
                                         <label for="areaid"><h5>Dãy-tầng<sup class="text-danger">(*)</sup></h5></label>
                                         <select class="form-control form-control-user"  placeholder="Tên nhà trọ"
-                                        name="areaid" id="areaid" formControlName="areaid"
+                                        name="areaid" id="areaid" formControlName="areaid" (change)="setSelectRoom($event)"
                                         >
                                             <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn dãy tầng</option>
                                             <option  *ngFor="let area of  areaSelect; index as i" [value]="area.id"  >{{area.areaName}} </option>
@@ -234,10 +234,10 @@
                                     <div class="col-xs-6">
                                         <label for="roomid"><h5>Phòng<sup class="text-danger">(*)</sup></h5></label>
                                         <select class="form-control form-control-user"  placeholder="Số phòng"
-                                        name="roomid" id="roomid" formControlName="roomid"
+                                        name="roomid" id="roomid" formControlName="roomid" (change)="SelectRoom($event)"
                                         >
                                             <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn phòng</option>
-                                            <option  *ngFor="let roomItem of  roomSelect; index as i" [value]="roomItem.id"  >{{roomItem.roomNumber}} </option>
+                                            <option  *ngFor="let roomItem of  roomSelect; index as i" [value]="roomItem.id"   >{{roomItem.roomNumber}} </option>
                                         </select>
                                         <div  *ngIf="frcontract.controls['roomid']?.hasError('required')
                                         && (frcontract.controls['roomid']?.touched || (isValidFormSubmitted!= null && !isValidFormSubmitted)) " 
@@ -250,18 +250,22 @@
                     </div>
                     <div class="container-fluid p-0 m-0">
                         <div class="row">
-                            <div class="col-12 col-xl-4 col-lg-4 col-md-4">
-                                <p>Địa chỉ</p>
-                                <p>kiểu nhà trọ</p>
+                            <div class="col-12">
+                                <p><b> Địa chỉ : </b><u>{{currentBranch.address}}</u> </p>
                             </div>
                             <div class="col-12 col-xl-4 col-lg-4 col-md-4">
-                                <p>Gác lửng</p>
-                                <p>Diện tích phòng</p>
+                                <p><b>Kiểu nhà trọ : </b>  {{currentBranch.houseType | housetype: true }}</p>
+                            </div>
+                            <div class="col-12 col-xl-4 col-lg-4 col-md-4">
+                               <p>
+                                    <b>Gác lửng : </b>
+                                    <span *ngIf="currentRoom.isMezzanine" > Có</span > 
+                                    <span  *ngIf="!currentRoom.isMezzanine" > Không</span >
+                                </p>
+                            </div>
+                            <div class="col-12 col-xl-4 col-lg-4 col-md-4">
+                                 <p><b>Diện tích phòng : </b>{{currentRoom.acreage}} m<sup>2</sup></p>
 
-                            </div>
-                            <div class="col-12 col-xl-4 col-lg-4 col-md-4">
-                                <p>Gác lửng</p>
-                                <p>Diện tích phòng</p>
                             </div>
                         </div>
 
@@ -279,7 +283,7 @@
                         <div class="col-xs-6">
                             <label for="rentalprice"><h5>Giá cho thuê<sup class="text-danger">(*)</sup></h5></label>
                             <input type="text" class="form-control form-control-user"  placeholder="Giá cho thuê"
-                            name="rentalprice" id="rentalprice"  formControlName="rentalprice"
+                            name="rentalprice" id="rentalprice"  formControlName="rentalprice" appOnlyNumber [value]="currentRoom.price"
                              >
                         </div>
                         <div  *ngIf=" frcontract.controls['rentalprice']?.hasError('required')
@@ -290,7 +294,7 @@
                         <div class="col-xs-6">
                             <label for="deposit"><h5>Tiền cọc<sup class="text-danger">(*)</sup></h5></label>
                             <input type="text" class="form-control form-control-user"  placeholder="Tiền cọc"
-                            name="deposit" id="deposit"  formControlName="deposit"
+                            name="deposit" id="deposit"  formControlName="deposit" appOnlyNumber 
                              >
                         </div>
                         <div  *ngIf=" frcontract.controls['deposit']?.hasError('required')
@@ -335,7 +339,7 @@
                     <div class="form-group">
                          <div class="col-xs-12">
                             <input type="submit" class="btn btn-primary" value="Thêm">
-                            <button type="button" class="btn btn-outline-primary ml-2" >Hủy</button>
+                            <button type="reset" class="btn btn-outline-primary ml-2" >Đặt lại</button>
                           </div>
                     </div>
                 </form>

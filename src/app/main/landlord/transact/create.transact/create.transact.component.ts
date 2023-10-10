@@ -5,6 +5,8 @@ import { DataService } from 'src/app/core/services/data.service';
 import { DiagioihanhchinhService } from 'src/app/core/services/diagioihanhchinh.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { BranchModel } from 'src/app/core/domain/room/branch.model';
+import { RoomModel } from 'src/app/core/domain/room/room.model';
 
 @Component({
   selector: 'app-create.transact',
@@ -27,7 +29,7 @@ export class CreateTransactComponent implements OnInit {
   public frcontract : FormGroup;
   public isValidFormSubmitted: boolean | null = null;
 
-  public branches: any[] =[];
+  public brancheSelect: BranchModel[] | any;
   public areaSelect: any[] =[];
   public roomSelect: any[] =[];
 
@@ -35,6 +37,8 @@ export class CreateTransactComponent implements OnInit {
   public District: any[] =[];
   public Wards: any[] =[];
 
+  public currentBranch: BranchModel|any = {};
+  public currentRoom: RoomModel|any = {};
 
 
 
@@ -62,14 +66,29 @@ export class CreateTransactComponent implements OnInit {
       durationofhouselease : new FormControl('',Validators.required),
       commencingon : new FormControl('',Validators.required),
       endingon : new FormControl('',Validators.required),
-      roomid : new FormControl('',Validators.required),
-      branchid : new FormControl('',Validators.required),
-      areaid : new FormControl('',Validators.required),
+      roomid : new FormControl(null,Validators.required),
+      branchid : new FormControl(null,Validators.required),
+      areaid : new FormControl(null,Validators.required),
       deposit : new FormControl('',Validators.required),
 
-      
-
     });
+
+    this.loadData();
+   
+  }
+
+  public loadData(){
+
+    this._data.get("/api/branch/allroom").subscribe(
+      {
+        next: res => { 
+          console.log("respone all branch", res);
+          this.brancheSelect = res;
+          
+        },
+        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err); this._data.handleError(err); },
+        complete: () => { console.log("load all room"); }, 
+      });
   }
 
   public onSubmit(){
@@ -82,11 +101,11 @@ export class CreateTransactComponent implements OnInit {
 		}
     this.isValidFormSubmitted = true;
     console.log('submited',this.frcontract.value );
-    this._data.post('/api/branch/add',this.frcontract.value).subscribe(
+    this._data.post('/api/contract/add',this.frcontract.value).subscribe(
       {
         next: res => { console.log("repone ", res);},
         error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err);},
-        complete: () => { this._notify.printSuccessMessage("Thêm nhà trọ thành công !"); },
+        complete: () => { this._notify.printSuccessMessage("Thêm hợp đồng thành công !"); },
       }
     );
 
@@ -123,12 +142,28 @@ export class CreateTransactComponent implements OnInit {
     return this.frcontract.get('services') as FormArray;
   }
 
-   // thêm phòng -> thiết lập khu vực
-   public setSelectArea(event: any): void{
-    let a : any[] = this.branches;
+  // thêm phòng -> thiết lập khu vực
+  public setSelectArea(event: any): void{
+    let a : any[] = this.brancheSelect;
+    this.currentBranch = a.find((data) =>  data.id == event.target.value);
     this.areaSelect = a.find((data) =>  data.id == event.target.value).areas ;
 
   }
+  // thêm phòng -> thiết lập khu vực
+  public setSelectRoom(event: any): void{
+    let a : any[] = this.areaSelect;
+    this.roomSelect = a.find((data) =>  data.id == event.target.value).rooms ;
+
+  }
+  public SelectRoom(event: any): void{
+    let a : any[] = this.roomSelect;
+    this.currentRoom = a.find((data) =>  data.id == event.target.value) ;
+    this.frcontract.patchValue({rentalprice: this.currentRoom.price });
+
+  }
+  
+  
+
 
 
 
