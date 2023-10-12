@@ -103,7 +103,8 @@
                     <div class="container-fluid" >
                         <div class="row ">
                                 <div *ngFor="let room of area.rooms" class="card m-2" style="width: 230px;">
-                                    <div class="card-header bg-primary text-light">
+                                    <div  [ngClass]="{'card-header  text-light':true ,'bg-secondary':(room.status=='Empty'),'bg-primary':(room.status=='Inhabited'),'bg-danger':(room.status=='Repair'),'bg-info':(room.status=='Deposit')}"
+                                    >
                                         <i class="fas fa-home"></i>
                                         Phòng {{area.areaName}}.{{room.roomNumber}}
                                     </div>
@@ -116,7 +117,10 @@
                                             <i class="fas fa-users" ></i> : 0/{{room.maxMember}}
                                         </p>
                                         <p class="card-text" placement="top" ngbTooltip="Trạng thái phòng" [openDelay]="300" [closeDelay]="500">
-                                            <i class="fas fa-toggle-on"></i> : {{room.status | roomstatus }}
+                                            <i class="fas fa-toggle-on"></i> :
+                                            <span [ngClass]="{'text-secondary':(room.status=='Empty'),'text-primary':(room.status=='Inhabited'),'text-danger':(room.status=='Repair'),'text-info':(room.status=='Deposit')}">
+                                                {{room.status | roomstatus }}
+                                            </span> 
                                         </p> 
                                         <p class="card-text" placement="top" ngbTooltip="Diện tích" [openDelay]="300" [closeDelay]="500"> 
                                             <i class="fas fa-ruler-combined"></i> : {{room.acreage }} m<sup>2</sup>

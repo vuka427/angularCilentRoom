@@ -265,20 +265,13 @@
                             </div>
                             <div class="col-12 col-xl-4 col-lg-4 col-md-4">
                                  <p><b>Diện tích phòng : </b>{{currentRoom.acreage}} m<sup>2</sup></p>
-
                             </div>
                         </div>
-
                     </div>
-                    
-                   
-                   
-                   
                     <div class="text-center">
                         <h6 class=" text-primary" >Thông tin thuê trọ</h6>
                     </div>
-                    <hr>  
-
+                    <hr> 
                     <div class="form-group">
                         <div class="col-xs-6">
                             <label for="rentalprice"><h5>Giá cho thuê<sup class="text-danger">(*)</sup></h5></label>
@@ -326,8 +319,8 @@
                     <div class="form-group">
                         <div class="col-xs-6">
                             <label for="endingon"><h5>Ngày kết thúc<sup class="text-danger">(*)</sup></h5></label>
-                            <input type="date" class="form-control form-control-user"  placeholder="Ngày kết thúc"
-                            name="endingon" id="endingon"  formControlName="endingon"
+                            <input type="date" class="form-control form-control-user" placeholder="Ngày kết thúc"
+                            name="endingon" id="endingon" formControlName="endingon"
                              >
                         </div>
                         <div  *ngIf=" frcontract.controls['endingon']?.hasError('required')

@@ -41,8 +41,6 @@ export class CreateTransactComponent implements OnInit {
   public currentRoom: RoomModel|any = {};
 
 
-
-
   ngOnInit(): void {
      this.frcontract = new FormGroup({
 
@@ -84,7 +82,6 @@ export class CreateTransactComponent implements OnInit {
         next: res => { 
           console.log("respone all branch", res);
           this.brancheSelect = res;
-          
         },
         error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err); this._data.handleError(err); },
         complete: () => { console.log("load all room"); }, 
@@ -145,8 +142,8 @@ export class CreateTransactComponent implements OnInit {
   // thêm phòng -> thiết lập khu vực
   public setSelectArea(event: any): void{
     let a : any[] = this.brancheSelect;
-    this.currentBranch = a.find((data) =>  data.id == event.target.value);
-    this.areaSelect = a.find((data) =>  data.id == event.target.value).areas ;
+    this.currentBranch = a.find((data) => data.id == event.target.value);
+    this.areaSelect = a.find((data) => data.id == event.target.value).areas ;
 
   }
   // thêm phòng -> thiết lập khu vực

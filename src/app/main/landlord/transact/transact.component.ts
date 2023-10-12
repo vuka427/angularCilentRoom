@@ -40,12 +40,12 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit  {
       serverSide: true,     // Set the flag 
       ajax: (dataTablesParameters: any, callback) => {
         this._data.postForDataTable(
-            '/api/branch/branchesfordatatable',
+            '/api/contract/contractfordatatable',
             dataTablesParameters
           ).subscribe(
             {
               next: resp  => {
-                console.log("Respone=> ", resp)
+                console.log("Respone datatable=> ", resp)
                 callback({
                   recordsTotal: resp.recordsTotal,
                   recordsFiltered: resp.recordsFiltered,
@@ -74,7 +74,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit  {
           data: null,
           defaultContent: '',
           render: function (data: any, type: any,row: any, full: any) {
-            return '<button type="button" deletebtn branchid="'+row.id+'" class="btn btn-sm btn-danger"   >Xóa </button>';
+            return '<button type="button" deletebtn branchid="'+row.id+'" class="btn btn-sm btn-danger" >Xóa </button>';
           }
         }
       ]
