@@ -58,23 +58,50 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit  {
       },
       language: DataTableLanguage.vietnam_datatables,
       columns: [{
-          title: 'ID',
-          data: 'id'
-        }, {
+          title: 'STT',
+          data: 'b_Lessee'
+        }, 
+        {
+          title: 'Tên người thuê',
+          data: 'b_Lessee'
+        },
+        {
+          title: 'Cccd',
+          data: 'b_Cccd'
+        }, 
+        {
+          title: 'Số phòng',
+          data: 'roomId'
+        }, 
+        {
           title: 'Tên nhà trọ',
-          data: 'branchName'
-        }, {
-          title: 'Mô tả',
-          data: 'description'
-        }, {
-          title: 'Địa chỉ',
-          data: 'address'
-        }, {
+          data: 'branchId'
+        }, 
+        {
+          title: 'Ngày bắt đầu HD',
+          data: 'commencingOn'
+        }, 
+        {
+          title: 'Ngày kết thúc HD',
+          data: 'endingOn'
+        }, 
+        {
+          title: 'Trạng thái',
+          data: null,
+          defaultContent: '',
+          render: function (data: any, type: any,row: any, full: any) {
+            if(row.status == 'Active') return '<span class="badge badge-pill badge-success">Còn hiệu lực</span>';
+            if(row.status == 'Expirat') return '<span class="badge badge-pill badge-secondary">Kết thúc</span>';
+            return '';
+          }
+        }
+        , 
+        {
           title: 'Tác vụ',
           data: null,
           defaultContent: '',
           render: function (data: any, type: any,row: any, full: any) {
-            return '<button type="button" deletebtn branchid="'+row.id+'" class="btn btn-sm btn-danger" >Xóa </button>';
+            return '<button type="button" deletebtn branchid="'+row.id+'" class="btn btn-sm btn-primary" >Chi tiết </button>';
           }
         }
       ]
