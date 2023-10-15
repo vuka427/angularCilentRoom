@@ -2,7 +2,10 @@
     <div id="error-message"></div>
     <div class="row  justify-content-center m-0">
         <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 card p-0 shadow border ">
-            <div class="card-header form-header p-0 ">
+            <div class="card-header form-header p-0 position-relative">
+                <i class="backtocontractlist position-absolute fas fa-long-arrow-alt-left fa-lg m-2 p-3 text-primary " 
+                placement="top" ngbTooltip="Quay lại danh sách hợp đồng" [openDelay]="200" [closeDelay]="500"
+                (click)="backToContractList()" ></i>
                 <h4 class="text-center font-weight-bold m-3 ">Thêm hợp đồng</h4>
             </div>
             <div class="card-body">
@@ -93,12 +96,16 @@
                                     <div class="col-xs-6">
                                       <label for="a_phone"><h5>Số điện thoại<sup class="text-danger">(*)</sup></h5></label>
                                         <input type="text" class="form-control" name="a_phone" id="a_phone" placeholder="Số điện thoại"
-                                         formControlName="a_phone"
+                                         formControlName="a_phone" maxlength="10" minlength="10" appValidPhone 
                                          >
                                     </div>
                                     <div  *ngIf=" frcontract.controls['a_phone']?.hasError('required')
                                     && ( frcontract.controls['a_phone']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                                     >Vui lòng nhập số điện thoại !</div>
+                                    <div *ngIf="frcontract.controls['a_phone']?.hasError('maxlength') || 
+                                                frcontract.controls['a_phone']?.hasError('phoneinvalid') || 
+                                                frcontract.controls['a_phone']?.hasError('minlength')" 
+                                                class="help-block text-danger">Số điện thoại không hợp lệ !</div>
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12" >
@@ -182,12 +189,16 @@
                                     <div class="col-xs-6">
                                       <label for="b_phone"><h5>Số điện thoại<sup class="text-danger">(*)</sup></h5></label>
                                         <input type="text" class="form-control" name="b_phone" id="b_phone" placeholder="Số điện thoại"
-                                         formControlName="b_phone" appOnlyNumber
+                                         formControlName="b_phone"  maxlength="10" minlength="10" appValidPhone 
                                          >
                                     </div>
-                                    <div  *ngIf=" frcontract.controls['b_phone']?.hasError('required')
+                                    <div *ngIf=" frcontract.controls['b_phone']?.hasError('required')
                                     && ( frcontract.controls['b_phone']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                                     >Vui lòng nhập số điện thoại !</div>
+                                    <div *ngIf="frcontract.controls['b_phone']?.hasError('maxlength') || 
+                                                frcontract.controls['b_phone']?.hasError('phoneinvalid') || 
+                                                frcontract.controls['b_phone']?.hasError('minlength')" 
+                                                class="help-block text-danger">Số điện thoại không hợp lệ !</div>
                                 </div>
                             </div>
 
@@ -245,7 +256,10 @@
                                         name="roomid" id="roomid" formControlName="roomid" (change)="SelectRoom($event)"
                                         >
                                             <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn phòng</option>
-                                            <option  *ngFor="let roomItem of  roomSelect; index as i" [value]="roomItem.id"   >{{roomItem.roomNumber}} </option>
+                                            <ng-container *ngFor="let roomItem of  roomSelect; index as i">
+                                                <option *ngIf="roomItem.status != 'Inhabited' && roomItem.status != 'Repair' && roomItem.status != 'Deposit'"  [value]="roomItem.id"   >{{roomItem.roomNumber}} </option>
+                                            </ng-container>
+                                            
                                         </select>
                                         <div  *ngIf="frcontract.controls['roomid']?.hasError('required')
                                         && (frcontract.controls['roomid']?.touched || (isValidFormSubmitted!= null && !isValidFormSubmitted)) " 
@@ -282,7 +296,7 @@
                     <hr> 
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="rentalprice"><h5>Giá cho thuê<sup class="text-danger">(*)</sup></h5></label>
+                            <label for="rentalprice"><h5>Giá cho thuê<sup class="text-danger">(*)</sup><sub>(đ/tháng)</sub></h5></label>
                             <input type="text" class="form-control form-control-user"  placeholder="Giá cho thuê"
                             name="rentalprice" id="rentalprice"  formControlName="rentalprice" appOnlyNumber [value]="currentRoom.price"
                              >
@@ -359,7 +373,7 @@
                     <div class="form-group">
                          <div class="col-xs-12">
                             <input type="submit" class="btn btn-primary" value="Thêm">
-                            <button type="button" class="btn btn-outline-primary ml-2" >Trở lại dánh sách hợp đồng</button>
+                            <button type="button" class="btn btn-outline-primary ml-2" (click)="backToContractList()">Trở lại dánh sách hợp đồng</button>
                           </div>
                     </div>
                 </form>

@@ -11,6 +11,7 @@ import { RoomModel } from 'src/app/core/domain/room/room.model';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 import {CKEConfig} from 'src/app/core/cke5/cke5.config'  ;
+import { UtilityService } from 'src/app/core/services/utility.service';
 
 
 @Component({
@@ -27,7 +28,8 @@ export class CreateTransactComponent implements OnInit {
     private _diagioi : DiagioihanhchinhService,
     private _elementRef: ElementRef,
     private _render: Renderer2,
-    private _modalService: NgbModal
+    private _modalService: NgbModal,
+    private _utility: UtilityService
   ){}
 
 
@@ -110,10 +112,17 @@ export class CreateTransactComponent implements OnInit {
       {
         next: res => { console.log("repone ", res);},
         error: err => { this._notify.printErrorMessage("Có lỗi xảy ra vui lòng thử lại !");console.log(err);},
-        complete: () => { this._notify.printSuccessMessage("Thêm hợp đồng thành công !"); },
+        complete: () => { 
+          this._notify.printSuccessMessage("Thêm hợp đồng thành công !");
+          this._utility.navigate('/landlord/transact');
+        },
       }
     );
 
+  }
+
+  public backToContractList(){
+    this._utility.navigate('/landlord/transact');
   }
 
   public setDistrict(event: any): void{
@@ -174,6 +183,7 @@ export class CreateTransactComponent implements OnInit {
   public onReady(editor: any) {
     console.log("CKEditor5 Angular Component is ready to use!", editor);
   }
+
   public onChange({ editor }: ChangeEvent) {
    
   }
