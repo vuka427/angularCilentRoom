@@ -6,7 +6,7 @@
                 <h4 class="text-center font-weight-bold m-3 ">Thêm hợp đồng</h4>
             </div>
             <div class="card-body">
-                <form class="form" novalidate  (ngSubmit)=" onSubmit()" [formGroup]="frcontract"  #f="ngForm" >
+                <form class="form" novalidate  (ngSubmit)=" onSubmit()" [formGroup]="frcontract"  #f="ngForm" [appComToEnd]="['commencingon', 'endingon']" >
                     <div class="text-center">
                         <h6 class=" text-primary" >Thông tin chung</h6>
                     </div>
@@ -34,34 +34,38 @@
                                     <div class="col-xs-6">
                                       <label for="a_dateofbirth"><h5>Ngày sinh<sup class="text-danger">(*)</sup></h5></label>
                                         <input type="date" class="form-control" name="a_dateofbirth" id="a_dateofbirth" placeholder="Mô tả"
-                                         formControlName="a_dateofbirth"
+                                         formControlName="a_dateofbirth" appValidDateofbirth 
                                          >
                                     </div>
                                     <div  *ngIf=" frcontract.controls['a_dateofbirth']?.hasError('required')
                                     && ( frcontract.controls['a_dateofbirth']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                                     >Vui lòng nhập ngày sinh !</div>
+                                    <div *ngIf=" frcontract.controls['a_dateofbirth']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày sinh không hợp lệ !</div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-6">
                                       <label for="a_cccd"><h5>Căn cước công dân<sup class="text-danger">(*)</sup></h5></label>
                                         <input type="text" class="form-control" name="a_cccd" id="a_cccd" placeholder="Căn cước công dân"
-                                         formControlName="a_cccd"
+                                         formControlName="a_cccd" minlength="12" maxlength="12" appValidCccd  
                                          >
                                     </div>
                                     <div  *ngIf=" frcontract.controls['a_cccd']?.hasError('required')
                                     && ( frcontract.controls['a_cccd']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                                     >Vui lòng nhập căn cước công dân !</div>
+                                    <div *ngIf="frcontract.controls['a_cccd']?.hasError('maxlength') || frcontract.controls['a_cccd']?.hasError('minlength')" class="help-block text-danger">Số căn cước công dân phải đủ 12 ký tự !</div>
+                                    <div *ngIf="frcontract.controls['a_cccd']?.hasError('cccdinvalid')" class="help-block text-danger">Số căn cước công dân không hợp lệ !</div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-6">
                                       <label for="a_dateofissuance"><h5>Ngày cấp cccd<sup class="text-danger">(*)</sup></h5></label>
                                         <input type="date" class="form-control" name="a_dateofissuance" id="a_dateofissuance" 
-                                         formControlName="a_dateofissuance"
+                                         formControlName="a_dateofissuance" appValidDateofbirth 
                                          >
                                     </div>
-                                    <div  *ngIf=" frcontract.controls['a_dateofissuance']?.hasError('required')
+                                    <div  *ngIf="frcontract.controls['a_dateofissuance']?.hasError('required')
                                     && ( frcontract.controls['a_dateofissuance']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
-                                    >Vui lòng nhập ngày cấp căn cước công dân !</div>
+                                    >Vui lòng nhập ngày cấp căn cước công dân ! </div>
+                                    <div *ngIf=" frcontract.controls['a_dateofissuance']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày cấp không hợp lệ !</div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-6">
@@ -119,34 +123,38 @@
                                     <div class="col-xs-6">
                                       <label for="b_dateofbirth"><h5>Ngày sinh<sup class="text-danger">(*)</sup></h5></label>
                                         <input type="date" class="form-control" name="b_dateofbirth" id="b_dateofbirth" placeholder="Ngày sinh"
-                                         formControlName="b_dateofbirth"
+                                         formControlName="b_dateofbirth" appValidDateofbirth
                                          >
                                     </div>
                                     <div  *ngIf=" frcontract.controls['b_dateofbirth']?.hasError('required')
                                     && ( frcontract.controls['b_dateofbirth']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                                     >Vui lòng nhập ngày sinh !</div>
+                                    <div *ngIf=" frcontract.controls['b_dateofbirth']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày sinh không hợp lệ !</div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-6">
                                       <label for="b_cccd"><h5>Căn cước công dân<sup class="text-danger">(*)</sup></h5></label>
                                         <input type="text" class="form-control" name="b_cccd" id="b_cccd" placeholder="Căn cước công dân"
-                                         formControlName="b_cccd"
+                                         formControlName="b_cccd" minlength="12" maxlength="12" appValidCccd 
                                          >
                                     </div>
                                     <div  *ngIf=" frcontract.controls['b_cccd']?.hasError('required')
                                     && ( frcontract.controls['b_cccd']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                                     >Vui lòng nhập số căn cước công dân !</div>
+                                    <div *ngIf="frcontract.controls['b_cccd']?.hasError('maxlength') || frcontract.controls['b_cccd']?.hasError('minlength')" class="help-block text-danger">Số căn cước công dân phải đủ 12 ký tự !</div>
+                                    <div *ngIf="frcontract.controls['b_cccd']?.hasError('cccdinvalid')" class="help-block text-danger">Số căn cước công dân không hợp lệ !</div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-6">
                                       <label for="b_dateofissuance"><h5>Ngày cấp cccd<sup class="text-danger">(*)</sup></h5></label>
                                         <input type="date" class="form-control" name="b_dateofissuance" id="b_dateofissuance" placeholder="Ngày cấp cccd"
-                                         formControlName="b_dateofissuance"
+                                         formControlName="b_dateofissuance" appValidDateofbirth
                                          >
                                     </div>
                                     <div  *ngIf=" frcontract.controls['b_dateofissuance']?.hasError('required')
                                     && ( frcontract.controls['b_dateofissuance']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                                     >Vui lòng nhập ngày cấp căn cước công dân !</div>
+                                    <div *ngIf=" frcontract.controls['b_dateofissuance']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày cấp không hợp lệ !</div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-6">
@@ -296,9 +304,10 @@
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
-                            <label for="durationofhouselease"><h5>Thời hạn thuê nhà <sup class="text-danger">(*)</sup></h5></label>
+                            <label for="durationofhouselease"><h5>Thời hạn thuê nhà <sup class="text-danger">(*)</sup><sub>(tháng)</sub></h5></label>
                             <input type="number" class="form-control form-control-user"  placeholder="Thời hạn thuê nhà"
                             name="durationofhouselease" id="durationofhouselease"  formControlName="durationofhouselease" appOnlyNumber
+                            (change)="setEndDate()"
                              >
                         </div>
                         <div  *ngIf=" frcontract.controls['durationofhouselease']?.hasError('required')
@@ -309,30 +318,48 @@
                         <div class="col-xs-6">
                             <label for="commencingon"><h5>Ngày bắt đầu<sup class="text-danger">(*)</sup></h5></label>
                             <input type="date" class="form-control form-control-user"  placeholder="Ngày bắt đầu"
-                            name="commencingon" id="commencingon"  formControlName="commencingon"
+                            name="commencingon" id="commencingon"  formControlName="commencingon" appValidDateFuture (change)="setEndDate()"
                              >
                         </div>
                         <div  *ngIf=" frcontract.controls['commencingon']?.hasError('required')
                         && ( frcontract.controls['commencingon']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                         >Vui lòng nhập ngày bắt đầu !</div>
+                        <div *ngIf=" frcontract.controls['commencingon']?.hasError('dateisfuturevalid')" class="help-block text-danger">Ngày bắt đầu không hợp lệ !</div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">
                             <label for="endingon"><h5>Ngày kết thúc<sup class="text-danger">(*)</sup></h5></label>
                             <input type="date" class="form-control form-control-user" placeholder="Ngày kết thúc"
-                            name="endingon" id="endingon" formControlName="endingon"
+                            name="endingon" id="endingon" formControlName="endingon" 
                              >
                         </div>
                         <div  *ngIf=" frcontract.controls['endingon']?.hasError('required')
                         && ( frcontract.controls['endingon']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                         >Vui lòng nhập ngày kết thúc !</div>
+                        <div *ngIf=" frcontract.controls['endingon']?.hasError('dateendinvald')" class="help-block text-danger">Ngày kết thúc sau ngày bắt đầu !</div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for=""><h5>Điều khoản</h5></label>
+                            <ckeditor
+                                [editor]="Editor"
+                                data=""
+                                [config]="ckeToolbar"
+                                (ready)="onReady($event)"
+                                (change)="onChange($event)"
+                                formControlName="termsofcontract"
+                                >
+                            </ckeditor>        
+
+                        </div>
                     </div>
 
                     <hr>
                     <div class="form-group">
                          <div class="col-xs-12">
                             <input type="submit" class="btn btn-primary" value="Thêm">
-                            <button type="reset" class="btn btn-outline-primary ml-2" >Đặt lại</button>
+                            <button type="button" class="btn btn-outline-primary ml-2" >Trở lại dánh sách hợp đồng</button>
                           </div>
                     </div>
                 </form>

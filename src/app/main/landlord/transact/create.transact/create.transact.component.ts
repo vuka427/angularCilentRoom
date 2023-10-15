@@ -8,6 +8,11 @@ import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import { BranchModel } from 'src/app/core/domain/room/branch.model';
 import { RoomModel } from 'src/app/core/domain/room/room.model';
 
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { ChangeEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
+import {CKEConfig} from 'src/app/core/cke5/cke5.config'  ;
+
+
 @Component({
   selector: 'app-create.transact',
   templateUrl: './create.transact.component.html',
@@ -40,6 +45,8 @@ export class CreateTransactComponent implements OnInit {
   public currentBranch: BranchModel|any = {};
   public currentRoom: RoomModel|any = {};
 
+  public ckeToolbar : any = CKEConfig.toolbarConfig;
+
 
   ngOnInit(): void {
      this.frcontract = new FormGroup({
@@ -68,6 +75,7 @@ export class CreateTransactComponent implements OnInit {
       branchid : new FormControl(null,Validators.required),
       areaid : new FormControl(null,Validators.required),
       deposit : new FormControl('',Validators.required),
+      termsofcontract : new FormControl(''),
 
     });
 
@@ -101,7 +109,7 @@ export class CreateTransactComponent implements OnInit {
     this._data.post('/api/contract/add',this.frcontract.value).subscribe(
       {
         next: res => { console.log("repone ", res);},
-        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err);},
+        error: err => { this._notify.printErrorMessage("Có lỗi xảy ra vui lòng thử lại !");console.log(err);},
         complete: () => { this._notify.printSuccessMessage("Thêm hợp đồng thành công !"); },
       }
     );
@@ -158,6 +166,42 @@ export class CreateTransactComponent implements OnInit {
     this.frcontract.patchValue({rentalprice: this.currentRoom.price });
 
   }
+
+ //cke 5
+  title = 'angular-template-ckeditor5-classic';
+  public Editor = ClassicEditor;
+
+  public onReady(editor: any) {
+    console.log("CKEditor5 Angular Component is ready to use!", editor);
+  }
+  public onChange({ editor }: ChangeEvent) {
+   
+  }
+
+  public setEndDate(){
+
+    let duration : number = this.frcontract.controls["durationofhouselease"].value as number;
+    console.log("ada",duration);
+    if(duration == 0 || duration == null) return ;
+
+    const comdate : Date = new Date(this.frcontract.controls["commencingon"].value as Date);
+   
+    if(comdate == null) return;
+    console.log(comdate);
+    
+    let date = this.addMonths(comdate,duration);
+    console.log("a=>",date);
+
+    this.frcontract.patchValue({endingon:comdate.toISOString().split('T')[0]});
+
+  }
+
+  private addMonths(date:Date, months :number) {
+    date.setMonth(date.getMonth() + months);
+    return date;
+  }
+  
+
   
   
 

@@ -7,6 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 
+
+
 @Component({
   selector: 'app-transact',
   templateUrl: './transact.component.html',
@@ -59,7 +61,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit  {
       language: DataTableLanguage.vietnam_datatables,
       columns: [{
           title: 'STT',
-          data: 'b_Lessee'
+          data: 'index'
         }, 
         {
           title: 'Tên người thuê',
@@ -71,12 +73,18 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit  {
         }, 
         {
           title: 'Số phòng',
-          data: 'roomId'
+          data: 'roomNumber'
         }, 
+         
+        {
+          title: 'Số dãy-tầng',
+          data: 'areaName'
+        },
         {
           title: 'Tên nhà trọ',
-          data: 'branchId'
-        }, 
+          data: 'branchName'
+        },
+         
         {
           title: 'Ngày bắt đầu HD',
           data: 'commencingOn'

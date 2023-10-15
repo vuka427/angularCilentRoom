@@ -8,6 +8,8 @@ import { ValidPhoneDirective } from './valid.phone.directive';
 import { ValidCccdDirective } from './valid.cccd.directive';
 import { ValidDateofbirthDirective } from './valid.dateofbirth.directive';
 import { OnlyNumberDirective } from './only.number.directive';
+import { ValidDateFutureDirective } from './valid.dateisfuture.directive';
+import { ValidComToEndDirective } from './valid.commingend.directive';
 
 
 
@@ -21,6 +23,8 @@ import { OnlyNumberDirective } from './only.number.directive';
     ValidCccdDirective,
     ValidDateofbirthDirective,
     OnlyNumberDirective,
+    ValidDateFutureDirective,
+    ValidComToEndDirective
   ],
   imports: [
     CommonModule
@@ -34,6 +38,8 @@ import { OnlyNumberDirective } from './only.number.directive';
     ValidCccdDirective,
     ValidDateofbirthDirective,
     OnlyNumberDirective,
+    ValidDateFutureDirective,
+    ValidComToEndDirective
 
   ]
 })

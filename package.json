@@ -20,6 +20,8 @@
     "@angular/router": "^16.1.7",
     "@angular/upgrade": "^16.1.7",
     "@auth0/angular-jwt": "^5.1.2",
+    "@ckeditor/ckeditor5-angular": "^7.0.1",
+    "@ckeditor/ckeditor5-build-classic": "^40.0.0",
     "@ng-bootstrap/ng-bootstrap": "^15.1.1",
     "@popperjs/core": "^2.11.8",
     "alertifyjs": "^1.13.1",

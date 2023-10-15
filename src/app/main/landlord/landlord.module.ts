@@ -18,7 +18,8 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { RoomstatusPipe } from 'src/app/shared/pipe/roomstatus.pipe';
 import { HousetypePipe } from 'src/app/shared/pipe/housetype.pipe';
 import { CreateTransactComponent } from './transact/create.transact/create.transact.component';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 
 
@@ -48,7 +49,8 @@ import { CreateTransactComponent } from './transact/create.transact/create.trans
     ReactiveFormsModule,
     ValidationModule,
     DataTablesModule,
-    NgbTooltipModule
+    NgbTooltipModule,
+    CKEditorModule
   ]
   
 })
