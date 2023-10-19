@@ -4,7 +4,7 @@
         <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 card p-0 shadow border ">
             <div class="card-header form-header p-0 position-relative">
                 <i class="backtocontractlist position-absolute fas fa-long-arrow-alt-left fa-lg m-2 p-3 text-primary " 
-                placement="top" ngbTooltip="Quay lại danh sách hợp đồng" [openDelay]="200" [closeDelay]="500"
+                placement="top" ngbTooltip="Trở lại danh sách hợp đồng" [openDelay]="200" [closeDelay]="500"
                 (click)="backToContractList()" ></i>
                 <h4 class="text-center font-weight-bold m-3 ">Thêm hợp đồng</h4>
             </div>
@@ -16,7 +16,7 @@
                     <hr>
                     <div class="container-fluid   p-0 m-0 ">
                         <div class="row">
-                            <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12  ">
+                            <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 ">
                                 <div class="text-center font-weight-bold mb-3">
                                     <h6 class=" text-primary font-weight-bold" >Bên A</h6>
                                     <small>(Bên cho thuê)</small>
@@ -105,7 +105,7 @@
                                     <div *ngIf="frcontract.controls['a_phone']?.hasError('maxlength') || 
                                                 frcontract.controls['a_phone']?.hasError('phoneinvalid') || 
                                                 frcontract.controls['a_phone']?.hasError('minlength')" 
-                                                class="help-block text-danger">Số điện thoại không hợp lệ !</div>
+                                                class="help-block text-danger">Số điện thoại không hợp lệ !</div> 
                                 </div>
                             </div>
                             <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12" >
@@ -304,6 +304,28 @@
                         <div  *ngIf=" frcontract.controls['rentalprice']?.hasError('required')
                         && ( frcontract.controls['rentalprice']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                         >Vui lòng nhập giá cho thuê !</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="electricitycosts"><h5>Giá điện<sup class="text-danger">(*)</sup><sub>(đ/Kwh)</sub></h5></label>
+                            <input type="text" class="form-control form-control-user"  placeholder="Giá điện"
+                            name="electricitycosts" id="electricitycosts"  formControlName="electricitycosts" appOnlyNumber [value]="currentBranch.electricityCosts"
+                             >
+                        </div>
+                        <div  *ngIf=" frcontract.controls['electricitycosts']?.hasError('required')
+                        && ( frcontract.controls['electricitycosts']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                        >Vui lòng nhập giá điện !</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <label for="watercosts"><h5>Giá nước<sup class="text-danger">(*)</sup><sub>(đ/m<sup>2</sup>)</sub></h5></label>
+                            <input type="text" class="form-control form-control-user"  placeholder="Giá nước"
+                            name="watercosts" id="watercosts"  formControlName="watercosts" appOnlyNumber [value]="currentBranch.waterCosts"
+                             >
+                        </div>
+                        <div  *ngIf=" frcontract.controls['watercosts']?.hasError('required')
+                        && ( frcontract.controls['watercosts']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                        >Vui lòng nhập giá nước !</div>
                     </div>
                     <div class="form-group">
                         <div class="col-xs-6">

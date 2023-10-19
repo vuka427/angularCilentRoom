@@ -5,3 +5,30 @@
         <table  datatable [dtOptions]="dtOptions" class="row-border hover display table"></table>
     </div>
 </div>
+
+
+
+<ng-template #DetailModal let-modal  >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="exampleModalLabel">Thông tin hợp đồng </h5>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body text-danger text-center">
+      
+        
+      
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Xóa hợp đồng</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Xuất file pdf</button>
+        <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Hủy</button>
+
+    </div>
+    
+</ng-template>
+

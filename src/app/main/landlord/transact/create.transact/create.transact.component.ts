@@ -70,6 +70,9 @@ export class CreateTransactComponent implements OnInit {
       b_phone : new FormControl('',Validators.required),
 
       rentalprice : new FormControl('',Validators.required),
+      electricitycosts : new FormControl('',Validators.required),
+      watercosts : new FormControl('',Validators.required),
+
       durationofhouselease : new FormControl('',Validators.required),
       commencingon : new FormControl('',Validators.required),
       endingon : new FormControl('',Validators.required),
@@ -93,7 +96,7 @@ export class CreateTransactComponent implements OnInit {
           console.log("respone all branch", res);
           this.brancheSelect = res;
         },
-        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err); this._data.handleError(err); },
+        error: err => {console.log(err); this._data.handleError(err); },
         complete: () => { console.log("load all room"); }, 
       });
   }
@@ -161,6 +164,7 @@ export class CreateTransactComponent implements OnInit {
     let a : any[] = this.brancheSelect;
     this.currentBranch = a.find((data) => data.id == event.target.value);
     this.areaSelect = a.find((data) => data.id == event.target.value).areas ;
+    this.frcontract.patchValue({electricitycosts: this.currentBranch.electricityCosts ,watercosts: this.currentBranch.waterCosts});
 
   }
   // thêm phòng -> thiết lập khu vực
