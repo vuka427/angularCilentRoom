@@ -6,7 +6,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
-
+import { ContractModel } from 'src/app/core/domain/contract/contract.model'
 
 
 @Component({
@@ -36,6 +36,8 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   dtTrigger: Subject<any> = new Subject<any>();
   public displayCreate: boolean = false;
   public styleTable: string = "block";
+
+  public currentCTDetail : ContractModel | any = {};
 
 
   ngOnInit(): void {
@@ -128,8 +130,8 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this._render.listen('document', 'click', (event) => {
       if (event.target.hasAttribute("contractid") && event.target.hasAttribute("detailbtn")) {
-          //this.deleteBranch(event.target.getAttribute("branchid"))
-          //this.deleteBranchId = event.target.getAttribute("branchid");
+          let ctId = event.target.getAttribute("contractid") as number;
+          this.loadContractDetail(ctId )
           this.openModal();
       }else{
         if(event.target.hasAttribute("contractid") && event.target.hasAttribute("exportpdfbtn")){
@@ -155,30 +157,49 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
       //dtInstance.destroy();
       dtInstance.ajax.reload();
       // Call the dtTrigger to rerender again
-
       this.dtTrigger.next('');
 
     });
   }
 
   public exportToPdf(contractid:number){
-    
+    this._notify.printSuccessMessage("Vui lòng chờ file đang gửi đến bạn !");
     console.log(contractid);
+
+    const anchorElement = document.createElement('a');
+    document.body.appendChild(anchorElement);
     
     this._data.DownloadFile("/api/contract/pdf?contractid="+contractid).subscribe(
       {
         next: (res:any) => { 
+          console.log(res);
           const blob = new Blob([res], { type: "application/pdf" });
           const url = window.URL.createObjectURL(blob);
+          anchorElement.href = url;
+          anchorElement.download =  "hop_dong_thue_tro_so_" + contractid;
+          //anchorElement.click();
+        
+          //window.URL.revokeObjectURL(url);
           window.open(url);
         },
         error: err => {console.log(err); this._data.handleError(err); },
 
-        complete: () => { this._notify.printSuccessMessage("Vui lòng chờ file đang gửi đến bạn !"); }, 
+        complete: () => {  }, 
       });
-    
   }
 
+  public loadContractDetail(contractid : number){
+
+    this._data.get("/api/contract/detail?contractid="+contractid).subscribe(
+      {
+        next: res => { 
+          console.log("respone contract", res);
+          this.currentCTDetail = res;
+        },
+        error: err => {console.log(err); this._data.handleError(err); },
+        complete: () => { }, 
+      });
+  }
 
 
 

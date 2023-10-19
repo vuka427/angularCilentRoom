@@ -35,11 +35,11 @@ export class DataService {
     return this._http.get<Response>(SystemConstants.BASE_API + uri, { headers: headers });
     
   }
-  DownloadFile(uri: string, data?: any) {
+  DownloadFile(uri: string) {
     const headers= new HttpHeaders()
     .set('content-type', 'application/json')
     .set('Authorization', `Bearer ${this._authen.getLoggedInUser()?.access_token }`);
-    return this._http.post(SystemConstants.BASE_API + uri, data, { headers: headers, reportProgress:true, responseType: 'blob' });
+    return this._http.get(SystemConstants.BASE_API + uri, { headers: headers, reportProgress:true, responseType: 'blob' });
         
   }
 

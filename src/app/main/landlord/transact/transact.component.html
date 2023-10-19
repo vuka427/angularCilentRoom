@@ -17,16 +17,114 @@
       </button>
     </div>
     
-    <div class="modal-body text-danger text-center">
-      
+    <div class="modal-body   ">
+
+        <dl class="row ">
+            <dt class="col-sm-4  ">
+                Tên người thuê :
+            </dt>
+            <dd class = "col-sm-8">
+                {{currentCTDetail.b_Lessee}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Ngày sinh :
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.b_DateOfBirth}}
+            </dd>
+            <dt class="col-sm-4 ">
+                CCCD :
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.b_Cccd}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Ngày cấp :
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.b_DateOfIssuance}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Nơi cấp : 
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.b_PlaceOfIssuance}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Địa chỉ thường trú:
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.b_PermanentAddress}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Số điện thoại :
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.b_Phone}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Thuê phòng :
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.roomNumber}}, {{currentCTDetail.houseType| housetype: false }}  {{currentCTDetail.areaName}}, nhà trọ {{currentCTDetail.branchName}} 
+            </dd>
+            <dt class="col-sm-4 ">
+                Địa chỉ :
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.branchAddress}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Giá thuê :
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.rentalPrice | currency:"VND":"symbol"}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Giá điện :
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.electricityCosts | currency:"VND":"symbol"}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Giá nước :
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.waterCosts | currency:"VND":"symbol"}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Tiền cọc :
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.deposit | currency:"VND":"symbol"}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Ngày bắt đầu :
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.commencingOn}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Ngày kết thúc
+            </dt>
+            <dd class="col-sm-8">
+                {{currentCTDetail.endingOn}}
+            </dd>
+           
+
+
+            
+           
+           
+            
+        </dl>
         
       
     </div>
     
     <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Xóa hợp đồng</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Xuất file pdf</button>
-        <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Hủy</button>
+       
+        <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Đóng</button>
 
     </div>
     
