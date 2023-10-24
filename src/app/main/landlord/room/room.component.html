@@ -131,11 +131,11 @@
                                         <hr>
                                         <button type="button" class="btn btn-sm btn-primary mr-1 mb-1">Xem</button>
                                         <button type="button" class="btn btn-sm btn-success mr-1 mb-1" (click)="openFromEditRoom(room.id,branch.branchName,area.areaName)">Chỉnh sửa</button>
-                                        <button type="button" class="btn btn-sm btn-danger mb-1 " (click)="openDeleteRoomModal(area.areaName,room.roomNumber,room.id)">Xóa</button>
+                                        <button type="button" class="btn btn-sm btn-danger mb-1 " (click)="openDeleteRoomModal(area.areaName,room.roomNumber,room.id)">Xóa</button> 
+                                        <button type="button" [disabled]="room.status!='Inhabited'" class="btn btn-sm btn-warning mr-1 mb-1" (click)="openCreateInvoiceModal(room.id)" >Lập hóa đơn</button>
                                     </div>
                                     
                                 </div>
-                           
                            
                         </div>
                     </div>
@@ -691,3 +691,146 @@
         </div>
     </div>
 </div>
+
+
+
+<!--modal xóa phòng-->
+<ng-template #createInvoiceModal let-modal  >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteRoomModalLabel">Lập hóa đơn tháng {{invoice.month}} năm {{invoice.year}}</h5>
+      <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body container-fluid"  >
+        <form id="invoice-form"   novalidate  (ngSubmit)="onFormCreateInvoiceSubmit()" [formGroup]="frInvoice" #fi="ngForm"  >
+            <div class="row">
+                <div class="col-12">
+                        <h5>Giá cho thuê : {{invoice.rentalPrice  |currency:"VND":"symbol"}}</h5>
+                </div>
+            </div>
+            <hr>
+            
+            <div class="row">
+                <div class="form-group col-sm-2">
+                    <label > Số điện cũ</label>
+                    <p>{{invoice.oldElectricNumber}}</p>
+                    
+                </div>
+                <div class="form-group col-sm-3">
+                    <label > Số điện mới</label>
+                    <input type="number"  class="form-control" 
+                        placeholder="Số điện" appOnlyNumber required formControlName="newelectricnumber" (change)="setEUse()"> 
+                    <div  *ngIf="frInvoice.controls['newelectricnumber']?.hasError('required')
+                    && (frInvoice.controls['newelectricnumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    > Vui lòng nhập chỉ số điện !</div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label > Số Kwh</label>
+                    <p>{{elecNumber}}</p>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label > Đơn giá</label>
+                    <p>{{invoice.electricityCosts |currency:"VND":"symbol"}}</p>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label >Tiền điện </label>
+                    <p class="text-danger">{{elecPrice |currency:"VND":"symbol"}}</p>
+                </div>
+            </div> 
+
+            <hr>
+            <div class="row">
+                <div class="form-group col-sm-2">
+                    <label > Số nước cũ</label>
+                    <p>{{invoice.oldWaterNumber}}</p>
+                    
+                </div>
+                <div class="form-group col-sm-3">
+                    <label > Số nước mới</label>
+                    <input type="number" #electric  class="form-control" 
+                    placeholder="Số nước " appOnlyNumber required formControlName="newwaternumber" 
+                    (change)="setWUse()"
+                    >
+                    <div  *ngIf="frInvoice.controls['newwaternumber']?.hasError('required')
+                    && (frInvoice.controls['newwaternumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    > Vui lòng nhập chỉ số nước !</div>
+                    
+                </div>
+                <div class="form-group col-sm-2">
+                    <label > Số m<sup>2</sup></label>
+                    <p>{{wanterNumber}}</p>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label > Đơn giá</label>
+                    <p>{{invoice.waterCosts |currency:"VND":"symbol"}}</p>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label > Tiền nước </label>
+                    <p class="text-danger">{{wanterPrice|currency:"VND":"symbol" }}</p>
+                </div>
+                
+            </div>
+
+            <hr>
+            <div class="row">
+                <table  class="table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên dịch vụ</th>
+                            <th>Giá</th> 
+                            <th></th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container formArrayName="services">
+                            <tr *ngFor="let serviceItem of serviceItems.controls; index as i" >
+
+                              <td for="">{{i+1}} </td>
+      
+                              <ng-container [formGroupName]="i">
+                                <td >
+                                    <input type="text"  class="form-control"  formControlName="servicename" placeholder="Tên dịch vụ" />
+                                    <div  *ngIf="serviceItems.controls[i].get('servicename')?.hasError('required')
+                                        && (serviceItems.controls[i].get('servicename')?.touched || (isValidInvoiceFormSubmitted!= null && !isValidInvoiceFormSubmitted))" 
+                                        class="help-block text-danger"
+                                        >Vui lòng nhập tên dịch vụ !</div>
+                                </td>
+    
+                                <td >
+                                    <input type="number"  class="form-control"  formControlName="price" placeholder="Giá dịch vụ" (change)="setTotalPrice()" />
+                                    <div  *ngIf="serviceItems.controls[i].get('price')?.hasError('required')
+                                        && (serviceItems.controls[i].get('price')?.touched|| (isValidInvoiceFormSubmitted!= null && !isValidInvoiceFormSubmitted))" 
+                                        class="help-block text-danger"
+                                        >Vui lòng nhập giá dịch vụ !</div>
+                                </td>
+                                <td><button type="button" (click)="removeSevices(i)"  class="btn btn-sm btn-danger" >Xóa</button> </td>
+                              </ng-container>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+                <div class="col-12">
+                    <div class=" text-center">
+                        <button type="button" class="btn btn-sm btn-outline-primary" (click)="addSevices()">+ Thêm thiết bị</button>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <h5>Tổng thanh toán : <span class="text-danger">{{totalPrice |currency:"VND":"symbol" }}</span></h5>
+            </div>
+        </form>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="submit" form="invoice-form" class="btn btn-primary" >Đồng ý</button>
+        <button type="reset" form="invoice-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+    </div>
+
+</ng-template>

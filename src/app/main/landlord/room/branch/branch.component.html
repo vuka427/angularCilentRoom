@@ -164,30 +164,6 @@
                             class="help-block text-danger"
                             >Vui lòng nhập giá nước !</div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-xs-6">
-                            <label for="garbagecolletionfee"><h5>Tiền đổ rác<sup class="text-danger">(*)</sup><sub>(vnđ/tháng)</sub></h5></label>
-                            <input type="number" class="form-control" name="garbagecolletionfee" id="garbagecolletionfee" placeholder="Tiền đổ rác" 
-                             required  appOnlyNumber formControlName="garbagecolletionfee"
-                            >
-                        </div>
-                        <div  *ngIf="frbranch.controls['garbagecolletionfee']?.hasError('required')
-                            && (frbranch.controls['garbagecolletionfee']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" 
-                            class="help-block text-danger"
-                            >Vui lòng nhập tiền đổ rác !</div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-6">
-                            <label for="internetcosts"><h5>Tiền Internet/wifi<sup class="text-danger">(*)</sup><sub>(vnđ/tháng)</sub></h5></label>
-                            <input type="number" class="form-control" name="internetcosts" id="internetcost" placeholder="Tiền Internet/wifi" 
-                             required  appOnlyNumber formControlName="internetcosts"
-                            >
-                        </div>
-                        <div  *ngIf="frbranch.controls['internetcosts']?.hasError('required')
-                            && (frbranch.controls['internetcosts']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" 
-                            class="help-block text-danger"
-                            >Vui lòng nhập tiền internet/wifi !</div>
-                    </div>
                     <ng-container formArrayName="services">
                         <div *ngFor="let serviceItem of services.controls; index as i"  class="form-group">
                             <label for=""><h5>Dịch vụ {{i+1}} <button type="button" (click)="RemoveService(i)"  class="btn btn-sm btn-danger" >Xóa</button></h5> </label>

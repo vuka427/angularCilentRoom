@@ -9,6 +9,7 @@ import {NgbModal, ModalDismissReasons, NgbTooltipModule} from '@ng-bootstrap/ng-
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HousetypePipe } from '../../../shared/pipe/housetype.pipe';
 import { ImageRoomModel } from 'src/app/core/domain/room/image.room';
+import { InvoiceModel } from 'src/app/core/domain/invoice/invoice.model';
 
 
 
@@ -26,6 +27,7 @@ export class RoomComponent implements OnInit{
   @ViewChild('editAreaModal') editAreaModal : TemplateRef<any>; 
 
   @ViewChild('deleteRoomModal') deleteRoomModal : TemplateRef<any>; 
+  @ViewChild('createInvoiceModal') createInvoiceModal : TemplateRef<any>; 
 
   constructor(
     private _data : DataService,
@@ -44,11 +46,13 @@ export class RoomComponent implements OnInit{
   public frUpdateArea : FormGroup ;
   public frRoom : FormGroup ;
   public frURoom : FormGroup ;
+  public frInvoice : FormGroup ;
 
   public isValidAreaFormSubmitted :boolean | null = null;
   public isValidAreaEditFormSubmitted :boolean | null = null;
   public isValidRoomEditFormSubmitted :boolean | null = null;
   public isValidRoomFormSubmitted :boolean | null = null;
+  public isValidInvoiceFormSubmitted :boolean | null = null;
 
 
   public showFormCreateRoom: number = 0;
@@ -104,7 +108,14 @@ export class RoomComponent implements OnInit{
         devices: new FormArray([])
       });
 
-      
+      this.frInvoice = new FormGroup({
+        roomid: new FormControl(0),
+        contractid: new FormControl(0),
+        newelectricnumber: new FormControl('',Validators.required),
+        newwaternumber: new FormControl('',Validators.required),
+        services: new FormArray([])
+      });
+
   }
 
   get devices() {
@@ -112,6 +123,9 @@ export class RoomComponent implements OnInit{
   }
   get udevices() {
     return this.frURoom.get('devices') as FormArray;
+  }
+  get serviceItems() {
+    return this.frInvoice.get('services') as FormArray;
   }
 
  //thiết lập nhà trọ hiện tại
@@ -121,7 +135,7 @@ export class RoomComponent implements OnInit{
     this.currentBranchIndex = index;
   }
   // load dữ liệu ban đầu
-  public loadData(){
+  public loadData(){ 
 
     this._data.get("/api/branch/allroom").subscribe(
       {
@@ -130,7 +144,7 @@ export class RoomComponent implements OnInit{
           this.branches = res;
           this.currentBranchId = this.branches[0].id;
         },
-        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err); this._data.handleError(err); },
+        error: err => { console.log(err); this._data.handleError(err); },
         complete: () => { console.log("load all room"); }, 
       });
   }
@@ -337,9 +351,11 @@ export class RoomComponent implements OnInit{
     let s = this.frRoom.get('devices') as FormArray;
     s.removeAt(index);
   }
+
   get services() {
     return this.frRoom.get('devices') as FormArray;
   }
+
   get editRoomId() {
     return this.frURoom.get('id')?.value;
   }
@@ -472,11 +488,10 @@ export class RoomComponent implements OnInit{
   onUploadOnefile(event:any) {
   
     const file :File = event.target.files[0];
-    console.log ("àdasfasfafasf");
+    
     if (file) {
 
       this.fileName = file;
-      console.log ("àdasfasfafasf",this.fileName);
 
       const reader = new FileReader();
       reader.onload = e => this.imageSrc = reader.result;
@@ -488,7 +503,6 @@ export class RoomComponent implements OnInit{
 
       this._data.postFile('/api/room/uploadoneimage?roomid='+this.editRoomId.toString(), formData ).subscribe({
         next: res => {
-           console.log("edit image repone ", res);
            let image: ImageRoomModel | any = res;
            this.imageRooms.push(image);
 
@@ -578,6 +592,160 @@ export class RoomComponent implements OnInit{
 
   }
  // end upload file
+
+
+  //mở đóng model lập hóa đơn
+  public openCreateInvoiceModal(roomid : number){
+    this.totalPrice =0;
+    this.elecPrice=0;
+    this.elecNumber=0;
+    this.wanterPrice=0;
+    this.wanterNumber=0;
+    let s = this.frInvoice.get('services') as FormArray;
+    s.clear()
+
+    this.loadDataToINvoice(roomid)
+    this._modalService.open(this.createInvoiceModal, { size: 'lg', backdrop: 'static' });
+  }
+
+  public offCreateInvoiceModal(){
+    this.totalPrice =0;
+    this.elecPrice=0;
+    this.elecNumber=0;
+    this.wanterPrice=0;
+    this.wanterNumber=0;
+    let s = this.frInvoice.get('services') as FormArray;
+    s.clear()
+    this._modalService.dismissAll(this.createInvoiceModal);
+  }
+ 
+  public invoice :InvoiceModel | any = {};
+  // load data to invoice 
+  public loadDataToINvoice(roomid: number){
+    console.log("load data to invoice room id : ",roomid);
+    this._data.get('/api/invoice/info?roomid='+roomid).subscribe(
+      {
+        next: res => { 
+          console.log(res);
+          this.invoice = res
+
+          let s = this.frInvoice.get('services') as FormArray;
+
+          if(this.invoice.serviceItems!=null)
+          this.invoice.serviceItems.forEach((e:any)=> {
+            const group = new FormGroup({
+              servicename: new FormControl(e.serviceName,Validators.required),
+              price: new FormControl(e.price,Validators.required)
+            });
+            s.push(group);
+          });
+
+        },
+        error: err => { this._data.handleError(err); console.log(err); },
+        complete: () => { this.setTotalPrice() },
+      }
+    );
+
+
+  }
+// chỉnh lập hóa đơn
+
+public onFormCreateInvoiceSubmit(){
+  console.log('submit invoice');
+  this.isValidInvoiceFormSubmitted = false;
+  
+  if (this.frURoom.invalid) {
+    console.log("is invalid");
+    return;
+  }
+  this.isValidInvoiceFormSubmitted= true;
+
+  console.log('submited',this.frURoom.value );
+
+  this._data.put('/api/room/edit/ghgh',this.frURoom.value).subscribe(
+    {
+      next: res => { this.uploadImage(res); console.log("repone ", res);},
+      error: err => { this._data.handleError(err);console.log(err);},
+      complete: () => { 
+        this._notify.printSuccessMessage("Cập nhật thông tin phòng thành công !"); 
+       
+        this.offCreateInvoiceModal();
+      },
+    }
+  );
+}
+
+public totalPrice: number =0;
+public elecNumber : number =0;
+public wanterNumber : number =0;
+public elecPrice : number =0;
+public wanterPrice : number =0;
+
+
+public setEUse(){
+  let en = this.frInvoice.get('newelectricnumber')?.value as number;
+  if(en!=null){
+    this.elecNumber = en - this.invoice.oldElectricNumber;
+    this.elecPrice=this.elecNumber *  this.invoice.electricityCosts;
+  }else {
+    this.elecPrice=0;
+    this.elecNumber=0;
+  }
+  this.setTotalPrice()
+}
+
+public setWUse(){
+  let wn = this.frInvoice.get('newwaternumber')?.value as number;
+  if(wn!=null){
+    this.wanterNumber = wn - this.invoice.oldWaterNumber;
+    this.wanterPrice=this.wanterNumber * this.invoice.waterCosts;
+  }else {
+    this.wanterPrice=0;
+    this.wanterNumber=0;
+  }
+  this.setTotalPrice()
+}
+
+public setTotalPrice(){
+  let serviceTotalPrice : number =0;
+  let s = this.frInvoice.get('services') as FormArray;
+  s.controls.forEach((element, index) => {
+    serviceTotalPrice += element.get('price')?.value;
+  });
+
+
+
+
+  this.totalPrice = this.invoice.rentalPrice + this.wanterPrice + this.elecPrice + serviceTotalPrice;
+
+
+}
+
+ // invoice -> thêm dịch vụ
+ public addSevices(){
+  console.log("add service");
+  const group = new FormGroup({
+    servicename: new FormControl('',Validators.required),
+    price: new FormControl(0,Validators.required),
+    description: new FormControl('')
+  });
+  
+  let s = this.frInvoice.get('services') as FormArray;
+  s.push(group);
+  console.log(this.frInvoice.value);
+  
+
+}
+
+// invoice -> xóa dịch vụ
+public removeSevices(index:number){
+  console.log("remove services");
+  let s = this.frInvoice.get('services') as FormArray;
+  s.removeAt(index);
+  this.setTotalPrice();
+}
+
+
 
 
 

@@ -55,7 +55,7 @@ export class UtilitesComponent implements OnInit {
           this.branches = res;
           this.currentBranchId = this.branches[0].id;
         },
-        error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err); this._data.handleError(err); },
+        error: err => {console.log(err); this._data.handleError(err); },
         complete: () => { console.log("load all room"); }, 
       });
   }
@@ -65,7 +65,7 @@ export class UtilitesComponent implements OnInit {
   public saveElectricNumber(roomid: any,electric: any){
 
     if(electric == null || electric ==''){
-      this._notify.printErrorMessage("Vui lòng nhập chỉ số điện !");
+      this._notify.printErrorMessage("Vui lòng nhập chỉ số điện !"); 
       return
     }
     

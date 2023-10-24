@@ -78,51 +78,56 @@
                           <div class="card-body m-0 p-0">
                             <div class="container-fluid m-0 p-0">
                                 <div class="row ">
-                                    <div *ngFor="let room of area.rooms, index as y " class="card m-2" style="width: 300px;">
-                                        <div class="card-header bg-primary text-light font-weight-bold">
-                                            <i class="fas fa-home"></i>
-                                            Phòng {{area.areaName}}.{{room.roomNumber}}
-                                        </div>
-                                        <div class="card-body">
-                                            <p class="card-text" placement="top" ngbTooltip="Tên người thuê" [openDelay]="300" [closeDelay]="500"> 
-                                                <i class="fas fa-user"></i> : 
-                                            </p>
-                                            <hr>
-                                           
-                                            <div class="form-group">
-                                                <div class="col-xs-6">
-                                                    <label for="price"><i class="fas fa-bolt"></i> Số điện (<small>Số cũ :</small>  <u class="text-primary">1312131</u>)</label>
-                                                   
-                                                    <input type="number" #electric  class="form-control" attr.name="electric-{{room.id}}" attr.id="electric-{{room.id}}" 
-                                                    placeholder="Số điện" appOnlyNumber required
-                                                     >
-                                                     <div *ngIf="electric.value==null || electric.value==''" class="help-block text-danger">Vui lòng nhập chỉ số điện !</div>
-                                                     <small class="text-success ">Cập nhật ngày : 7/10/2023</small>
-                                                </div>
-                                                <div class="text-right" > 
-                                                    <button type="button" class="btn btn-sm btn-primary mt-2 "
-                                                    (click)="saveElectricNumber(room.id,electric.value)" >Lưu</button>
-                                                </div>
-                                            </div> 
-                                           
-                                            <hr>
-                                            <div class="form-group">
-                                                <div class="col-xs-6">
-                                                    <label for="imaxmember"><i class="fas fa-tint"></i> Số nước (<small>Số cũ</small> : <u class="text-primary">1312131</u>) </label>
-                                                    
-                                                    <input type="number" #water class="form-control" attr.name="water-{{room.id}}" attr.id="water-{{room.id}}" 
-                                                    placeholder="Số nước" appOnlyNumber required
-                                                    >
-                                                    <div *ngIf="water.value==null || water.value==''" class="help-block text-danger">Vui lòng nhập chỉ số nước !</div>
-                                                    <small class="text-success ">Cập nhật ngày : 7/10/2023</small>
-                                                </div>
-                                                <div class="text-right" > 
-                                                    <button type="button" class="btn btn-sm btn-primary mt-2 "
-                                                    (click)="saveWaterNumber(room.id,water.value)" >Lưu</button>
+                                    <div *ngFor="let room of area.rooms, index as y " >
+                                        <div *ngIf="room.status" class="card m-2" style="width: 300px;">
+
+                                            <div class="card-header bg-primary text-light font-weight-bold">
+                                                <i class="fas fa-home"></i>
+                                                Phòng {{area.areaName}}.{{room.roomNumber}}
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text" placement="top" ngbTooltip="Tên người thuê" [openDelay]="300" [closeDelay]="500"> 
+                                                    <i class="fas fa-user"></i> : {{room.tenantName}}
+                                                </p>
+                                                <hr>
+                                               
+                                                <div class="form-group">
+                                                    <div class="col-xs-6">
+                                                        <label for="price"><i class="fas fa-bolt"></i> Số điện (<small>Số cũ :</small>  <u class="text-primary">1312131</u>)</label>
+                                                       
+                                                        <input type="number" #electric  class="form-control" attr.name="electric-{{room.id}}" attr.id="electric-{{room.id}}" 
+                                                        placeholder="Số điện" appOnlyNumber required
+                                                         >
+                                                         <div *ngIf="electric.value==null || electric.value==''" class="help-block text-danger">Vui lòng nhập chỉ số điện !</div>
+                                                         <small class="text-success ">Cập nhật ngày : 7/10/2023</small>
+                                                    </div>
+                                                    <div class="text-right" > 
+                                                        <button type="button" class="btn btn-sm btn-primary mt-2"
+                                                        (click)="saveElectricNumber(room.id,electric.value)">Lưu</button>
+                                                    </div>
+                                                </div> 
+                                               
+                                                <hr>
+                                                <div class="form-group">
+                                                    <div class="col-xs-6">
+                                                        <label for="imaxmember"><i class="fas fa-tint"></i> Số nước (<small>Số cũ</small> : <u class="text-primary">1312131</u>) </label>
+                                                        
+                                                        <input type="number" #water class="form-control" attr.name="water-{{room.id}}" attr.id="water-{{room.id}}" 
+                                                        placeholder="Số nước" appOnlyNumber required
+                                                        >
+                                                        <div *ngIf="water.value==null || water.value==''" class="help-block text-danger">Vui lòng nhập chỉ số nước !</div>
+                                                        <small class="text-success ">Cập nhật ngày : 7/10/2023</small>
+                                                    </div>
+                                                    <div class="text-right" > 
+                                                        <button type="button" class="btn btn-sm btn-primary mt-2"
+                                                        (click)="saveWaterNumber(room.id,water.value)" >Lưu</button>
+                                                    </div>
                                                 </div>
                                             </div>
+    
                                         </div>
                                     </div>
+                                   
                                 </div>
                             </div>
                           </div>

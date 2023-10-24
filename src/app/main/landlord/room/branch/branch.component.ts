@@ -113,8 +113,6 @@ constructor(
       address: new FormControl('',Validators.required),
       electricitycosts: new FormControl('',Validators.required),
       watercosts: new FormControl('',Validators.required),
-      garbagecolletionfee: new FormControl('',Validators.required),
-      internetcosts: new FormControl('',Validators.required),
       services: new FormArray([])
 
     });
