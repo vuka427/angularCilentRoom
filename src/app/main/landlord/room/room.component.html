@@ -705,7 +705,7 @@
     </div>
     
     <div class="modal-body container-fluid"  >
-        <form id="invoice-form"   novalidate  (ngSubmit)="onFormCreateInvoiceSubmit()" [formGroup]="frInvoice" #fi="ngForm"  >
+        <form id="invoice-form"  novalidate  (ngSubmit)="onFormCreateInvoiceSubmit()" [formGroup]="frInvoice" #fi="ngForm"  >
             <div class="row">
                 <div class="col-12">
                         <h5>Giá cho thuê : {{invoice.rentalPrice  |currency:"VND":"symbol"}}</h5>
