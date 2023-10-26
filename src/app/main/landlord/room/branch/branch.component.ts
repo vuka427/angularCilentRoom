@@ -6,8 +6,8 @@ import { DiagioihanhchinhService } from 'src/app/core/services/diagioihanhchinh.
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import {DataTableLanguage} from '../../../../core/domain/datatable/datatable.language';
-import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import { DataTableLanguage} from '../../../../core/domain/datatable/datatable.language';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-branch',
@@ -55,6 +55,8 @@ constructor(
 
   
   ngOnInit(): void {
+
+    
 
     this.dtOptions = {
       serverSide: true,     // Set the flag 

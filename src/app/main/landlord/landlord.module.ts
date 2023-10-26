@@ -20,6 +20,7 @@ import { HousetypePipe } from 'src/app/shared/pipe/housetype.pipe';
 import { CreateTransactComponent } from './transact/create.transact/create.transact.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { InvoiceTransactComponent } from './transact/invoice.transact/invoice.transact.component';
 
 
 
@@ -36,7 +37,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     BranchComponent,
     RoomstatusPipe,
     HousetypePipe,
-    CreateTransactComponent
+    CreateTransactComponent,
+    InvoiceTransactComponent
     
   ],
   providers: [

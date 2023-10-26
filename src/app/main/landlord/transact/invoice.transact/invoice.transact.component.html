@@ -1,0 +1,55 @@
+
+<div class="card shadow p-3"   >
+  <h5>Danh sách hóa đơn </h5>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+     
+      <div class="collapse navbar-collapse" id="navbarm">
+        <ul class="navbar-nav mr-auto">
+          <li class="navbar-brand m-2">Bộ lọc </li>
+          <li class="nav-item m-2">
+              <select class="form-control " [(ngModel)]="status_filter" placement="top" ngbTooltip="Trạng thái" [openDelay]="300" [closeDelay]="500">
+                  <option value='none'>-- Tất cả --</option>
+                  <option value='unpaid'>Chưa thành toán</option>
+                  <option value='paid'>Đã thanh toán</option>
+              </select>
+          </li>
+          <li class="nav-item m-2">
+            <select id='gMonth2' [(ngModel)]="month_filter" class="form-control" placement="top" ngbTooltip="Tháng" [openDelay]="300" [closeDelay]="500">
+                <option selected value='0'>-- chọn tháng --</option>
+                <option value='1'>Tháng 1</option>
+                <option value='2'>Tháng 2</option>
+                <option value='3'>Tháng 3</option>
+                <option value='4'>Tháng 4</option>
+                <option value='5'>Tháng 5</option>
+                <option value='6'>Tháng 6</option>
+                <option value='7'>Tháng 7</option>
+                <option value='8'>Tháng 8</option>
+                <option value='9'>Tháng 9</option>
+                <option value='10'>Tháng 10</option>
+                <option value='11'>Tháng 11</option>
+                <option value='12'>Tháng 12</option>
+            </select> 
+        </li>
+        <li class="nav-item m-2">
+            <select id='gMonth2' [(ngModel)]="year_filter" class="form-control" placement="top" ngbTooltip="Năm" [openDelay]="300" [closeDelay]="500">
+                <option selected value='0'>-- chọn năm --</option>
+                <option *ngFor="let item of [].constructor(10), index as i" value='{{i+2023}}' >{{i+2023}}</option>
+            </select> 
+        </li>
+        <li class="nav-item m-2">
+          <select id='gBranch' [(ngModel)]="branch_filter" class="form-control" placement="top" ngbTooltip="Nhà trọ" [openDelay]="300" [closeDelay]="500">
+              <option selected value='0'>-- chọn nhà trọ --</option>
+              <option *ngFor="let item of branches, index as i" value='{{item.id}}' >{{item.branchName}}</option>
+          </select> 
+        </li>
+          
+        </ul>
+       <button class="btn btn-sm btn-primary" >Thêm </button>
+      </div>
+  </nav>
+
+  <div class="table-responsive p-1">
+      <table datatable [dtOptions]="dtOptions" class=" row-border hover display table"></table>
+
+  </div>
+</div>

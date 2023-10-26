@@ -10,6 +10,7 @@ import { EmailhistoryComponent } from './emailhistory/emailhistory.component';
 import { UtilitesComponent } from './utilites/utilites.component';
 import { BranchComponent } from './room/branch/branch.component';
 import { CreateTransactComponent } from './transact/create.transact/create.transact.component';
+import { InvoiceTransactComponent } from './transact/invoice.transact/invoice.transact.component';
 
 
 const routes: Routes = [
@@ -24,6 +25,7 @@ const routes: Routes = [
   {path: 'emailhistory', component: EmailhistoryComponent },
   {path: 'utilites', component: UtilitesComponent },
   {path: 'branch', component: BranchComponent },
+  {path: 'invoice', component: InvoiceTransactComponent},
  
   
 ]
