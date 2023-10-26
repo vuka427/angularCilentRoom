@@ -134,6 +134,7 @@ export class RoomComponent implements OnInit{
     this.currentBranchId = id;
     this.currentBranchIndex = index;
   }
+  
   // load dữ liệu ban đầu
   public loadData(){ 
 
@@ -148,6 +149,7 @@ export class RoomComponent implements OnInit{
         complete: () => { console.log("load all room"); }, 
       });
   }
+
  //mở đóng model thêm khu vực
   public openAddAreaModal(){
     this._modalService.open(this.addAreaModal);
@@ -619,6 +621,7 @@ export class RoomComponent implements OnInit{
     this._modalService.dismissAll(this.createInvoiceModal);
   }
  
+
   public invoice :InvoiceModel | any = {};
   // load data to invoice 
   public loadDataToINvoice(roomid: number){
@@ -627,10 +630,16 @@ export class RoomComponent implements OnInit{
       {
         next: res => { 
           console.log(res);
-          this.invoice = res
+          this.invoice = res;
 
           let s = this.frInvoice.get('services') as FormArray;
-          this.frInvoice.patchValue({roomid: roomid,contractid: this.invoice.contractId });
+          this.frInvoice.patchValue({
+            roomid: roomid,
+            contractid: this.invoice.contractId,
+            newelectricnumber: this.invoice.newElectricNumber,
+            newwaternumber: this.invoice.newWaterNumber
+
+          });
 
 
           if(this.invoice.serviceItems!=null)
@@ -644,14 +653,13 @@ export class RoomComponent implements OnInit{
 
         },
         error: err => { this._data.handleError(err); console.log(err); },
-        complete: () => { this.setTotalPrice() },
+        complete: () => { this.setTotalPrice(); },
       }
     );
-
-
   }
-  // chỉnh lập hóa đơn
 
+
+  // chỉnh lập hóa đơn
   public onFormCreateInvoiceSubmit(){
     console.log('submit invoice');
 
@@ -717,13 +725,7 @@ export class RoomComponent implements OnInit{
     s.controls.forEach((element, index) => {
       serviceTotalPrice += element.get('price')?.value;
     });
-
-
-
-
     this.totalPrice = this.invoice.rentalPrice + this.wanterPrice + this.elecPrice + serviceTotalPrice;
-
-
   }
 
  // invoice -> thêm dịch vụ

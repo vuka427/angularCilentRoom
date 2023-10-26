@@ -704,11 +704,11 @@
       </button>
     </div>
     
-    <div class="modal-body container-fluid"  >
+    <div class="modal-body container-fluid">
         <form id="invoice-form"  novalidate  (ngSubmit)="onFormCreateInvoiceSubmit()" [formGroup]="frInvoice" #fi="ngForm"  >
             <div class="row">
                 <div class="col-12">
-                        <h5>Giá cho thuê : {{invoice.rentalPrice  |currency:"VND":"symbol"}}</h5>
+                    <h5>Giá cho thuê : {{invoice.rentalPrice  |currency:"VND":"symbol"}}</h5>
                 </div>
             </div>
             <hr>
@@ -726,7 +726,7 @@
                     <div  *ngIf="frInvoice.controls['newelectricnumber']?.hasError('required')
                     && (frInvoice.controls['newelectricnumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
                     class="help-block text-danger"
-                    > Vui lòng nhập chỉ số điện !</div>
+                    >Vui lòng nhập chỉ số điện !</div>
                 </div>
                 <div class="form-group col-sm-2">
                     <label > Số Kwh</label>
@@ -778,6 +778,11 @@
 
             <hr>
             <div class="row">
+                <div class="col-12">
+                        <h5>Dịch vụ</h5>
+                </div>
+            </div>
+            <div class="row">
                 <table  class="table">
                     <thead>
                         <tr>
@@ -817,19 +822,21 @@
                 </table>
                 <div class="col-12">
                     <div class=" text-center">
-                        <button type="button" class="btn btn-sm btn-outline-primary" (click)="addSevices()">+ Thêm thiết bị</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary" (click)="addSevices()">+ Thêm dịch vụ</button>
                     </div>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <h5>Tổng thanh toán : <span class="text-danger">{{totalPrice |currency:"VND":"symbol" }}</span></h5>
+                <h5 *ngIf="!invoice.isApproved && invoice.id>0" class="text-info  ml-3"> Đã lập hóa đơn </h5>
+                <h5 *ngIf="invoice.isApproved && invoice.id>0" class="text-info  ml-3"> Đã thanh toán </h5>
             </div>
         </form>
     </div>
     
     <div class="modal-footer">
-        <button type="submit" form="invoice-form" class="btn btn-primary" >Đồng ý</button>
+        <button type="submit" [disabled]="invoice.isApproved && invoice.id>0" form="invoice-form" class="btn btn-primary" >Lập hóa đơn</button>
         <button type="reset" form="invoice-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
     </div>
 

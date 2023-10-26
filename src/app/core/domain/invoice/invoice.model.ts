@@ -35,6 +35,7 @@ export class InvoiceModel {
         this.serviceItems = serviceItems
     }
 
+    
     id: number
     invoiceCode: string
     isApproved: boolean
