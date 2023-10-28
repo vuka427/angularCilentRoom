@@ -7,14 +7,14 @@
         <ul class="navbar-nav mr-auto">
           <li class="navbar-brand m-2">Bộ lọc </li>
           <li class="nav-item m-2">
-              <select class="form-control " [(ngModel)]="status_filter" placement="top" ngbTooltip="Trạng thái" [openDelay]="300" [closeDelay]="500">
+              <select class="form-control " [(ngModel)]="status_filter" (change)="rerender()" placement="top" ngbTooltip="Trạng thái" [openDelay]="300" [closeDelay]="500"> 
                   <option value='none'>-- Tất cả --</option>
                   <option value='unpaid'>Chưa thành toán</option>
                   <option value='paid'>Đã thanh toán</option>
               </select>
           </li>
           <li class="nav-item m-2">
-            <select id='gMonth2' [(ngModel)]="month_filter" class="form-control" placement="top" ngbTooltip="Tháng" [openDelay]="300" [closeDelay]="500">
+            <select id='gMonth2' [(ngModel)]="month_filter" (change)="rerender()" class="form-control" placement="top" ngbTooltip="Tháng" [openDelay]="300" [closeDelay]="500">
                 <option selected value='0'>-- chọn tháng --</option>
                 <option value='1'>Tháng 1</option>
                 <option value='2'>Tháng 2</option>
@@ -31,13 +31,13 @@
             </select> 
         </li>
         <li class="nav-item m-2">
-            <select id='gMonth2' [(ngModel)]="year_filter" class="form-control" placement="top" ngbTooltip="Năm" [openDelay]="300" [closeDelay]="500">
+            <select id='gMonth2' [(ngModel)]="year_filter" (change)="rerender()" class="form-control" placement="top" ngbTooltip="Năm" [openDelay]="300" [closeDelay]="500">
                 <option selected value='0'>-- chọn năm --</option>
                 <option *ngFor="let item of [].constructor(10), index as i" value='{{i+2023}}' >{{i+2023}}</option>
             </select> 
         </li>
         <li class="nav-item m-2">
-          <select id='gBranch' [(ngModel)]="branch_filter" class="form-control" placement="top" ngbTooltip="Nhà trọ" [openDelay]="300" [closeDelay]="500">
+          <select id='gBranch' [(ngModel)]="branch_filter" (change)="rerender()" class="form-control" placement="top" ngbTooltip="Nhà trọ" [openDelay]="300" [closeDelay]="500">
               <option selected value='0'>-- chọn nhà trọ --</option>
               <option *ngFor="let item of branches, index as i" value='{{item.id}}' >{{item.branchName}}</option>
           </select> 

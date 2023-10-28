@@ -10,8 +10,6 @@ import { NotificationService } from 'src/app/core/services/notification.service'
 import { DiagioihanhchinhService } from 'src/app/core/services/diagioihanhchinh.service';
 import { BranchModel } from 'src/app/core/domain/room/branch.model';
 
-
-
 @Component({
   selector: 'app-invoice.transact',
   templateUrl: './invoice.transact.component.html',
@@ -26,8 +24,6 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
   public dtOptions: DataTables.Settings = {};
 
   public dtTrigger: Subject<any> = new Subject<any>();
-
-
 
   constructor(
     private _http : HttpClient,
@@ -50,7 +46,19 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
 
 
   ngAfterViewInit(): void {
-    
+    this.dtTrigger.next('');
+
+    this._render.listen('document', 'click', (event) => {
+      if (event.target.hasAttribute("invoiceid") && event.target.hasAttribute("detailbtn")) {
+          let ctId = event.target.getAttribute("invoiceid") as number;
+          console.log("dsdsfdsfs");
+      }else{
+        if(event.target.hasAttribute("contractid") && event.target.hasAttribute("exportpdfbtn")){
+          let ctId = event.target.getAttribute("contractid") as number;
+          
+        }
+      }
+    });
   }
   ngOnDestroy(): void {
    
@@ -97,28 +105,38 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
       },
       language: DataTableLanguage.vietnam_datatables,
       columns: [{
-          title: 'ID',
+          title: 'STT',
           data: 'id'
         }, 
         {
-          title: 'Tên nhà trọ',
-          data: 'branchName'
+          title: 'Người thuê',
+          data: 'lessee'
         }, 
         {
           title: 'Số phòng',
-          data: 'description'
+          data: 'roomNumber'
         }, 
         {
-          title: 'Người thuê',
-          data: 'address'
+          title: 'Nhà trọ',
+          data: 'branchName'
         }, 
         {
           title: 'Tiền phòng',
-          data: 'address'
+          data: null,
+          defaultContent: '',
+          render: function (data: any, type: any,row: any, full: any) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(row.totalPrice);
+          }
         }, 
         {
           title: 'Trạng thái',
-          data: 'address'
+          data: null,
+          defaultContent: '',
+          render: function (data: any, type: any, row: any, full: any) {
+            if (row.isApproved ) return '<span class="badge badge-pill badge-success">Đã thanh toán</span>';
+            if ( !row.isApproved ) return '<span class="badge badge-pill badge-warning">Chờ thành toán</span>';
+            return '';
+          }
         }, 
         {
           title: 'Tác vụ',
@@ -131,7 +149,24 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
         }
       ]
     };
-
   }
+
+  public rerender(): void {
+    
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      //dtInstance.destroy();
+      dtInstance.ajax.reload(); 
+      // Call the dtTrigger to rerender again
+
+      this.dtTrigger.next('');
+      
+    });
+  }
+
+
+
+
+
 
 }

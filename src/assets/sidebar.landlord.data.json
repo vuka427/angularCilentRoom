@@ -77,25 +77,7 @@
         }
       ]
     },
-    {
-      "title": "Quản lý tin đăng",
-      "parentLink": "",
-      "awesomeIcon":"fas fa-tasks",
-      "type": "",
-      "menu": true,
-      "submenu": [
-        {
-          "childtitle": "Link 1",
-          "link": "#",
-          "islink": true
-        },
-        {
-          "childtitle": "Link 2",
-          "link": "#",
-          "islink": true
-        }
-      ]
-    },
+    
     {
       "title": "Quản lý yêu cầu gớp ý",
       "parentLink": "",
