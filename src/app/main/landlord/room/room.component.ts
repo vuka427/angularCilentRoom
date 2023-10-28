@@ -599,10 +599,10 @@ export class RoomComponent implements OnInit{
   //mở đóng model lập hóa đơn
   public openCreateInvoiceModal(roomid : number){
     this.totalPrice =0;
-    this.elecPrice=0;
-    this.elecNumber=0;
-    this.wanterPrice=0;
-    this.wanterNumber=0;
+    this.elecPrice =0;
+    this.elecNumber =0;
+    this.wanterPrice =0;
+    this.wanterNumber =0;
     let s = this.frInvoice.get('services') as FormArray;
     s.clear()
 

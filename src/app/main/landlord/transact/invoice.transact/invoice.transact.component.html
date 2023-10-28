@@ -2,18 +2,22 @@
 <div class="card shadow p-3"   >
   <h5>Danh sách hóa đơn </h5>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-     
+    <h5 class="navbar-brand active mb-1">Bộ lọc</h5>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarm" aria-controls="navbarm" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="" role="button"><i class="fas fa-tools text-primary"></i></span>
+    </button>
       <div class="collapse navbar-collapse" id="navbarm">
         <ul class="navbar-nav mr-auto">
-          <li class="navbar-brand m-2">Bộ lọc </li>
           <li class="nav-item m-2">
+            <label>Trạng thái </label>
               <select class="form-control " [(ngModel)]="status_filter" (change)="rerender()" placement="top" ngbTooltip="Trạng thái" [openDelay]="300" [closeDelay]="500"> 
-                  <option value='none'>-- Tất cả --</option>
+                  <option value='none'>-- tất cả --</option>
                   <option value='unpaid'>Chưa thành toán</option>
                   <option value='paid'>Đã thanh toán</option>
               </select>
           </li>
           <li class="nav-item m-2">
+            <label>Tháng</label>
             <select id='gMonth2' [(ngModel)]="month_filter" (change)="rerender()" class="form-control" placement="top" ngbTooltip="Tháng" [openDelay]="300" [closeDelay]="500">
                 <option selected value='0'>-- chọn tháng --</option>
                 <option value='1'>Tháng 1</option>
@@ -31,25 +35,117 @@
             </select> 
         </li>
         <li class="nav-item m-2">
+            <label>Năm </label>
             <select id='gMonth2' [(ngModel)]="year_filter" (change)="rerender()" class="form-control" placement="top" ngbTooltip="Năm" [openDelay]="300" [closeDelay]="500">
                 <option selected value='0'>-- chọn năm --</option>
                 <option *ngFor="let item of [].constructor(10), index as i" value='{{i+2023}}' >{{i+2023}}</option>
             </select> 
         </li>
         <li class="nav-item m-2">
+            <label>Nhà trọ </label>
           <select id='gBranch' [(ngModel)]="branch_filter" (change)="rerender()" class="form-control" placement="top" ngbTooltip="Nhà trọ" [openDelay]="300" [closeDelay]="500">
-              <option selected value='0'>-- chọn nhà trọ --</option>
+              <option selected value='0'>-- tất cả nhà trọ --</option>
               <option *ngFor="let item of branches, index as i" value='{{item.id}}' >{{item.branchName}}</option>
           </select> 
         </li>
           
         </ul>
+        
        <button class="btn btn-sm btn-primary" >Thêm </button>
       </div>
   </nav>
 
   <div class="table-responsive p-1">
       <table datatable [dtOptions]="dtOptions" class=" row-border hover display table"></table>
-
   </div>
 </div>
+
+<!--modal lập hóa đơn-->
+<ng-template #InvoiceDetailModal let-modal  >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteRoomModalLabel">Thông tin hóa đơn </h5>
+      <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body container-fluid">
+
+        <dl class="row ">
+            <dt class="col-sm-4  ">
+                Số phòng:
+            </dt>
+            <dd class = "col-sm-8">
+                {{invoice.roomNumber}}
+            </dd>
+            <dt class="col-sm-4 ">
+                Tên người thuê:
+            </dt>
+            <dd class="col-sm-8">
+               {{invoice.lessee}}
+            </dd>
+            <hr>
+            <table  class="table table-responsive ">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên dịch vụ</th>
+                        <th>Chỉ số đầu</th> 
+                        <th>Chỉ số đầu</th> 
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Tiền phòng</td>
+                        <td></td>
+                        <td></td>
+                        <td>1</td>
+                        <td>{{invoice.rentalPrice}}</td>
+                        <td>{{invoice.rentalPrice}}</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Tiền điện</td>
+                        <td>{{invoice.oldElectricNumber}}</td>
+                        <td>{{invoice.newElectricNumber}}</td>
+                        <td>{{invoice.newElectricNumber-invoice.oldElectricNumber}}</td>
+                        <td>{{invoice.electricityCosts}}</td>
+                        <td>{{(invoice.newElectricNumber-invoice.oldElectricNumber)*invoice.electricityCosts}} </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Tiền nước</td>
+                        <td>{{invoice.oldWaterNumber}}</td>
+                        <td>{{invoice.newWaterNumber}}</td>
+                        <td>{{invoice.newWaterNumber-invoice.oldWaterNumber}}</td>
+                        <td>{{invoice.waterCosts}}</td>
+                        <td>{{(invoice.newWaterNumber-invoice.oldWaterNumber)*invoice.waterCosts}}</td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+            <dt class="col-sm-4 ">
+                Tổng :
+            </dt>
+            <dd class="col-sm-8">
+               
+            </dd>
+           
+           
+        </dl>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="submit"  form="invoice-form" class="btn btn-primary" >thanh toán</button>
+        <button type="reset" form="invoice-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+    </div>
+
+</ng-template>
+
+
+

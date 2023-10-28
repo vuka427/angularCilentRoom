@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
@@ -9,15 +9,18 @@ import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { DiagioihanhchinhService } from 'src/app/core/services/diagioihanhchinh.service';
 import { BranchModel } from 'src/app/core/domain/room/branch.model';
+import { InvoiceModel } from 'src/app/core/domain/invoice/invoice.model';
 
 @Component({
   selector: 'app-invoice.transact',
   templateUrl: './invoice.transact.component.html',
   styleUrls: ['./invoice.transact.component.css']
 })
+
 export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewInit {
 
   @ViewChild(DataTableDirective, {static: false}) dtElement: DataTableDirective ; 
+  @ViewChild('InvoiceDetailModal') InvoiceDetailModal : TemplateRef<any>; 
 
   datatableElement: any = DataTableDirective;
 
@@ -36,13 +39,13 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
   ){}
 
 
- public status_filter: string ='none';
- public month_filter: string ='0';
- public year_filter: string ='0';
- public branch_filter: string ='0';
- 
- public branches: BranchModel[] | any;
-
+  public status_filter: string ='none';
+  public month_filter: string ='0';
+  public year_filter: string ='0';
+  public branch_filter: string ='0';
+  
+  public branches: BranchModel[] | any;
+  public invoice :InvoiceModel | any = {};
 
 
   ngAfterViewInit(): void {
@@ -50,16 +53,18 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
 
     this._render.listen('document', 'click', (event) => {
       if (event.target.hasAttribute("invoiceid") && event.target.hasAttribute("detailbtn")) {
-          let ctId = event.target.getAttribute("invoiceid") as number;
-          console.log("dsdsfdsfs");
+          let invoiceId = event.target.getAttribute("invoiceid") as number;
+         
+          this.loadDataToINvoice(invoiceId);
+          this.openDeleteRoomModal();
       }else{
-        if(event.target.hasAttribute("contractid") && event.target.hasAttribute("exportpdfbtn")){
-          let ctId = event.target.getAttribute("contractid") as number;
-          
+        if(event.target.hasAttribute("invoiceid") && event.target.hasAttribute("exportpdfbtn")){
+          let ctId = event.target.getAttribute("invoiceid") as number;
         }
       }
     });
   }
+
   ngOnDestroy(): void {
    
   }
@@ -90,7 +95,7 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
             dataTablesParameters
           ).subscribe(
             {
-              next: resp  => {
+              next: resp => {
                 console.log("Respone=> ", resp)
                 callback({
                   recordsTotal: resp.recordsTotal,
@@ -164,8 +169,29 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
     });
   }
 
+  //mở đóng model 
+  public openDeleteRoomModal(){
+    this._modalService.open(this.InvoiceDetailModal, { size: 'lg', backdrop: 'static'});
+  }
 
+  public closeDeleteRoomModal(){
+    this._modalService.dismissAll(this.InvoiceDetailModal);
+  }
 
+    // load data to invoice 
+  public loadDataToINvoice(invoiceid: number){
+    console.log("load invoice bai id : ",invoiceid);
+    this._data.get('/api/invoice/detail?invoiceid='+invoiceid).subscribe(
+      {
+        next: res => { 
+          console.log(res);
+          this.invoice = res;
+        },
+        error: err => { this._data.handleError(err); console.log(err); },
+        complete: () => { },
+      }
+    );
+  }
 
 
 
