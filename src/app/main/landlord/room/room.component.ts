@@ -36,6 +36,7 @@ export class RoomComponent implements OnInit{
     private _housetypePipe: HousetypePipe
   ){}
 
+  public roomStatus:string = "none";
 
   public branches: BranchModel[] | any;
 
@@ -68,6 +69,8 @@ export class RoomComponent implements OnInit{
 
   public roomNameDelete:string;
   public roomIdDelete: number = 0 ;
+
+
 
   public ngOnInit(): void {
       this.loadData();
@@ -137,8 +140,8 @@ export class RoomComponent implements OnInit{
   
   // load dữ liệu ban đầu
   public loadData(){ 
-
-    this._data.get("/api/branch/allroom").subscribe(
+    console.log(this.roomStatus);
+    this._data.get("/api/branch/allroom?roomstatus="+this.roomStatus).subscribe(
       {
         next: res => { 
           console.log("respone all branch", res);
@@ -641,15 +644,19 @@ export class RoomComponent implements OnInit{
 
           });
 
-
           if(this.invoice.serviceItems!=null)
           this.invoice.serviceItems.forEach((e:any)=> {
             const group = new FormGroup({
               servicename: new FormControl(e.serviceName,Validators.required),
-              price: new FormControl(e.price,Validators.required)
+              price: new FormControl(e.price,Validators.required),
+              quantity: new FormControl(e.quantity,Validators.required),
+              description: new FormControl(e.description)
             });
             s.push(group);
           });
+
+          this.setEUse();
+          this.setWUse();
 
         },
         error: err => { this._data.handleError(err); console.log(err); },
@@ -723,7 +730,7 @@ export class RoomComponent implements OnInit{
     let serviceTotalPrice : number =0;
     let s = this.frInvoice.get('services') as FormArray;
     s.controls.forEach((element, index) => {
-      serviceTotalPrice += element.get('price')?.value;
+      serviceTotalPrice += element.get('price')?.value * element.get('quantity')?.value;
     });
     this.totalPrice = this.invoice.rentalPrice + this.wanterPrice + this.elecPrice + serviceTotalPrice;
   }
@@ -734,6 +741,7 @@ export class RoomComponent implements OnInit{
     const group = new FormGroup({
       servicename: new FormControl('',Validators.required),
       price: new FormControl(0,Validators.required),
+      quantity: new FormControl(1,Validators.required),
       description: new FormControl('')
     });
     

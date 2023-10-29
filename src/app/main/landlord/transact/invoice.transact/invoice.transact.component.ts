@@ -21,6 +21,7 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
 
   @ViewChild(DataTableDirective, {static: false}) dtElement: DataTableDirective ; 
   @ViewChild('InvoiceDetailModal') InvoiceDetailModal : TemplateRef<any>; 
+  @ViewChild('InvoiceAgreeModal') InvoiceAgreeModal : TemplateRef<any>; 
 
   datatableElement: any = DataTableDirective;
 
@@ -56,7 +57,7 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
           let invoiceId = event.target.getAttribute("invoiceid") as number;
          
           this.loadDataToINvoice(invoiceId);
-          this.openDeleteRoomModal();
+          this.openInvoiceDetailModal();
       }else{
         if(event.target.hasAttribute("invoiceid") && event.target.hasAttribute("exportpdfbtn")){
           let ctId = event.target.getAttribute("invoiceid") as number;
@@ -170,13 +171,15 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
   }
 
   //mở đóng model 
-  public openDeleteRoomModal(){
+  public openInvoiceDetailModal(){
     this._modalService.open(this.InvoiceDetailModal, { size: 'lg', backdrop: 'static'});
   }
 
-  public closeDeleteRoomModal(){
+  public closeInvoiceDetailModal(){
     this._modalService.dismissAll(this.InvoiceDetailModal);
   }
+
+
 
     // load data to invoice 
   public loadDataToINvoice(invoiceid: number){
@@ -191,6 +194,37 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
         complete: () => { },
       }
     );
+  }
+
+
+  //mở đóng model xác nhận thanh toán
+  public openInvoicePayModal(invoiceid:number){
+    this.agreeInvoice =  invoiceid;
+    this._modalService.open(this.InvoiceAgreeModal,{ centered: true });
+  }
+
+  public closeInvoicePayModal(){
+    this.agreeInvoice = 0;
+    this._modalService.dismissAll(this.InvoiceAgreeModal);
+  }
+  public agreeInvoice:number=0;
+  // Agree to pay invoice 
+  public AgreeToPayInvoice(){
+    if(this.agreeInvoice!=0){
+      console.log("Agree to pay invoice : ",this.agreeInvoice);
+          this._data.post('/api/invoice/pay?invoiceid='+this.agreeInvoice).subscribe(
+            {
+              next: res => { 
+                console.log(res);
+               
+                
+              },
+              error: err => { this._data.handleError(err); console.log(err); },
+              complete: () => { this.rerender() },
+            }
+          );
+    }
+    this._modalService.dismissAll(this.InvoiceAgreeModal);
   }
 
 

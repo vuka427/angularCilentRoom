@@ -22,7 +22,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { InvoiceTransactComponent } from './transact/invoice.transact/invoice.transact.component';
 import { FormatVndPipe } from 'src/app/shared/pipe/format.vnd.pipe';
-
+import {NgxPrintModule} from 'ngx-print';
 
 
 
@@ -54,7 +54,8 @@ import { FormatVndPipe } from 'src/app/shared/pipe/format.vnd.pipe';
     ValidationModule,
     DataTablesModule,
     NgbTooltipModule,
-    CKEditorModule
+    CKEditorModule,
+    NgxPrintModule
   ]
   
 })

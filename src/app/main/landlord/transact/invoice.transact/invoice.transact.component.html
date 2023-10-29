@@ -51,7 +51,7 @@
           
         </ul>
         
-       <button class="btn btn-sm btn-primary" >Thêm </button>
+     
       </div>
   </nav>
 
@@ -70,12 +70,14 @@
       </button>
     </div>
     
-    <div class="modal-body container-fluid">
+    <div id="invoice_table" class="modal-body container-fluid">
        
        
         <dl class="row ">
             <div class="col-12 text-center">
-                <h5 class=""> Thông tin hóa đơn nhà trọ {{invoice.branchName}}</h5>
+                <h4 class=""> Hóa đơn nhà trọ {{invoice.branchName}}</h4>
+                <p>DH/{{invoice.id}}</p>
+                <p>tháng {{invoice.month}}, năm {{invoice.year}}</p>
             </div>
             <dt class="col-sm-3  ">
                 Số phòng:
@@ -90,7 +92,7 @@
                {{invoice.lessee}}
             </dd>
             <hr>
-            <table  class="table table-responsive-lg table-bordered table-striped">
+            <table  class="table table-responsive-lg table-bordered table-striped ">
                 <thead>
                     <tr>
                         <th>STT</th>
@@ -135,20 +137,20 @@
 
                         <td>{{i+4}}</td>
                         <td>{{serviceItem.serviceName}}</td>
-                        <td colspan="2"><small>ghi chú :</small>  </td>
+                        <td colspan="2"><small>ghi chú :</small> {{serviceItem.description}} </td>
                         
-                        <td>1</td>
-                        <td class="text-right ">{{serviceItem.price |FormatVndPipe}}</td>
-                        <td class="text-right text-primary">{{serviceItem.price |FormatVndPipe}}</td>
+                        <td>{{serviceItem.quantity}}</td>
+                        <td class="text-right">{{serviceItem.price |FormatVndPipe}}</td>
+                        <td class="text-right text-primary">{{serviceItem.price*serviceItem.quantity |FormatVndPipe}}</td>
                     </tr>
                    
                 </tbody>
             </table>
 
             
-            <h5 class="col-12 text-right">
+            <h4 class="col-12 text-right">
                 Tổng : <span class="text-danger">{{invoice.totalPrice |FormatVndPipe}} </span>
-            </h5>
+            </h4>
             
            
            
@@ -156,8 +158,32 @@
     </div>
     
     <div class="modal-footer">
-        <button type="submit"  form="invoice-form" class="btn btn-primary" >Thanh toán</button>
-        <button type="reset" form="invoice-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+        <button type="button" class="btn btn-success" styleSheetFile="assets/css/sb-admin-2.min.css" printSectionId="invoice_table" ngxPrint>In</button>
+        <button type="button" *ngIf="!invoice.isApproved"  class="btn btn-primary" (click)="openInvoicePayModal(invoice.id)" >Thanh toán</button>
+        <button type="button"  class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+    </div>
+
+</ng-template>
+
+
+
+<!--modal lập hóa đơn-->
+<ng-template #InvoiceAgreeModal let-modalAgree  >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteRoomModalLabel">Xác nhận thanh toán</h5>
+        <button type="reset"  class="close" aria-label="Close" (click)="modalAgree.dismiss()">
+            <span class="text-light" aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    
+    <div class="modal-body container-fluid">
+        <h5>Bạn có chắc chắn thanh toán ?</h5> 
+    </div>
+    
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger" (click)=" AgreeToPayInvoice()" >Đồng ý</button>
+        <button type="reset"  class="btn btn-outline-primary" (click)="modalAgree.close()" >Hủy</button>
     </div>
 
 </ng-template>
