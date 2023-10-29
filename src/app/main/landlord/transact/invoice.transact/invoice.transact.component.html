@@ -71,22 +71,26 @@
     </div>
     
     <div class="modal-body container-fluid">
-
+       
+       
         <dl class="row ">
-            <dt class="col-sm-4  ">
+            <div class="col-12 text-center">
+                <h5 class=""> Thông tin hóa đơn nhà trọ {{invoice.branchName}}</h5>
+            </div>
+            <dt class="col-sm-3  ">
                 Số phòng:
             </dt>
-            <dd class = "col-sm-8">
+            <dd class = "col-sm-9">
                 {{invoice.roomNumber}}
             </dd>
-            <dt class="col-sm-4 ">
+            <dt class="col-sm-3 ">
                 Tên người thuê:
             </dt>
-            <dd class="col-sm-8">
+            <dd class="col-sm-9">
                {{invoice.lessee}}
             </dd>
             <hr>
-            <table  class="table table-responsive ">
+            <table  class="table table-responsive-lg table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>STT</th>
@@ -94,8 +98,8 @@
                         <th>Chỉ số đầu</th> 
                         <th>Chỉ số đầu</th> 
                         <th>Số lượng</th>
-                        <th>Đơn giá</th>
-                        <th>Thành tiền</th>
+                        <th >Đơn giá</th>
+                        <th >Thành tiền</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,43 +109,54 @@
                         <td></td>
                         <td></td>
                         <td>1</td>
-                        <td>{{invoice.rentalPrice}}</td>
-                        <td>{{invoice.rentalPrice}}</td>
+                        <td class="text-right ">{{invoice.rentalPrice |FormatVndPipe}}</td>
+                        <td class="text-right text-primary">{{invoice.rentalPrice |FormatVndPipe}}</td>
                     </tr>
                     <tr>
                         <td>2</td>
                         <td>Tiền điện</td>
                         <td>{{invoice.oldElectricNumber}}</td>
                         <td>{{invoice.newElectricNumber}}</td>
-                        <td>{{invoice.newElectricNumber-invoice.oldElectricNumber}}</td>
-                        <td>{{invoice.electricityCosts}}</td>
-                        <td>{{(invoice.newElectricNumber-invoice.oldElectricNumber)*invoice.electricityCosts}} </td>
+                        <td>{{invoice.newElectricNumber-invoice.oldElectricNumber}} (Kwh)</td>
+                        <td class="text-right ">{{invoice.electricityCosts |FormatVndPipe}}</td>
+                        <td class="text-right text-primary">{{(invoice.newElectricNumber-invoice.oldElectricNumber)*invoice.electricityCosts |FormatVndPipe}} </td>
                     </tr>
                     <tr>
                         <td>3</td>
                         <td>Tiền nước</td>
                         <td>{{invoice.oldWaterNumber}}</td>
                         <td>{{invoice.newWaterNumber}}</td>
-                        <td>{{invoice.newWaterNumber-invoice.oldWaterNumber}}</td>
-                        <td>{{invoice.waterCosts}}</td>
-                        <td>{{(invoice.newWaterNumber-invoice.oldWaterNumber)*invoice.waterCosts}}</td>
+                        <td>{{invoice.newWaterNumber-invoice.oldWaterNumber}} (m<sup>2</sup>)</td>
+                        <td class="text-right ">{{invoice.waterCosts |FormatVndPipe}}</td>
+                        <td class="text-right text-primary">{{(invoice.newWaterNumber-invoice.oldWaterNumber)*invoice.waterCosts |FormatVndPipe}}</td>
+                    </tr>
+
+                    <tr *ngFor="let serviceItem of invoice.serviceItems; index as i">
+
+                        <td>{{i+4}}</td>
+                        <td>{{serviceItem.serviceName}}</td>
+                        <td colspan="2"><small>ghi chú :</small>  </td>
+                        
+                        <td>1</td>
+                        <td class="text-right ">{{serviceItem.price |FormatVndPipe}}</td>
+                        <td class="text-right text-primary">{{serviceItem.price |FormatVndPipe}}</td>
                     </tr>
                    
                 </tbody>
             </table>
-            <dt class="col-sm-4 ">
-                Tổng :
-            </dt>
-            <dd class="col-sm-8">
-               
-            </dd>
+
+            
+            <h5 class="col-12 text-right">
+                Tổng : <span class="text-danger">{{invoice.totalPrice |FormatVndPipe}} </span>
+            </h5>
+            
            
            
         </dl>
     </div>
     
     <div class="modal-footer">
-        <button type="submit"  form="invoice-form" class="btn btn-primary" >thanh toán</button>
+        <button type="submit"  form="invoice-form" class="btn btn-primary" >Thanh toán</button>
         <button type="reset" form="invoice-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
     </div>
 

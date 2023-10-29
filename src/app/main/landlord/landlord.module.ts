@@ -21,6 +21,7 @@ import { CreateTransactComponent } from './transact/create.transact/create.trans
 import { BrowserModule } from '@angular/platform-browser';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { InvoiceTransactComponent } from './transact/invoice.transact/invoice.transact.component';
+import { FormatVndPipe } from 'src/app/shared/pipe/format.vnd.pipe';
 
 
 
@@ -37,6 +38,7 @@ import { InvoiceTransactComponent } from './transact/invoice.transact/invoice.tr
     BranchComponent,
     RoomstatusPipe,
     HousetypePipe,
+    FormatVndPipe,
     CreateTransactComponent,
     InvoiceTransactComponent
     

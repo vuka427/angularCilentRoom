@@ -788,35 +788,51 @@
                         <tr>
                             <th>STT</th>
                             <th>Tên dịch vụ</th>
+                            <th>Số lượng</th>
                             <th>Giá</th> 
                             <th></th> 
                         </tr>
                     </thead>
                     <tbody>
                         <ng-container formArrayName="services">
-                            <tr *ngFor="let serviceItem of serviceItems.controls; index as i" >
+                            <ng-container *ngFor="let serviceItem of serviceItems.controls; index as i">
+                                <ng-container [formGroupName]="i">
+                                    <tr >
 
-                              <td for="">{{i+1}} </td>
-      
-                              <ng-container [formGroupName]="i">
-                                <td >
-                                    <input type="text"  class="form-control"  formControlName="servicename" placeholder="Tên dịch vụ" />
-                                    <div  *ngIf="serviceItems.controls[i].get('servicename')?.hasError('required')
-                                        && (serviceItems.controls[i].get('servicename')?.touched || (isValidInvoiceFormSubmitted!= null && !isValidInvoiceFormSubmitted))" 
-                                        class="help-block text-danger"
-                                        >Vui lòng nhập tên dịch vụ !</div>
-                                </td>
-    
-                                <td >
-                                    <input type="number"  class="form-control"  formControlName="price" placeholder="Giá dịch vụ" (change)="setTotalPrice()" />
-                                    <div  *ngIf="serviceItems.controls[i].get('price')?.hasError('required')
-                                        && (serviceItems.controls[i].get('price')?.touched|| (isValidInvoiceFormSubmitted!= null && !isValidInvoiceFormSubmitted))" 
-                                        class="help-block text-danger"
-                                        >Vui lòng nhập giá dịch vụ !</div>
-                                </td>
-                                <td><button type="button" (click)="removeSevices(i)"  class="btn btn-sm btn-danger" >Xóa</button> </td>
-                              </ng-container>
-                            </tr>
+                                    <td for="">{{i+1}} </td>
+            
+                                    
+                                        <td >
+                                            <input type="text"  class="form-control"  formControlName="servicename" placeholder="Tên dịch vụ" />
+                                            <div  *ngIf="serviceItems.controls[i].get('servicename')?.hasError('required')
+                                                && (serviceItems.controls[i].get('servicename')?.touched || (isValidInvoiceFormSubmitted!= null && !isValidInvoiceFormSubmitted))" 
+                                                class="help-block text-danger"
+                                                >Vui lòng nhập tên dịch vụ !</div>
+                                        </td>
+                                        <td>
+                                            <input type="number"  class="form-control"   placeholder="Số lượng" (change)="setTotalPrice()" />
+                                        </td>
+            
+                                        <td >
+                                            <input type="number"  class="form-control"  formControlName="price" placeholder="Giá dịch vụ" (change)="setTotalPrice()" />
+                                            <div  *ngIf="serviceItems.controls[i].get('price')?.hasError('required')
+                                                && (serviceItems.controls[i].get('price')?.touched|| (isValidInvoiceFormSubmitted!= null && !isValidInvoiceFormSubmitted))" 
+                                                class="help-block text-danger"
+                                                >Vui lòng nhập giá dịch vụ !</div>
+                                        </td>
+                                        <td><button type="button" (click)="removeSevices(i)"  class="btn btn-sm btn-danger" >Xóa</button> </td>
+                                    
+                                    </tr>
+                                    <tr>
+                                        <td>Ghi chú</td>
+                                        <td colspan="3">
+                                            
+                                            <input type="text"  class="form-control"   placeholder="Ghi chú"  />
+                                        </td>
+
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
                         </ng-container>
                     </tbody>
                 </table>
