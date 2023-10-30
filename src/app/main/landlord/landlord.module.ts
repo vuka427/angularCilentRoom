@@ -14,7 +14,7 @@ import { UtilitesComponent } from './utilites/utilites.component';
 import { BranchComponent } from './room/branch/branch.component';
 
 import { DataTablesModule } from 'angular-datatables';
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { RoomstatusPipe } from 'src/app/shared/pipe/roomstatus.pipe';
 import { HousetypePipe } from 'src/app/shared/pipe/housetype.pipe';
 import { CreateTransactComponent } from './transact/create.transact/create.transact.component';
@@ -55,7 +55,8 @@ import {NgxPrintModule} from 'ngx-print';
     DataTablesModule,
     NgbTooltipModule,
     CKEditorModule,
-    NgxPrintModule
+    NgxPrintModule,
+    NgbDropdownModule
   ]
   
 })

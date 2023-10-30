@@ -102,14 +102,28 @@
     
                     <div class="container-fluid" >
                         <div class="row ">
-                                <div *ngFor="let room of area.rooms" class="card m-2" style="width: 230px;">
+                                <div *ngFor="let room of area.rooms; index as i" class="card m-2" style="width: 230px;" >
                                     <div  [ngClass]="{'card-header  text-light':true ,'bg-secondary':(room.status=='Empty'),'bg-primary':(room.status=='Inhabited'),'bg-danger':(room.status=='Repair'),'bg-info':(room.status=='Deposit')}"
                                     >
                                         <i class="fas fa-home"></i>
                                         Phòng {{area.areaName}}.{{room.roomNumber}}
+
+                                        <div ngbDropdown class="d-inline-block float-right">
+                                            <a class="dropdown-toggle m-1"  attr.id="dropdownBasic-{{i}}"  ngbDropdownToggle placement="top" ngbTooltip="Tùy chọn" 
+                                            [openDelay]="300" [closeDelay]="500">
+                                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                            </a>
+                                            <div ngbDropdownMenu attr.aria-labelledby="dropdownBasic-{{i}}">
+                                                <button ngbDropdownItem type="button" class="" (click)="openDetailRoomModal(room.id)">Xem</button>
+                                                <button ngbDropdownItem type="button" class="" (click)="openFromEditRoom(room.id,branch.branchName,area.areaName)">Chỉnh sửa</button>
+                                                
+                                                <button ngbDropdownItem type="button" [disabled]="room.status!='Inhabited'" class="" (click)="openCreateInvoiceModal(room.id)" >Lập hóa đơn</button>
+                                                <button ngbDropdownItem type="button" class="text-danger" (click)="openDeleteRoomModal(area.areaName,room.roomNumber,room.id)">Xóa</button> 
+                                            </div>
+                                        </div>
                                     </div>
                                 
-                                    <div class="card-body">
+                                    <div class="card-body" (click)="openDetailRoomModal(room.id)">
                                         <p class="card-text"  placement="top" ngbTooltip="Giá cho thuê" [openDelay]="300" [closeDelay]="500">
                                             <i class="fas fa-dollar-sign"></i> : {{room.price |FormatVndPipe}} 
                                         </p>
@@ -128,11 +142,6 @@
                                         <p class="card-text" placement="top" ngbTooltip="Tên người thuê" [openDelay]="300" [closeDelay]="500"> 
                                             <i class="fas fa-user"></i> : {{room.lessee }}
                                         </p>
-                                        <hr>
-                                        <button type="button" class="btn btn-sm btn-primary mr-1 mb-1">Xem</button>
-                                        <button type="button" class="btn btn-sm btn-success mr-1 mb-1" (click)="openFromEditRoom(room.id,branch.branchName,area.areaName)">Chỉnh sửa</button>
-                                        <button type="button" class="btn btn-sm btn-danger mb-1 " (click)="openDeleteRoomModal(area.areaName,room.roomNumber,room.id)">Xóa</button> 
-                                        <button type="button" [disabled]="room.status!='Inhabited'" class="btn btn-sm btn-warning mr-1 mb-1" (click)="openCreateInvoiceModal(room.id)" >Lập hóa đơn</button>
                                     </div>
                                     
                                 </div>
@@ -256,7 +265,6 @@
         <button type="submit" form="area-form" class="btn btn-danger" (click)="onDeleteAreaSubmit()" >Đồng ý</button>
         <button type="reset" form="area-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
         
-
     </div>
 </ng-template>
 
@@ -866,4 +874,131 @@
         <button type="reset" form="invoice-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
     </div>
 
+</ng-template>
+
+
+<!--modal chi tiết phòng -->
+<ng-template #detailRoomModal let-modal >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteRoomModalLabel" >Chi tiết phòng {{detailRoom.roomNumber}}</h5>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body ">
+        <div class="row">
+            <div class="col-12 col-lg-6 p-0">
+                <div class="card m-2">
+                    <h5 class="text-center">Thông tin phòng</h5>
+                    <dl class="row m-3">
+                        <dt class="col-sm-4  ">
+                            Giá cho thuê :
+                        </dt>
+                        <dd class = "col-sm-8">
+                            {{detailRoom.price | FormatVndPipe}}    
+                        </dd>
+                        <dt class="col-sm-4 ">
+                            Số người ở tối đa :
+                        </dt>
+                        <dd class="col-sm-8">
+                            {{detailRoom.maxMember}}
+                        </dd>
+                        <dt class="col-sm-4 ">
+                            Diện tích :
+                        </dt>
+                        <dd class="col-sm-8">
+                            {{detailRoom.acreage}} m<sup>2</sup>
+                        </dd>
+                        <dt class="col-sm-4 ">
+                            Gác lửng :
+                        </dt>
+                        <dd class="col-sm-8">
+                            {{detailRoom.isMezzanine==true? "có":"không"}}
+                        </dd>
+                        <dt class="col-sm-4 ">
+                            Trạng thái : 
+                        </dt>
+                        <dd  [ngClass]="{'col-sm-8':true,'text-secondary':(detailRoom.status=='Empty'),'text-primary':(detailRoom.status=='Inhabited'),'text-danger':(detailRoom.status=='Repair'),'text-info':(detailRoom.status=='Deposit')}">
+                            {{detailRoom.status | roomstatus }}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 p-0">
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 p-0">
+                <div class="card m-2">
+                    <h5 class="text-center">Thành viên</h5>
+                    <table  class="table table-responsive-lg table-bordered table-striped ">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Họ tên</th>
+                                <th>Giới tính</th>
+                                <th>Ngày sinh</th> 
+                                <th>CCCD</th> 
+                                <th>Địa chỉ thường trú</th>
+                                <th>Nghề nghiệp</th>
+                                <th>Ngày đến</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="detailRoom.contracts!=null">
+                                <td>1</td>
+                                <td>{{detailRoom.contracts==null? "":detailRoom.contracts.b_Lessee}} <br><small class="text-info">người đại diện </small></td>
+                                <td>//</td>
+                                <td>{{detailRoom.contracts==null? "":detailRoom.contracts.b_DateOfBirth}}</td>
+                                <td>{{detailRoom.contracts==null? "":detailRoom.contracts.b_Cccd}}</td>
+                                <td>{{detailRoom.contracts==null? "":detailRoom.contracts.b_PermanentAddress}}</td>
+                                <td>{{detailRoom.contracts==null? "":detailRoom.contracts.b_Job}}</td>
+                                <td>{{detailRoom.contracts==null? "":detailRoom.contracts.commencingOn}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-12  p-0">
+                <div class="card m-2">
+                    <h5 class="text-center">Thiết bị</h5>
+                    <table  class="table table-responsive-lg table-bordered table-striped ">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên thiết bị</th>
+                                <th>Số lượng</th>
+                                <th>Ghi chú</th> 
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of detailRoom.devices; index as i">
+                                <td>{{i+1}}</td>
+                                <td>{{item.deviceName}}</td>
+                                <td>{{item.quantity}}</td>
+                                <td>{{item.description}}</td>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                
+            </div>
+        </div>
+       
+      
+      
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+        
+    </div>
 </ng-template>

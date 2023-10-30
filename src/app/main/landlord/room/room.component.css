@@ -50,3 +50,6 @@
     cursor:pointer;
     font-size:15px;
   }
+  .dropdown-toggle::after {
+    display:none;
+}

@@ -5,7 +5,7 @@ import { SystemConstants } from 'src/app/core/common/system.constants';
 import { RoomModel } from 'src/app/core/domain/room/room.model';
 import { AreaModel } from 'src/app/core/domain/room/area.model';
 import { BranchModel } from 'src/app/core/domain/room/branch.model';
-import {NgbModal, ModalDismissReasons, NgbTooltipModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, ModalDismissReasons, NgbTooltipModule, NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HousetypePipe } from '../../../shared/pipe/housetype.pipe';
 import { ImageRoomModel } from 'src/app/core/domain/room/image.room';
@@ -17,7 +17,7 @@ import { InvoiceModel } from 'src/app/core/domain/invoice/invoice.model';
   selector: 'app-room',
   templateUrl: './room.component.html',
  
-
+  
   styleUrls: ['./room.component.css']
 })
 export class RoomComponent implements OnInit{
@@ -25,9 +25,9 @@ export class RoomComponent implements OnInit{
   @ViewChild('addAreaModal') addAreaModal : TemplateRef<any>; 
   @ViewChild('deleteAreaModal') deleteAreaModal : TemplateRef<any>; 
   @ViewChild('editAreaModal') editAreaModal : TemplateRef<any>; 
-
   @ViewChild('deleteRoomModal') deleteRoomModal : TemplateRef<any>; 
   @ViewChild('createInvoiceModal') createInvoiceModal : TemplateRef<any>; 
+  @ViewChild('detailRoomModal') detailRoomModal : TemplateRef<any>; 
 
   constructor(
     private _data : DataService,
@@ -760,5 +760,35 @@ export class RoomComponent implements OnInit{
     this.setTotalPrice();
   }
 
+
+  //mở đóng model thêm khu vực
+  public openDetailRoomModal(roomId:number){
+    this.detailRoom = {}
+    
+    this.loadDetailRoom(roomId);
+    
+    this._modalService.open(this.detailRoomModal, { size: 'xl' });
+  }
+  public closeDetailRoomModal(){
+    this._modalService.dismissAll(this.detailRoomModal);
+  }
+
+
+  public detailRoom : RoomModel | any = {};
+
+  // load data to invoice 
+  public loadDetailRoom(roomid: number){
+    console.log("load detail room id : ",roomid);
+    this._data.get('/api/room/detail/full?roomid='+roomid).subscribe(
+      {
+        next: res => {
+          console.log(res);
+          this.detailRoom = res;
+        },
+        error: err => { this._data.handleError(err); console.log(err); },
+        complete: () => {  },
+      }
+    );
+  }
 
 }
