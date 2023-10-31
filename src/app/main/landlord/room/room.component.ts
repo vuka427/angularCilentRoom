@@ -28,6 +28,8 @@ export class RoomComponent implements OnInit{
   @ViewChild('deleteRoomModal') deleteRoomModal : TemplateRef<any>; 
   @ViewChild('createInvoiceModal') createInvoiceModal : TemplateRef<any>; 
   @ViewChild('detailRoomModal') detailRoomModal : TemplateRef<any>; 
+  @ViewChild('editRoomModal') editRoomModal : TemplateRef<any>; 
+  @ViewChild('createRoomModal') createRoomModal : TemplateRef<any>; 
 
   constructor(
     private _data : DataService,
@@ -302,7 +304,7 @@ export class RoomComponent implements OnInit{
         complete: () => { 
           this._notify.printSuccessMessage("Thêm phòng trọ thành công !"); 
           this.LoadRoomInAreaData(this.currentBranchIndex,this.frRoom.controls['areaid'].value);
-          this.closeFromCreateRoom();
+          this.closeCreateRoomModal();
           
         },
       }
@@ -330,7 +332,7 @@ export class RoomComponent implements OnInit{
         complete: () => { 
           this._notify.printSuccessMessage("Cập nhật thông tin phòng thành công !"); 
           this.LoadRoomInAreaData(this.currentBranchIndex,this.editCurrentAreaId);
-          this.closeFromEditRoom();
+          this.closeEditRoomModal();
         },
       }
     );
@@ -393,84 +395,85 @@ export class RoomComponent implements OnInit{
 
   }
 
-//mở form thêm phòng 
-  public openFromCreateRoom(branchId: any, areaId: any){
 
+  //mở đóng model thêm phòng
+  public openCreateRoomModal(branchId: any, areaId: any){
     this.frRoom.patchValue({branchid: branchId , areaid:areaId });
     if(branchId){
        let a : any[] = this.branches;
        this.areaSelect = a.find((data) =>  data.id == branchId ).areas ;
     }
-   
-    this.showFormCreateRoom= 1;
+    this._modalService.open(this.createRoomModal,{size:"xl"});
   }
 
-  //đóng form thêm phòng
-  public closeFromCreateRoom(){
+  public closeCreateRoomModal(){
     this.imageNumber = 0;
     this.imagePreviewSrc=[];
     this.ImageUploads=[];
-    this.showFormCreateRoom= 0;
     let s = this.frRoom.get('devices') as FormArray;
     s.clear();
+    this._modalService.dismissAll(this.createRoomModal);
   }
+
+
+
 
   public imageRooms: ImageRoomModel[];
   public indexEditImageRooms: number =0;
   //mở form chỉnh sửa phòng 
-  public openFromEditRoom(roomid:number, branchName:string, areaName:string){
+ //mở đóng model chỉnh sửa phòng
+ public openEditRoomModal(roomid:number, branchName:string, areaName:string){
 
-    this._data.get('/api/room/detail?roomid='+roomid).subscribe(
-      {
-        next: res => { 
-          let room : RoomModel| any = res;
-          console.log("repone ", room);   
-          this.frURoom.patchValue({ id: room.id,
-            branchid: branchName,
-            areaid: areaName,
-            roomnumber: room.roomNumber,
-            acreage: room.acreage,
-            ismezzanine: room.isMezzanine? "true": "false" ,
-            price: room.price ,
-            maxmember: room.maxMember,
-           });
+  this._data.get('/api/room/detail?roomid='+roomid).subscribe(
+    {
+      next: res => { 
+        let room : RoomModel| any = res;
+        console.log("repone ", room);   
+        this.frURoom.patchValue({ id: room.id,
+          branchid: branchName,
+          areaid: areaName,
+          roomnumber: room.roomNumber,
+          acreage: room.acreage,
+          ismezzanine: room.isMezzanine? "true": "false" ,
+          price: room.price ,
+          maxmember: room.maxMember,
+         });
 
-           this.imageRooms = room.imageRooms;
-           this.indexEditImageRooms = room.imageRooms.length;
-         
-           this.editCurrentAreaId = room.areaId;
-           let s = this.frURoom.get('devices') as FormArray;
+         this.imageRooms = room.imageRooms;
+         this.indexEditImageRooms = room.imageRooms.length;
+       
+         this.editCurrentAreaId = room.areaId;
+         let s = this.frURoom.get('devices') as FormArray;
 
-            room.devices.forEach((e:any)=> {
-              const group = new FormGroup({
-                id: new FormControl(e.id),
-                devicename: new FormControl(e.deviceName,Validators.required),
-                quantity: new FormControl(e.quantity,Validators.required),
-                description: new FormControl(e.description)
-              });
-              s.push(group);
+          room.devices.forEach((e:any)=> {
+            const group = new FormGroup({
+              id: new FormControl(e.id),
+              devicename: new FormControl(e.deviceName,Validators.required),
+              quantity: new FormControl(e.quantity,Validators.required),
+              description: new FormControl(e.description)
             });
-        },
-        error: err => { this._data.handleError(err); console.log(err); },
-        complete: () => { },
-      }
-    );
+            s.push(group);
+          });
+      },
+      error: err => { this._data.handleError(err); console.log(err); },
+      complete: () => { },
+    }
+  );
+  this._modalService.open(this.editRoomModal,{size:"xl"});
+}
+public closeEditRoomModal(){
+
+  this.imageNumber = 0;
+  this.imagePreviewSrc=[];
+  this.ImageUploads=[];
+  this.indexEditImageRooms =0;
+  let s = this.frURoom.get('devices') as FormArray;
+  s.clear();
+  this._modalService.dismissAll(this.editRoomModal);
+}
 
 
-    
-    this.showFormCreateRoom= 2;
-  }
 
-  //đóng form chỉnh sửa phòng
-  public closeFromEditRoom(){
-    this.imageNumber = 0;
-    this.imagePreviewSrc=[];
-    this.ImageUploads=[];
-    this.showFormCreateRoom = 0;
-    this.indexEditImageRooms =0;
-    let s = this.frURoom.get('devices') as FormArray;
-    s.clear();
-  }
   // xóa ảnh
   public deleteImageRoom( index: number,imageid:number){
     

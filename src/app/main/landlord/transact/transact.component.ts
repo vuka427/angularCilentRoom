@@ -28,6 +28,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(DataTableDirective, { static: false }) dtElement: DataTableDirective;
 
   @ViewChild('DetailModal') detailModal: TemplateRef<any>; // Note: TemplateRef
+  @ViewChild('EndContractModal') EndContractModal: TemplateRef<any>
   public ContractDetailId: Number;
 
   datatableElement: any = DataTableDirective;
@@ -88,7 +89,6 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
         title: 'Tên nhà trọ',
         data: 'branchName'
       },
-
       {
         title: 'Ngày bắt đầu HD',
         data: 'commencingOn'
@@ -131,7 +131,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
     this._render.listen('document', 'click', (event) => {
       if (event.target.hasAttribute("contractid") && event.target.hasAttribute("detailbtn")) {
           let ctId = event.target.getAttribute("contractid") as number;
-          this.loadContractDetail(ctId )
+          this.loadContractDetail(ctId);
           this.openModal();
       }else{
         if(event.target.hasAttribute("contractid") && event.target.hasAttribute("exportpdfbtn")){
@@ -146,8 +146,17 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
   }
+
   openModal() {
+    this._modalService.dismissAll(this.detailModal);
     this._modalService.open(this.detailModal);
+  }
+
+  openEndContractModal() {
+    this._modalService.open(this.EndContractModal);
+  }
+  closeEndContractModal() {
+    this._modalService.dismissAll(this.EndContractModal);
   }
 
   public rerender(): void {
@@ -195,12 +204,37 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
         next: res => { 
           console.log("respone contract", res);
           this.currentCTDetail = res;
+          this.currentContractId = this.currentCTDetail.id as number;
         },
         error: err => {console.log(err); this._data.handleError(err); },
         complete: () => { }, 
       });
   }
 
+  public currentContractId :number ;
+  public endContract(){
+    console.log(this.currentContractId);
+    if(this.currentContractId >0){
+      this._data.post("/api/contract/end?contractid="+this.currentContractId).subscribe(
+      {
+        next: (res:any) => { 
+          console.log(res);
+        },
+        error: err => {console.log(err); this._data.handleError(err); },
+
+        complete: () => {  
+          this._notify.printSuccessMessage("Kết thúc hợp đồng thành công !");
+          this.closeEndContractModal(); 
+          this.rerender();
+        }, 
+      });
+    }else{
+      this.closeEndContractModal();
+      this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");
+    }
+
+    
+  }
 
 
 }

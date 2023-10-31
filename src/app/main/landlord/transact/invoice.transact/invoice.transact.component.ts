@@ -172,6 +172,7 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
 
   //mở đóng model 
   public openInvoiceDetailModal(){
+    this._modalService.dismissAll(this.InvoiceDetailModal);
     this._modalService.open(this.InvoiceDetailModal, { size: 'lg', backdrop: 'static'});
   }
 
