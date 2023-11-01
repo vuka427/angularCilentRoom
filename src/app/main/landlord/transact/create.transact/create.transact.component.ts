@@ -60,6 +60,7 @@ export class CreateTransactComponent implements OnInit {
       a_placeofissuance : new FormControl('',Validators.required),
       a_permanentaddress : new FormControl('',Validators.required),
       a_phone : new FormControl('',Validators.required),
+      a_gender : new FormControl('male',Validators.required),
 
       b_lessee : new FormControl('',Validators.required),
       b_dateofbirth : new FormControl('',Validators.required),
@@ -68,6 +69,8 @@ export class CreateTransactComponent implements OnInit {
       b_placeofissuance : new FormControl('',Validators.required),
       b_permanentaddress : new FormControl('',Validators.required),
       b_phone : new FormControl('',Validators.required),
+      b_gender : new FormControl('male',Validators.required),
+      b_job : new FormControl('',Validators.required),
 
       rentalprice : new FormControl('',Validators.required),
       electricitycosts : new FormControl('',Validators.required),

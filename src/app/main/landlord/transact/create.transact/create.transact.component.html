@@ -14,19 +14,20 @@
                         <h6 class=" text-primary" >Thông tin chung</h6>
                     </div>
                     <hr>
-                    <div class="container-fluid   p-0 m-0 ">
+                    <div class="container-fluid p-0 m-0 ">
                         <div class="row">
                             <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 ">
                                 <div class="text-center font-weight-bold mb-3">
                                     <h6 class=" text-primary font-weight-bold" >Bên A</h6>
                                     <small>(Bên cho thuê)</small>
                                 </div>
+
                                 <div class="form-group">
                                     <div class="col-xs-6">
                                         <label for="a_lessor"><h5>Tên người cho thuê<sup class="text-danger">(*)</sup></h5></label>
                                         <input type="text" class="form-control form-control-user"  placeholder="Tên người cho thuê"
                                         name="a_lessor" id="a_lessor"  formControlName="a_lessor"
-                                         >
+                                        >
                                     </div>
                                     <div  *ngIf=" frcontract.controls['a_lessor']?.hasError('required')
                                     && ( frcontract.controls['a_lessor']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
@@ -44,6 +45,31 @@
                                     && ( frcontract.controls['a_dateofbirth']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
                                     >Vui lòng nhập ngày sinh !</div>
                                     <div *ngIf=" frcontract.controls['a_dateofbirth']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày sinh không hợp lệ !</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                        <label for="internalregulation"><h5>Giới tính<sup class="text-danger">(*)</sup></h5></label>
+                                        <div>
+                                            <span>
+                                                <input type="radio" id="a_male" name="a_gender" value="male" checked class="mr-1"
+                                                formControlName="a_gender"
+                                                >
+                                                <label for="house-row" class="mr-3" >Nam</label>
+                                            </span>
+                                            <span>
+                                                <input type="radio" id="a_female" name="a_gender" value="female" class="mr-1"  
+                                                formControlName="a_gender"
+                                                >
+                                                <label for="house-floor" class="mr-3" >Nữ</label>
+                                            </span>
+                                        
+                                        </div>
+                                        <div  *ngIf="frcontract.controls['a_gender']?.hasError('required')
+                                            && (frcontract.controls['a_gender']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" class="help-block text-danger"
+                                            >Vui lòng chọn giới tính !</div>
+                                        
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-6">
@@ -140,6 +166,29 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-6">
+                                        <label for="internalregulation"><h5>Giới tính<sup class="text-danger">(*)</sup></h5></label>
+                                        <div>
+                                            <span>
+                                                <input type="radio" id="b_male" name="b_gender" value="male" checked class="mr-1"
+                                                formControlName="b_gender"
+                                                >
+                                                <label for="house-row" class="mr-3" >Nam</label>
+                                            </span>
+                                            <span>
+                                                <input type="radio" id="b_female" name="b_gender" value="female" class="mr-1"  
+                                                formControlName="b_gender"
+                                                >
+                                                <label for="house-floor" class="mr-3" >Nữ</label>
+                                            </span>
+                                        </div>
+                                        <div  *ngIf="frcontract.controls['b_gender']?.hasError('required')
+                                            && (frcontract.controls['b_gender']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted))" class="help-block text-danger"
+                                            >Vui lòng chọn giới tính !</div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
                                       <label for="b_cccd"><h5>Căn cước công dân<sup class="text-danger">(*)</sup></h5></label>
                                         <input type="text" class="form-control" name="b_cccd" id="b_cccd" placeholder="Căn cước công dân"
                                          formControlName="b_cccd" minlength="12" maxlength="12" appValidCccd 
@@ -199,6 +248,18 @@
                                                 frcontract.controls['b_phone']?.hasError('phoneinvalid') || 
                                                 frcontract.controls['b_phone']?.hasError('minlength')" 
                                                 class="help-block text-danger">Số điện thoại không hợp lệ !</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-xs-6">
+                                      <label for="b_job"><h5>Nghề nhiệp<sup class="text-danger">(*)</sup></h5></label>
+                                        <input type="text" class="form-control" name="b_job" id="b_job" placeholder="nghề nghiệp"
+                                         formControlName="b_job"  
+                                         >
+                                    </div>
+                                    <div *ngIf=" frcontract.controls['b_job']?.hasError('required')
+                                    && ( frcontract.controls['b_job']?.touched || (isValidFormSubmitted != null && !isValidFormSubmitted) )" class="help-block text-danger"
+                                    >Vui lòng nhập nghề nghiệp !</div>
+                                   
                                 </div>
                             </div>
 

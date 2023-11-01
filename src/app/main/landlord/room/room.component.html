@@ -128,7 +128,7 @@
                                             <i class="fas fa-dollar-sign"></i> : {{room.price |FormatVndPipe}} 
                                         </p>
                                         <p class="card-text" placement="top" ngbTooltip="Số người ở tối đa" [openDelay]="300" [closeDelay]="500">
-                                            <i class="fas fa-users" ></i> : 1/{{room.maxMember}}
+                                            <i class="fas fa-users" ></i> : {{room.maxMember}}
                                         </p>
                                         <p class="card-text" placement="top" ngbTooltip="Trạng thái phòng" [openDelay]="300" [closeDelay]="500">
                                             <i class="fas fa-toggle-on"></i> :
@@ -974,7 +974,7 @@
                             <tr *ngIf="detailRoom.contracts!=null">
                                 <td>1</td>
                                 <td>{{detailRoom.contracts==null? "":detailRoom.contracts.b_Lessee}} <br><small class="text-info">người đại diện </small></td>
-                                <td>{{detailRoom.contracts==null? "": detailRoom.contracts.b_Gender=="true"?"Nữ":"Nam"}}</td>
+                                <td>{{detailRoom.contracts==null? "": detailRoom.contracts.b_Gender==true?"Nữ":"Nam"}}</td>
                                 <td>{{detailRoom.contracts==null? "":detailRoom.contracts.b_DateOfBirth}}</td>
                                 <td>{{detailRoom.contracts==null? "":detailRoom.contracts.b_Cccd}}</td>
                                 <td>{{detailRoom.contracts==null? "":detailRoom.contracts.b_PermanentAddress}}</td>
