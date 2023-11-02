@@ -1,1 +1,87 @@
-<p>customer works!</p>
+
+<div class="card shadow p-3"   >
+    <h5>Danh sách khách trọ </h5>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <h5 class="navbar-brand active mb-1">Bộ lọc</h5>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarm" aria-controls="navbarm" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="" role="button"><i class="fas fa-tools text-primary"></i></span>
+      </button>
+        <div class="collapse navbar-collapse" id="navbarm">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item m-2">
+              <label>Trạng thái </label>
+                <select class="form-control " [(ngModel)]="status_filter" (change)="rerender()" placement="top" ngbTooltip="Trạng thái" [openDelay]="300" [closeDelay]="500"> 
+                    <option value='none'>-- tất cả --</option>
+                    <option value='unpaid'>Còn ở</option>
+                    <option value='paid'>Đã rời đi</option>
+                </select>
+            </li>
+          <li class="nav-item m-2">
+              <label>Nhà trọ </label>
+            <select id='gBranch' [(ngModel)]="branch_filter" (change)="rerender()" class="form-control" placement="top" ngbTooltip="Nhà trọ" [openDelay]="300" [closeDelay]="500">
+                <option selected value='0'>-- tất cả nhà trọ --</option>
+                <option *ngFor="let item of branches, index as i" value='{{item.id}}' >{{item.branchName}}</option>
+            </select> 
+          </li>
+          </ul>
+          
+       
+        </div>
+    </nav>
+  
+    <div class="table-responsive p-1">
+        <table datatable [dtOptions]="dtOptions" class=" row-border hover display table"></table>
+    </div>
+  </div>
+  
+  <!--modal lập hóa đơn-->
+  <ng-template #InvoiceDetailModal let-modal  >
+  
+      <div class="modal-header bg-primary">
+          <h5 class="modal-title text-light" id="deleteRoomModalLabel">Thông tin hóa đơn </h5>
+        <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+          <span class="text-light" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div id="invoice_table" class="modal-body container-fluid">
+         
+         
+        
+        
+      </div>
+      
+      <div class="modal-footer">
+          <button type="button" class="btn btn-success" styleSheetFile="assets/css/sb-admin-2.min.css" printSectionId="invoice_table" ngxPrint>In</button>
+        
+          <button type="button"  class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+      </div>
+  
+  </ng-template>
+  
+  
+  
+  <!--modal lập hóa đơn-->
+  <ng-template #InvoiceAgreeModal let-modalAgree  >
+  
+      <div class="modal-header bg-primary">
+          <h5 class="modal-title text-light" id="deleteRoomModalLabel">Xác nhận thanh toán</h5>
+          <button type="reset"  class="close" aria-label="Close" (click)="modalAgree.dismiss()">
+              <span class="text-light" aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      
+      <div class="modal-body container-fluid">
+          <h5>Bạn có chắc chắn thanh toán ?</h5> 
+      </div>
+      
+      <div class="modal-footer">
+          <button type="submit" class="btn btn-danger" >Đồng ý</button>
+          <button type="reset"  class="btn btn-outline-primary" (click)="modalAgree.close()" >Hủy</button>
+      </div>
+  
+  </ng-template>
+  
+  
+  
+  

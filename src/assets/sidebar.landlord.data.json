@@ -34,13 +34,8 @@
       "menu": true,
       "submenu": [
         {
-          "childtitle": "Link 1",
-          "link": "#",
-          "islink": true
-        },
-        {
-          "childtitle": "Link 2",
-          "link": "#",
+          "childtitle": "Danh sách khách hàng",
+          "link": "/landlord/customer",
           "islink": true
         }
       ]

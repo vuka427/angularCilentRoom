@@ -957,14 +957,14 @@
             <div class="col-12 p-0">
                 <div class="card m-2">
                     <h5 class="text-center">Thành viên</h5>
-                    <table  class="table table-responsive-lg table-bordered table-striped ">
+                    <table class="table table-responsive-lg table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>STT</th>
                                 <th>Họ tên</th>
                                 <th>Giới tính</th>
-                                <th>Ngày sinh</th> 
-                                <th>CCCD</th> 
+                                <th>Ngày sinh</th>
+                                <th>CCCD</th>
                                 <th>Địa chỉ thường trú</th>
                                 <th>Nghề nghiệp</th>
                                 <th>Ngày đến</th>
@@ -981,8 +981,6 @@
                                 <td>{{detailRoom.contracts==null? "":detailRoom.contracts.b_Job}}</td>
                                 <td>{{detailRoom.contracts==null? "":detailRoom.contracts.commencingOn}}</td>
                             </tr>
-
-                            
                         </tbody>
                     </table>
                 </div>
@@ -998,7 +996,6 @@
                                 <th>Tên thiết bị</th>
                                 <th>Số lượng</th>
                                 <th>Ghi chú</th> 
-                                
                             </tr>
                         </thead>
                         <tbody>
@@ -1007,13 +1004,10 @@
                                 <td>{{item.deviceName}}</td>
                                 <td>{{item.quantity}}</td>
                                 <td>{{item.description}}</td>
-                                
                             </tr>
                         </tbody>
                     </table>
-
                 </div>
-                
             </div>
         </div>
        
@@ -1023,6 +1017,5 @@
     
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
-        
     </div>
 </ng-template>
