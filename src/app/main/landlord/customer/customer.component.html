@@ -12,8 +12,8 @@
               <label>Trạng thái </label>
                 <select class="form-control " [(ngModel)]="status_filter" (change)="rerender()" placement="top" ngbTooltip="Trạng thái" [openDelay]="300" [closeDelay]="500"> 
                     <option value='none'>-- tất cả --</option>
-                    <option value='unpaid'>Còn ở</option>
-                    <option value='paid'>Đã rời đi</option>
+                    <option value='active'>Còn ở</option>
+                    <option value='deactive'>Đã rời đi</option>
                 </select>
             </li>
           <li class="nav-item m-2">

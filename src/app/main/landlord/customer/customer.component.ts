@@ -98,7 +98,7 @@ export class CustomerComponent {
                   data: resp.data
                 });
               },
-              error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại"); this._data.handleError(err)} ,
+              error: err => {  this._data.handleError(err)} ,
               
             });
            
@@ -106,31 +106,50 @@ export class CustomerComponent {
       language: DataTableLanguage.vietnam_datatables,
       columns: [{
           title: 'STT',
-          data: 'id'
+          data: 'index'
         }, 
         {
           title: 'Họ tên',
-          data: 'lessee'
+          data: 'fullName'
+        }, 
+        {
+          title: 'Đại diện',
+          data: null,
+          defaultContent: '',
+          render: function (data: any, type: any, row: any, full: any) {
+            if ( row.isRepresent ) return '<span >X</span>';
+            return '';
+          }
         }, 
         {
           title: 'Giới tính',
-          data: 'lessee'
+          data: null,
+          defaultContent: '',
+          render: function (data: any, type: any, row: any, full: any) {
+            if (!row.gender ) return '<span >Nữ</span>';
+            if ( row.gender ) return '<span >Nam</span>';
+            return '';
+          }
         }, 
         {
           title: 'Ngày sinh',
-          data: 'lessee'
+          data: 'dateOfBirth'
+        },
+        {
+          title: 'CCCD',
+          data: 'cccd'
         },  
         {
           title: 'Nghề nghiệp',
-          data: 'lessee'
+          data: 'job'
         }, 
         {
           title: 'địa chỉ',
-          data: 'lessee'
+          data: 'permanentAddress'
         }, 
         {
           title: 'Số phòng',
-          data: 'roomNumber'
+          data: 'roomName'
         }, 
         {
           title: 'Nhà trọ',
@@ -141,8 +160,8 @@ export class CustomerComponent {
           data: null,
           defaultContent: '',
           render: function (data: any, type: any, row: any, full: any) {
-            if (row.isApproved ) return '<span class="badge badge-pill badge-success">Đã thanh toán</span>';
-            if ( !row.isApproved ) return '<span class="badge badge-pill badge-warning">Chờ thành toán</span>';
+            if (row.isActive ) return '<span class="badge badge-pill badge-success">Còn ở</span>';
+            if ( !row.isActive ) return '<span class="badge badge-pill badge-secondary">Rời đi</span>';
             return '';
           }
         }, 

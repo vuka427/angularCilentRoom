@@ -29,7 +29,8 @@ export class RoomComponent implements OnInit{
   @ViewChild('createInvoiceModal') createInvoiceModal : TemplateRef<any>; 
   @ViewChild('detailRoomModal') detailRoomModal : TemplateRef<any>; 
   @ViewChild('editRoomModal') editRoomModal : TemplateRef<any>; 
-  @ViewChild('createRoomModal') createRoomModal : TemplateRef<any>; 
+  @ViewChild('createRoomModal') createRoomModal : TemplateRef<any>;
+  @ViewChild('addMemberRoomModal') addMemberRoomModal : TemplateRef<any>; 
 
   constructor(
     private _data : DataService,
@@ -50,12 +51,14 @@ export class RoomComponent implements OnInit{
   public frRoom : FormGroup ;
   public frURoom : FormGroup ;
   public frInvoice : FormGroup ;
+  public frMember : FormGroup ;
 
   public isValidAreaFormSubmitted :boolean | null = null;
   public isValidAreaEditFormSubmitted :boolean | null = null;
   public isValidRoomEditFormSubmitted :boolean | null = null;
   public isValidRoomFormSubmitted :boolean | null = null;
   public isValidInvoiceFormSubmitted :boolean | null = null;
+  public isValidMemberFormSubmitted :boolean | null = null;
 
 
   public showFormCreateRoom: number = 0;
@@ -120,6 +123,21 @@ export class RoomComponent implements OnInit{
         newwaternumber: new FormControl('',Validators.required),
         services: new FormArray([])
       });
+
+      this.frMember = new FormGroup({
+        fullname : new FormControl('',Validators.required),
+        dateofbirth : new FormControl('',Validators.required),
+        cccd : new FormControl('',Validators.required),
+        dateofissuance : new FormControl('',Validators.required),
+        placeofissuance : new FormControl('',Validators.required),
+        permanentaddress : new FormControl('',Validators.required),
+        phone : new FormControl('',Validators.required),
+        gender : new FormControl('male',Validators.required),
+        ispermanent : new FormControl('no',Validators.required),
+        job : new FormControl('',Validators.required),
+      });
+
+
 
   }
 
@@ -766,8 +784,9 @@ public closeEditRoomModal(){
 
   //mở đóng model thêm khu vực
   public openDetailRoomModal(roomId:number){
-    this.detailRoom = {}
-    
+    this.detailRoom = {};
+    this.detailRoom.contracts = {};
+    this.detailRoom.contracts.members ={};
     this.loadDetailRoom(roomId);
     
     this._modalService.open(this.detailRoomModal, { size: 'xl' });
@@ -779,6 +798,7 @@ public closeEditRoomModal(){
 
   public detailRoom : RoomModel | any = {};
 
+
   // load data to invoice 
   public loadDetailRoom(roomid: number){
     console.log("load detail room id : ",roomid);
@@ -787,11 +807,51 @@ public closeEditRoomModal(){
         next: res => {
           console.log(res);
           this.detailRoom = res;
+          if( this.detailRoom.contracts == null || this.detailRoom.contracts.members == null){
+            this.detailRoom.contracts = {};
+            this.detailRoom.contracts.members ={};
+          }
+            
         },
         error: err => { this._data.handleError(err); console.log(err); },
         complete: () => {  },
       }
     );
   }
+
+
+
+  //mở đóng model thêm thành viên
+  public openAddMemberModal(roomId:number){
+
+    this._modalService.open(this.addMemberRoomModal);
+  }
+  public closeAddMemberModal(){
+    this._modalService.dismissAll(this.addMemberRoomModal);
+  }
+
+  public onAddMemberSubmit(){
+    console.log('submit');
+    this.isValidMemberFormSubmitted = false;
+    
+    if (this.frMember.invalid) {
+      console.log("is invalid",this.frMember.errors );
+			return;
+		}
+    this.isValidMemberFormSubmitted  = true;
+    console.log('submited',this.frMember.value );
+    this._data.post('/api/memner/create',this.frMember.value).subscribe(
+      {
+        next: res => { console.log("repone ", res);},
+        error: err => { this._notify.printErrorMessage("Có lỗi xảy ra vui lòng thử lại !");console.log(err);},
+        complete: () => { 
+          this._notify.printSuccessMessage("Thêm thành viên thành công !");
+          
+        },
+      }
+    );
+  }
+
+
 
 }
