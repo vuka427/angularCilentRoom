@@ -134,7 +134,9 @@ export class RoomComponent implements OnInit{
         phone : new FormControl('',Validators.required),
         gender : new FormControl('male',Validators.required),
         ispermanent : new FormControl('no',Validators.required),
+        permanentdate : new FormControl('no',Validators.required),
         job : new FormControl('',Validators.required),
+        commencingon : new FormControl('',Validators.required),
       });
 
 
@@ -819,14 +821,42 @@ public closeEditRoomModal(){
     );
   }
 
+  get permanentDate() {
+    return this.frMember.get('permanentdate');
+  } 
+  get isPermanent() {
+    return this.frMember.get('ispermanent');
+  } 
 
+  public setPermanentDate(){
+     console.log(this.isPermanent?.value);
+    if(this.isPermanent?.value == "yes"){
+      
+      this.permanentDate?.enable();
+      this.permanentDate?.setValue('');
+      this.permanentDate?.setValidators([Validators.required]);
+      this.permanentDate?.updateValueAndValidity();
+      
+    }else{
+      this.permanentDate?.setValue('');
+      this.permanentDate?.clearValidators();
+      this.permanentDate?.updateValueAndValidity();
+      this.permanentDate?.disable();
+    }
+
+    
+    
+  }
 
   //mở đóng model thêm thành viên
+  public roomIdAddMember : number =0 ;
   public openAddMemberModal(roomId:number){
-
-    this._modalService.open(this.addMemberRoomModal);
+    this.roomIdAddMember = roomId;
+    this.setPermanentDate();
+    this._modalService.open(this.addMemberRoomModal,{size:"lg"});
   }
   public closeAddMemberModal(){
+    this.roomIdAddMember = 0;
     this._modalService.dismissAll(this.addMemberRoomModal);
   }
 
@@ -838,11 +868,12 @@ public closeEditRoomModal(){
       console.log("is invalid",this.frMember.errors );
 			return;
 		}
-    this.isValidMemberFormSubmitted  = true;
-    console.log('submited',this.frMember.value );
-    this._data.post('/api/memner/create',this.frMember.value).subscribe(
+
+    this.isValidMemberFormSubmitted = true;
+    console.log('submited',this.frMember.value ,"-", this.roomIdAddMember);
+    this._data.post('/api/customer/create?roomid='+this.roomIdAddMember, this.frMember.value).subscribe(
       {
-        next: res => { console.log("repone ", res);},
+        next: res => { console.log("respone ", res);},
         error: err => { this._notify.printErrorMessage("Có lỗi xảy ra vui lòng thử lại !");console.log(err);},
         complete: () => { 
           this._notify.printSuccessMessage("Thêm thành viên thành công !");

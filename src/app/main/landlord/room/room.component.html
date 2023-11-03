@@ -1025,7 +1025,7 @@
     </div>
 </ng-template>
 
-<!--modal thêm thành viên  -->
+<!-- modal thêm thành viên -->
 <ng-template #addMemberRoomModal let-modal >
 
     <div class="modal-header bg-primary">
@@ -1036,156 +1036,196 @@
     </div>
     
     <div class="modal-body ">
-        <form class="form" novalidate  (ngSubmit)=" onAddMemberSubmit()" [formGroup]="frMember"  #f="ngForm"  >
-            <div class="form-group">
-
-                <div class="col-xs-6">
-                    <label for="fullname"><h5>Họ tên<sup class="text-danger">(*)</sup></h5></label>
-                    <input type="text" class="form-control form-control-user"  placeholder="Tên người thuê"
-                    name="fullname" id="fullname"  formControlName="fullname"
-                    >
-                </div>
-                <div  *ngIf=" frMember.controls['fullname']?.hasError('required')
-                && ( frMember.controls['fullname']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
-                >Vui lòng nhập Họ tên !</div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-xs-6">
-                <label for="dateofbirth"><h5>Ngày sinh<sup class="text-danger">(*)</sup></h5></label>
-                    <input type="date" class="form-control" name="dateofbirth" id="dateofbirth" placeholder="Ngày sinh"
-                    formControlName="dateofbirth" appValidDateofbirth
-                    >
-                </div>
-                <div  *ngIf=" frMember.controls['dateofbirth']?.hasError('required')
-                && ( frMember.controls['dateofbirth']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
-                >Vui lòng nhập ngày sinh !</div>
-                <div *ngIf=" frMember.controls['dateofbirth']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày sinh không hợp lệ !</div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-6">
-                    <label for="internalregulation"><h5>Giới tính<sup class="text-danger">(*)</sup></h5></label>
-                    <div>
-                        <span>
-                            <input type="radio" id="male" name="gender" value="male" checked class="mr-1"
-                            formControlName="gender"
-                            >
-                            <label for="house-row" class="mr-3" >Nam</label>
-                        </span>
-                        <span>
-                            <input type="radio" id="female" name="gender" value="female" class="mr-1"  
-                            formControlName="gender"
-                            >
-                            <label for="house-floor" class="mr-3" >Nữ</label>
-                        </span>
-                    </div>
-                    <div  *ngIf="frMember.controls['gender']?.hasError('required')
-                        && (frMember.controls['gender']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted))" class="help-block text-danger"
-                        >Vui lòng chọn giới tính !</div>
-                    
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-6">
-                <label for="cccd"><h5>Căn cước công dân<sup class="text-danger">(*)</sup></h5></label>
-                    <input type="text" class="form-control" name="cccd" id="cccd" placeholder="Căn cước công dân"
-                    formControlName="cccd" minlength="12" maxlength="12" appValidCccd 
-                    >
-                </div>
-                <div  *ngIf=" frMember.controls['cccd']?.hasError('required')
-                && ( frMember.controls['cccd']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
-                >Vui lòng nhập số căn cước công dân !</div>
-                <div *ngIf="frMember.controls['cccd']?.hasError('maxlength') || frMember.controls['cccd']?.hasError('minlength')" class="help-block text-danger">Số căn cước công dân phải đủ 12 ký tự !</div>
-                <div *ngIf="frMember.controls['cccd']?.hasError('cccdinvalid')" class="help-block text-danger">Số căn cước công dân không hợp lệ !</div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-6">
-                <label for="dateofissuance"><h5>Ngày cấp cccd<sup class="text-danger">(*)</sup></h5></label>
-                    <input type="date" class="form-control" name="dateofissuance" id="dateofissuance" placeholder="Ngày cấp cccd"
-                    formControlName="dateofissuance" appValidDateofbirth
-                    >
-                </div>
-                <div  *ngIf=" frMember.controls['dateofissuance']?.hasError('required')
-                && ( frMember.controls['dateofissuance']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
-                >Vui lòng nhập ngày cấp căn cước công dân !</div>
-                <div *ngIf=" frMember.controls['dateofissuance']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày cấp không hợp lệ !</div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-6">
-                <label for="placeofissuance"><h5>Nơi cấp cccd<sup class="text-danger">(*)</sup></h5></label>
-                    <input type="text" class="form-control" name="placeofissuance" id="placeofissuance" placeholder="Nơi cấp cccd"
-                    formControlName="placeofissuance"
-                    >
-                </div>
-                <div  *ngIf=" frMember.controls['placeofissuance']?.hasError('required')
-                && ( frMember.controls['placeofissuance']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
-                >Vui lòng nhập nơi cấp căn cước công dân !</div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-6">
-                <label for="permanentaddress"><h5>Địa chỉ thường trú<sup class="text-danger">(*)</sup></h5></label>
-                    <input type="text" class="form-control" name="permanentaddress" id="permanentaddress" placeholder="Địa chỉ thường trú"
-                    formControlName="permanentaddress"
-                    >
-                </div>
-                <div  *ngIf=" frMember.controls['permanentaddress']?.hasError('required')
-                && ( frMember.controls['permanentaddress']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
-                >Vui lòng nhập địa chỉ thường trú !</div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-6">
-                    <label for="internalregulation"><h5>Đăng ký thường trú<sup class="text-danger">(*)</sup></h5></label>
-                    <div>
-                        <span>
-                            <input type="radio" id="ispermanent_id"  name="ispermanent" value="yes" checked class="mr-1"
-                            formControlName="ispermanent"
-                            >
-                            <label for="ispermanent_yes" class="mr-3" >Đã đăng ký</label>
-                        </span>
-                        <span>
-                            <input type="radio" id="ispermanent_no" name="ispermanent" value="no" class="mr-1"  
-                            formControlName="ispermanent"
-                            >
-                            <label for="ispermanent_no" class="mr-3" >Chưa đăng ký</label>
-                        </span>
-                    </div>
-                    <div  *ngIf="frMember.controls['ispermanent']?.hasError('required')
-                        && (frMember.controls['ispermanent']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted))" class="help-block text-danger"
-                        >Vui lòng chọn trạng thái đăng ký thương trú !</div>
-                    
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-6">
-                <label for="phone"><h5>Số điện thoại<sup class="text-danger">(*)</sup></h5></label>
-                    <input type="text" class="form-control" name="phone" id="phone" placeholder="Số điện thoại"
-                    formControlName="phone"  maxlength="10" minlength="10" appValidPhone 
-                    >
-                </div>
-                <div *ngIf=" frMember.controls['phone']?.hasError('required')
-                && ( frMember.controls['phone']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
-                >Vui lòng nhập số điện thoại !</div>
-                <div *ngIf="frMember.controls['phone']?.hasError('maxlength') || 
-                            frMember.controls['phone']?.hasError('phoneinvalid') || 
-                            frMember.controls['phone']?.hasError('minlength')" 
-                            class="help-block text-danger">Số điện thoại không hợp lệ !</div>
-            </div>
-            <div class="form-group">
-                <div class="col-xs-6">
-                <label for="job"><h5>Nghề nhiệp<sup class="text-danger">(*)</sup></h5></label>
-                    <input type="text" class="form-control" name="job" id="job" placeholder="nghề nghiệp"
-                    formControlName="job"  
-                    >
-                </div>
-                <div *ngIf=" frMember.controls['job']?.hasError('required')
-                && ( frMember.controls['job']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
-                >Vui lòng nhập nghề nghiệp !</div>
+        <form class="form" id="addMemberFrom" novalidate  (ngSubmit)=" onAddMemberSubmit()" [formGroup]="frMember"  #f="ngForm"  >
+            <div class="container-fluid p-0 m-0 ">
+                <div class="row">
+                    <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 ">
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="fullname"><h5>Họ tên<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control form-control-user"  placeholder="Tên người thuê"
+                                name="fullname" id="fullname"  formControlName="fullname"
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['fullname']?.hasError('required')
+                            && ( frMember.controls['fullname']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập Họ tên !</div>
+                        </div>
             
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="dateofbirth"><h5>Ngày sinh<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="date" class="form-control" name="dateofbirth" id="dateofbirth" placeholder="Ngày sinh"
+                                formControlName="dateofbirth" appValidDateofbirth
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['dateofbirth']?.hasError('required')
+                            && ( frMember.controls['dateofbirth']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập ngày sinh !</div>
+                            <div *ngIf=" frMember.controls['dateofbirth']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày sinh không hợp lệ !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="internalregulation"><h5>Giới tính<sup class="text-danger">(*)</sup></h5></label>
+                                <div>
+                                    <span>
+                                        <input type="radio" id="male" name="gender" value="male" checked class="mr-1"
+                                        formControlName="gender"
+                                        >
+                                        <label for="house-row" class="mr-3" >Nam</label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" id="female" name="gender" value="female" class="mr-1"  
+                                        formControlName="gender"
+                                        >
+                                        <label for="house-floor" class="mr-3" >Nữ</label>
+                                    </span>
+                                </div>
+                                <div  *ngIf="frMember.controls['gender']?.hasError('required')
+                                    && (frMember.controls['gender']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted))" class="help-block text-danger"
+                                    >Vui lòng chọn giới tính !</div>
+                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="phone"><h5>Số điện thoại<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control" name="phone" id="phone" placeholder="Số điện thoại"
+                                formControlName="phone"  maxlength="10" minlength="10" appValidPhone 
+                                >
+                            </div>
+                            <div *ngIf=" frMember.controls['phone']?.hasError('required')
+                            && ( frMember.controls['phone']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập số điện thoại !</div>
+                            <div *ngIf="frMember.controls['phone']?.hasError('maxlength') || 
+                                        frMember.controls['phone']?.hasError('phoneinvalid') || 
+                                        frMember.controls['phone']?.hasError('minlength')" 
+                                        class="help-block text-danger">Số điện thoại không hợp lệ !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="job"><h5>Nghề nhiệp<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control" name="job" id="job" placeholder="nghề nghiệp"
+                                formControlName="job"  
+                                >
+                            </div>
+                            <div *ngIf=" frMember.controls['job']?.hasError('required')
+                            && ( frMember.controls['job']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập nghề nghiệp !</div>
+                        
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="commencingon"><h5>Ngày đến ở<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="date" class="form-control" name="commencingon" id="commencingon" placeholder="Ngày cấp cccd"
+                                formControlName="commencingon" 
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['commencingon']?.hasError('required')
+                            && ( frMember.controls['commencingon']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập ngày đến ở !</div>
+                            <div *ngIf=" frMember.controls['commencingon']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày đến ở không hợp lệ !</div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 ">
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="cccd"><h5>Căn cước công dân<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control" name="cccd" id="cccd" placeholder="Căn cước công dân"
+                                formControlName="cccd" minlength="12" maxlength="12" appValidCccd appOnlyNumber
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['cccd']?.hasError('required')
+                            && ( frMember.controls['cccd']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập số căn cước công dân !</div>
+                            <div *ngIf="frMember.controls['cccd']?.hasError('maxlength') || frMember.controls['cccd']?.hasError('minlength')" class="help-block text-danger">Số căn cước công dân phải đủ 12 ký tự !</div>
+                            <div *ngIf="frMember.controls['cccd']?.hasError('cccdinvalid')" class="help-block text-danger">Số căn cước công dân không hợp lệ !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="dateofissuance"><h5>Ngày cấp cccd<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="date" class="form-control" name="dateofissuance" id="dateofissuance" placeholder="Ngày cấp cccd"
+                                formControlName="dateofissuance" appValidDateofbirth
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['dateofissuance']?.hasError('required')
+                            && ( frMember.controls['dateofissuance']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập ngày cấp căn cước công dân !</div>
+                            <div *ngIf=" frMember.controls['dateofissuance']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày cấp không hợp lệ !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="placeofissuance"><h5>Nơi cấp cccd<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control" name="placeofissuance" id="placeofissuance" placeholder="Nơi cấp cccd"
+                                formControlName="placeofissuance"
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['placeofissuance']?.hasError('required')
+                            && ( frMember.controls['placeofissuance']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập nơi cấp căn cước công dân !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="permanentaddress"><h5>Địa chỉ thường trú<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control" name="permanentaddress" id="permanentaddress" placeholder="Địa chỉ thường trú"
+                                formControlName="permanentaddress"
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['permanentaddress']?.hasError('required')
+                            && ( frMember.controls['permanentaddress']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập địa chỉ thường trú !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="internalregulation"><h5>Đăng ký thường trú<sup class="text-danger">(*)</sup></h5></label>
+                                <div> 
+                                    <span>
+                                        <input type="radio" id="ispermanent_no" name="ispermanent" value="no" class="mr-1"  
+                                        formControlName="ispermanent" checked (change)="setPermanentDate()" 
+                                        >
+                                        <label for="ispermanent_no" class="mr-3">Chưa đăng ký</label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" id="ispermanent_id"  name="ispermanent" value="yes"  class="mr-1"
+                                        formControlName="ispermanent" (change)="setPermanentDate()" 
+                                        >
+                                        <label for="ispermanent_yes" class="mr-3" >Đã đăng ký</label>
+                                    </span>
+                                   
+                                </div>
+                                <div  *ngIf="frMember.controls['ispermanent']?.hasError('required')
+                                    && (frMember.controls['ispermanent']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted))" class="help-block text-danger"
+                                    >Vui lòng chọn trạng thái đăng ký thương trú !</div>
+                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="permanentdate"><h5>Hạn đăng ký tạm trú<sup class="text-danger">(*)</sup></h5></label>
+                                <input  type="date" class="form-control" name="permanentdate" id="permanentdate" placeholder="Ngày cấp cccd"
+                                formControlName="permanentdate" appValidDateFuture
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['permanentdate']?.hasError('required')
+                            && ( frMember.controls['permanentdate']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập hạn đăng ký tạm trú !</div>
+                            <div *ngIf=" frMember.controls['permanentdate']?.hasError('dateisfuturevalid')" class="help-block text-danger">Hạn đăng ký tạm trú không hợp lệ !</div>
+                        </div>
+                        
+                       
+                    </div>
+                </div>
             </div>
+
+            
+           
         </form>
     </div>
     
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+        <button type="submit" form="addMemberFrom" class="btn btn-primary">Thêm</button>
+        <button type="reset" form="addMemberFrom" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
     </div>
 </ng-template>
