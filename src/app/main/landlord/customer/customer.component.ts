@@ -50,11 +50,11 @@ export class CustomerComponent {
       if (event.target.hasAttribute("invoiceid") && event.target.hasAttribute("detailbtn")) {
           let invoiceId = event.target.getAttribute("invoiceid") as number;
          
-          this.loadDataToINvoice(invoiceId);
+          
           this.openInvoiceDetailModal();
       }else{
-        if(event.target.hasAttribute("invoiceid") && event.target.hasAttribute("exportpdfbtn")){
-          let ctId = event.target.getAttribute("invoiceid") as number;
+        if(event.target.hasAttribute("memberid") && event.target.hasAttribute("deletebtn")){
+          let memberId = event.target.getAttribute("memberid") as number;
         }
       }
     });
@@ -170,7 +170,8 @@ export class CustomerComponent {
           data: null,
           defaultContent: '',
           render: function (data: any, type: any,row: any, full: any) {
-            return '<button type="button" detailbtn invoiceid="'+row.id+'" class="btn btn-sm btn-primary" >Chi tiết </button>'
+            return '<button type="button" detailbtn memberid="'+row.id+'" class="btn btn-sm btn-primary mr-2" >Chi tiết</button>'+
+                    '<button type="button" deletebtn memberid="'+row.id+'" class="btn btn-sm btn-danger" >Xóa</button>'
                     ;
           }
         }
