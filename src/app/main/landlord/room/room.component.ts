@@ -801,7 +801,7 @@ public closeEditRoomModal(){
   public detailRoom : RoomModel | any = {};
 
 
-  // load data to invoice 
+  // load data to room info
   public loadDetailRoom(roomid: number){
     console.log("load detail room id : ",roomid);
     this._data.get('/api/room/detail/full?roomid='+roomid).subscribe(
@@ -851,6 +851,12 @@ public closeEditRoomModal(){
   //mở đóng model thêm thành viên
   public roomIdAddMember : number =0 ;
   public openAddMemberModal(roomId:number){
+
+    if(this.detailRoom.maxMember <= this.detailRoom.currentMember ){
+      this._notify.printErrorMessage("Số người ở đã đạt tối đa !");
+        return;
+    }
+
     this.roomIdAddMember = roomId;
     this.setPermanentDate();
     this._modalService.open(this.addMemberRoomModal,{size:"lg"});
@@ -876,12 +882,33 @@ public closeEditRoomModal(){
         next: res => { console.log("respone ", res);},
         error: err => { this._notify.printErrorMessage("Có lỗi xảy ra vui lòng thử lại !");console.log(err);},
         complete: () => { 
+
           this._notify.printSuccessMessage("Thêm thành viên thành công !");
-          
+
+          this.loadDetailRoom(this.detailRoom.id);
         },
       }
     );
   }
+
+
+  public memberLeave(roomId:number,memberId: number){
+    console.log("memberLeave", this.roomIdAddMember,memberId);
+    
+    this._data.put('/api/customer/leave?roomid='+roomId+'&memberid='+memberId ).subscribe(
+      {
+        next: res => { console.log("respone ", res);},
+        error: err => { this._notify.printErrorMessage("Có lỗi xảy ra vui lòng thử lại !");console.log(err);},
+        complete: () => { 
+
+          this._notify.printSuccessMessage("Cập nhật thành viên thành công !");
+          
+          this.loadDetailRoom(this.detailRoom.id);
+        },
+      }
+    );
+  }
+
 
 
 

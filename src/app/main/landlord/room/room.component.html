@@ -968,6 +968,7 @@
                                 <th>Địa chỉ thường trú</th>
                                 <th>Nghề nghiệp</th>
                                 <th>Ngày đến</th>
+                                <th>Tác vụ</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -981,6 +982,7 @@
                                     <td>{{member.permanentAddress}}</td>
                                     <td>{{member.job}}</td>
                                     <td>{{member.commencingOn}}</td>
+                                    <td> <button [disabled]="member.isRepresent==true" (click)="memberLeave(detailRoom.id,member.id)" class="btn btn-sm btn-danger" >Rời đi</button></td>
                                 </tr> 
                             </ng-container>
                         </tbody>
@@ -1214,7 +1216,6 @@
                             <div *ngIf=" frMember.controls['permanentdate']?.hasError('dateisfuturevalid')" class="help-block text-danger">Hạn đăng ký tạm trú không hợp lệ !</div>
                         </div>
                         
-                       
                     </div>
                 </div>
             </div>
@@ -1225,7 +1226,7 @@
     </div>
     
     <div class="modal-footer">
-        <button type="submit" form="addMemberFrom" class="btn btn-primary">Thêm</button>
+        <button type="submit" form="addMemberFrom" class="btn btn-primary" (click)="modal.close()">Thêm</button>
         <button type="reset" form="addMemberFrom" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
     </div>
 </ng-template>
