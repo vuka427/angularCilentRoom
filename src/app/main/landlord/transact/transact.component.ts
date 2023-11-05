@@ -123,12 +123,12 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
-
+  listenerFn = () => {};
   ngAfterViewInit(): void {
 
     this.dtTrigger.next('');
 
-    this._render.listen('document', 'click', (event) => {
+    this.listenerFn = this._render.listen('document', 'click', (event) => {
       if (event.target.hasAttribute("contractid") && event.target.hasAttribute("detailbtn")) {
           let ctId = event.target.getAttribute("contractid") as number;
           this.loadContractDetail(ctId);
@@ -145,6 +145,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    this.listenerFn();
   }
 
   openModal() {

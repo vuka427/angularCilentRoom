@@ -9,6 +9,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { BranchModel } from 'src/app/core/domain/room/branch.model';
 import { InvoiceModel } from 'src/app/core/domain/invoice/invoice.model';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
@@ -18,6 +19,9 @@ export class CustomerComponent {
   @ViewChild(DataTableDirective, {static: false}) dtElement: DataTableDirective ; 
   @ViewChild('InvoiceDetailModal') InvoiceDetailModal : TemplateRef<any>; 
   @ViewChild('InvoiceAgreeModal') InvoiceAgreeModal : TemplateRef<any>; 
+
+  @ViewChild('deleteMemberModal') deleteMemberModal : TemplateRef<any>; 
+  @ViewChild('detailMemberModal') detailMemberModal : TemplateRef<any>; 
 
   datatableElement: any = DataTableDirective;
 
@@ -40,28 +44,35 @@ export class CustomerComponent {
   public branch_filter: string ='0';
   
   public branches: BranchModel[] | any;
-  public invoice :InvoiceModel | any = {};
+  public member :any = {};
 
+  public frMember : FormGroup ;
+
+  public isValidMemberFormSubmitted :boolean | null = null;
+
+  listenerFn = () => {};
 
   ngAfterViewInit(): void {
     this.dtTrigger.next('');
 
-    this._render.listen('document', 'click', (event) => {
-      if (event.target.hasAttribute("invoiceid") && event.target.hasAttribute("detailbtn")) {
-          let invoiceId = event.target.getAttribute("invoiceid") as number;
-         
+    this.listenerFn = this._render.listen('document', 'click', (event) => {
+      if (event.target.hasAttribute("memberid") && event.target.hasAttribute("detailbtn")) {
+          let memberId = event.target.getAttribute("memberid") as number;
+          this.loadMemberData(memberId);
+          this.openDetailMemberModal(memberId);
           
-          this.openInvoiceDetailModal();
+         
       }else{
         if(event.target.hasAttribute("memberid") && event.target.hasAttribute("deletebtn")){
           let memberId = event.target.getAttribute("memberid") as number;
+          this.openDeleteMemberModal(memberId);
         }
       }
     });
   }
 
   ngOnDestroy(): void {
-   
+    this.listenerFn();
   }
 
   // load dữ liệu ban đầu
@@ -72,7 +83,6 @@ export class CustomerComponent {
         next: res => { 
           console.log("respone list branch", res);
           this.branches = res;
-
         },
         error: err => { console.log(err); this._data.handleError(err); },
         complete: () => { console.log("load all room"); }, 
@@ -144,7 +154,7 @@ export class CustomerComponent {
           data: 'job'
         }, 
         {
-          title: 'địa chỉ',
+          title: 'Địa chỉ',
           data: 'permanentAddress'
         }, 
         {
@@ -170,13 +180,39 @@ export class CustomerComponent {
           data: null,
           defaultContent: '',
           render: function (data: any, type: any,row: any, full: any) {
-            return '<button type="button" detailbtn memberid="'+row.id+'" class="btn btn-sm btn-primary mr-2" >Chi tiết</button>'+
-                    '<button type="button" deletebtn memberid="'+row.id+'" class="btn btn-sm btn-danger" >Xóa</button>'
-                    ;
+            let html = '<button type="button" detailbtn memberid="'+row.id+'" class="btn btn-sm btn-primary mr-2" >Chi tiết</button>';
+            if(!row.isRepresent){
+              html = html + '<button type="button" deletebtn memberid="'+row.id+'" class="btn btn-sm btn-danger" >Xóa</button>';
+            }else{
+              html = html + '<button type="button" disabled class="btn btn-sm btn-danger" >Xóa</button>';
+            }
+
+            return html;
           }
         }
       ]
     };
+
+    this.frMember = new FormGroup({
+      id : new FormControl('',Validators.required),
+      fullname : new FormControl('',Validators.required),
+      dateofbirth : new FormControl('',Validators.required),
+      cccd : new FormControl('',Validators.required),
+      dateofissuance : new FormControl('',Validators.required),
+      placeofissuance : new FormControl('',Validators.required),
+      permanentaddress : new FormControl('',Validators.required),
+      phone : new FormControl('',Validators.required),
+      gender : new FormControl('male',Validators.required),
+      ispermanent : new FormControl('no',Validators.required),
+      permanentdate : new FormControl('no',Validators.required),
+      job : new FormControl('',Validators.required),
+      commencingon : new FormControl('',Validators.required),
+      endingon : new FormControl(''),
+    });
+
+
+
+
   }
 
   public rerender(): void {
@@ -202,16 +238,75 @@ export class CustomerComponent {
     this._modalService.dismissAll(this.InvoiceDetailModal);
   }
 
+  //mở đóng delete member modal 
+  public openDeleteMemberModal(memberid:number){
+    this.deleteMemberId = memberid.toString();
+    this._modalService.dismissAll(this.deleteMemberModal);
+    this._modalService.open(this.deleteMemberModal);
+  }
+
+  public closeDeleteMemberModal(){
+    this._modalService.dismissAll(this.deleteMemberModal);
+  }
+
+  public deleteMemberId:string;
+  // delete member 
+  public deleteMember(){
+    
+      console.log("delete member id : ",this.deleteMemberId);
+          this._data.delete('/api/customer/delete','memberid',this.deleteMemberId).subscribe(
+            {
+              next: res => { 
+                console.log(res);
+              },
+              error: err => { this._data.handleError(err); console.log(err); },
+              complete: () => { this._notify.printSuccessMessage("Xóa thành viên thành công !"); this.rerender() },
+            }
+          );
+    
+    this._modalService.dismissAll(this.InvoiceAgreeModal);
+  }
 
 
-    // load data to invoice 
-  public loadDataToINvoice(invoiceid: number){
-    console.log("load invoice bai id : ",invoiceid);
-    this._data.get('/api/invoice/detail?invoiceid='+invoiceid).subscribe(
+
+  //mở đóng detail member modal 
+  public openDetailMemberModal( memberid:number ){
+    this._modalService.dismissAll(this.detailMemberModal);
+    this._modalService.open(this.detailMemberModal,{ size: 'lg'});
+  }
+
+  public closeDetailMemberModal(){
+    this._modalService.dismissAll(this.detailMemberModal);
+  }
+
+
+
+  // load member data 
+  public loadMemberData(memberid: number){
+    console.log("load member by id : ",memberid);
+    this._data.get('/api/customer/detail?memberid='+memberid).subscribe(
       {
         next: res => { 
           console.log(res);
-          this.invoice = res;
+          this.member = res;
+          this.frMember.patchValue({
+            id : this.member.id,
+            fullname : this.member.fullName,
+            dateofbirth : "",
+            cccd : "",
+            dateofissuance : "",
+            placeofissuance : "",
+            permanentaddress : '',
+            phone : '',
+            gender : '',
+            ispermanent : '',
+            permanentdate : '',
+            job : '',
+            commencingon :'',
+            endingon : '',
+          });
+
+
         },
         error: err => { this._data.handleError(err); console.log(err); },
         complete: () => { },
@@ -220,34 +315,62 @@ export class CustomerComponent {
   }
 
 
-  //mở đóng model xác nhận thanh toán
-  public openInvoicePayModal(invoiceid:number){
-    this.agreeInvoice =  invoiceid;
-    this._modalService.open(this.InvoiceAgreeModal,{ centered: true });
+
+  get permanentDate() {
+    return this.frMember.get('permanentdate');
+  } 
+  get isPermanent() {
+    return this.frMember.get('ispermanent');
+  } 
+
+  public setPermanentDate(){
+     console.log(this.isPermanent?.value);
+    if(this.isPermanent?.value == "yes"){
+      
+      this.permanentDate?.enable();
+      this.permanentDate?.setValue('');
+      this.permanentDate?.setValidators([Validators.required]);
+      this.permanentDate?.updateValueAndValidity();
+      
+    }else{
+      this.permanentDate?.setValue('');
+      this.permanentDate?.clearValidators();
+      this.permanentDate?.updateValueAndValidity();
+      this.permanentDate?.disable();
+    }
+
+    
+    
   }
 
-  public closeInvoicePayModal(){
-    this.agreeInvoice = 0;
-    this._modalService.dismissAll(this.InvoiceAgreeModal);
+  public roomIdAddMember : number =0 ;
+  public onUpdateMemberSubmit(){
+    console.log('submit');
+    this.isValidMemberFormSubmitted = false;
+    
+    if (this.frMember.invalid) {
+      console.log("is invalid",this.frMember.errors );
+			return;
+		}
+
+    this.isValidMemberFormSubmitted = true;
+    console.log('submited',this.frMember.value ,"-", this.roomIdAddMember);
+    this._data.post('/api/customer/create?roomid='+this.roomIdAddMember, this.frMember.value).subscribe(
+      {
+        next: res => { console.log("respone ", res);},
+        error: err => { this._notify.printErrorMessage("Có lỗi xảy ra vui lòng thử lại !");console.log(err);},
+        complete: () => { 
+
+          this._notify.printSuccessMessage("Thêm thành viên thành công !");
+
+          
+        },
+      }
+    );
   }
-  public agreeInvoice:number=0;
-  // Agree to pay invoice 
-  public AgreeToPayInvoice(){
-    if(this.agreeInvoice!=0){
-      console.log("Agree to pay invoice : ",this.agreeInvoice);
-          this._data.post('/api/invoice/pay?invoiceid='+this.agreeInvoice).subscribe(
-            {
-              next: res => { 
-                console.log(res);
-               
-                
-              },
-              error: err => { this._data.handleError(err); console.log(err); },
-              complete: () => { this.rerender() },
-            }
-          );
-    }
-    this._modalService.dismissAll(this.InvoiceAgreeModal);
-  }
+
+ 
+
+ 
 
 }
