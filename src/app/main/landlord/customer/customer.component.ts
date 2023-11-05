@@ -10,10 +10,14 @@ import { Subject } from 'rxjs';
 import { BranchModel } from 'src/app/core/domain/room/branch.model';
 import { InvoiceModel } from 'src/app/core/domain/invoice/invoice.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+
+
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.css']
+  styleUrls: ['./customer.component.css'],
+  providers: [DatePipe]
 })
 export class CustomerComponent {
   @ViewChild(DataTableDirective, {static: false}) dtElement: DataTableDirective ; 
@@ -36,7 +40,8 @@ export class CustomerComponent {
     private _diagioi : DiagioihanhchinhService,
     private _elementRef: ElementRef,
     private _render: Renderer2,
-    private _modalService: NgbModal
+    private _modalService: NgbModal,
+    private _datePipe : DatePipe
   ){}
 
 
@@ -292,19 +297,21 @@ export class CustomerComponent {
           this.frMember.patchValue({
             id : this.member.id,
             fullname : this.member.fullName,
-            dateofbirth : "",
-            cccd : "",
-            dateofissuance : "",
-            placeofissuance : "",
-            permanentaddress : '',
-            phone : '',
-            gender : '',
-            ispermanent : '',
-            permanentdate : '',
-            job : '',
-            commencingon :'',
-            endingon : '',
+            dateofbirth :  this._datePipe.transform(this.member.dateOfBirth , "yyyy-MM-dd"),
+            cccd : this.member.cccd,
+            dateofissuance : this._datePipe.transform(this.member.dateOfIssuance , "yyyy-MM-dd"),
+            placeofissuance : this.member.placeOfIssuance,
+            permanentaddress : this.member.permanentAddress,
+            phone : this.member.phone,
+            gender : this.member.gender==false?'female':'male',
+            ispermanent : this.member.isPermanent==true?'yes':'no',
+            permanentdate :  this._datePipe.transform(this.member.permanentDate , "yyyy-MM-dd"),
+            job : this.member.job,
+            commencingon : this._datePipe.transform(this.member.commencingOn  , "yyyy-MM-dd"),
+            endingon : this._datePipe.transform(this.member.endingOn , "yyyy-MM-dd"),
           });
+
+         this.setPermanentDate();
 
 
         },
@@ -328,7 +335,7 @@ export class CustomerComponent {
     if(this.isPermanent?.value == "yes"){
       
       this.permanentDate?.enable();
-      this.permanentDate?.setValue('');
+      //this.permanentDate?.setValue('');
       this.permanentDate?.setValidators([Validators.required]);
       this.permanentDate?.updateValueAndValidity();
       
@@ -343,7 +350,7 @@ export class CustomerComponent {
     
   }
 
-  public roomIdAddMember : number =0 ;
+  public roomIdAddMember : number = 0 ;
   public onUpdateMemberSubmit(){
     console.log('submit');
     this.isValidMemberFormSubmitted = false;
@@ -355,15 +362,16 @@ export class CustomerComponent {
 
     this.isValidMemberFormSubmitted = true;
     console.log('submited',this.frMember.value ,"-", this.roomIdAddMember);
-    this._data.post('/api/customer/create?roomid='+this.roomIdAddMember, this.frMember.value).subscribe(
+    this._data.put('/api/customer/update', this.frMember.value).subscribe(
       {
         next: res => { console.log("respone ", res);},
         error: err => { this._notify.printErrorMessage("Có lỗi xảy ra vui lòng thử lại !");console.log(err);},
         complete: () => { 
 
-          this._notify.printSuccessMessage("Thêm thành viên thành công !");
+          this._notify.printSuccessMessage("Cập nhật thành công !");
+          this.closeDetailMemberModal();
+          this.rerender();
 
-          
         },
       }
     );

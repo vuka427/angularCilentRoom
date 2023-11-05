@@ -28,17 +28,11 @@
     },
     {
       "title": "Quản lý khách trọ",
-      "parentLink": "",
+      "parentLink": "/landlord/customer",
       "awesomeIcon":"fas fa-user-friends",
       "type": "",
-      "menu": true,
-      "submenu": [
-        {
-          "childtitle": "Danh sách khách hàng",
-          "link": "/landlord/customer",
-          "islink": true
-        }
-      ]
+      "menu": false,
+      "submenu": []
     },
     {
       "title": "Quản lý Điện nước",

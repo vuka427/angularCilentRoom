@@ -45,6 +45,50 @@
       </div>
       
       <div  class="modal-body container-fluid">
+        <div class="row">
+            <div class="col-12 ">
+                <div class="card mb-2">
+                    <dl class="row m-3">
+                        <dt class="col-sm-4  ">
+                            Số phòng :
+                        </dt>
+                        <dd class = "col-sm-8">
+                            {{member.roomName}}
+                        </dd>
+                        <dt class="col-sm-4 ">
+                            Nhà trọ :
+                        </dt>
+                        <dd class="col-sm-8">
+                            {{member.branchName}}
+                        </dd>
+                        <dt class="col-sm-4 ">
+                            Trạng thái :
+                        </dt>
+                        <dd class="col-sm-8">
+                          
+                          <span *ngIf="member.isActive==true" class="badge badge-pill badge-success">Còn ở</span> 
+                          <span  *ngIf="member.isActive==false" class="badge badge-pill badge-secondary">Rời đi</span>
+                        </dd>
+                        <dt class="col-sm-4 ">
+                            Ngày đến :
+                        </dt>
+                        <dd class="col-sm-8">
+                            {{member.commencingOn | date: 'dd/MM/yyyy' }}
+                        </dd>
+
+                        <dt *ngIf="member.isActive==false" class="col-sm-4 ">
+                            Ngày đi :
+                        </dt>
+                        <dd *ngIf="member.isActive==false" class="col-sm-8">
+                            {{member.endingOn | date: 'dd/MM/yyyy' }}
+                        </dd>
+                        
+                    </dl>
+                </div>
+            </div>
+
+        </div>
+
         <form class="form" id="updateMemberFrom" novalidate  (ngSubmit)=" onUpdateMemberSubmit()" [formGroup]="frMember"  #f="ngForm"  >
           <div class="container-fluid p-0 m-0 ">
               <div class="row">
@@ -233,7 +277,7 @@
       </div>
       
       <div class="modal-footer">
-          <button type="submit" form="updateMemberFrom" class="btn btn-primary" >Cập nhật</button>
+          <button type="submit" [disabled]="member.isActive==false" form="updateMemberFrom" class="btn btn-primary" >Cập nhật</button>
           <button type="reset" form="updateMemberFrom" class="btn btn-outline-danger" (click)="modal.close()" >Hủy</button>
       </div>
   

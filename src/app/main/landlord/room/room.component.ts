@@ -784,7 +784,7 @@ public closeEditRoomModal(){
   }
 
 
-  //mở đóng model thêm khu vực
+  //mở đóng model chi tiết phòng
   public openDetailRoomModal(roomId:number){
     this.detailRoom = {};
     this.detailRoom.contracts = {};
@@ -884,8 +884,10 @@ public closeEditRoomModal(){
         complete: () => { 
 
           this._notify.printSuccessMessage("Thêm thành viên thành công !");
+          this.closeAddMemberModal();
+          this.openDetailRoomModal(this.detailRoom.id);
 
-          this.loadDetailRoom(this.detailRoom.id);
+         
         },
       }
     );
