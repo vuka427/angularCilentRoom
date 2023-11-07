@@ -51,7 +51,13 @@ export class IndexComponent implements OnInit {
         }]
       },
       options: {
-        aspectRatio:2.5
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        aspectRatio:2.2
+        
       }
       
     });
