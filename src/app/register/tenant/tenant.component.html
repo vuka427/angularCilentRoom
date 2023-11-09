@@ -42,6 +42,18 @@
 
                                 </div>
                                 <div class="text-primary">
+                                    <h6 class="h6 font-weight-bold">Số điện thoại <sup class="text-danger">(*)</sup></h6>
+                                </div>
+                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
+                                    <input type="text" class="form-control form-control-user"
+                                        id="phone" placeholder="Số điện thoại"
+                                        name="phone" [(ngModel)]="model.phone" #phone="ngModel" required maxlength="10" minlength="10" appValidPhone appOnlyNumber
+                                        >
+                                    <div *ngIf="f.submitted && !phone.valid" class="help-block text-danger">Vui lòng nhập số điện thoại !</div>
+                                    <div *ngIf="phone.errors?.['maxlength'] || phone.errors?.['phoneinvalid'] || phone.errors?.['minlength']" class="help-block text-danger">Số điện thoại không hợp lệ !</div>
+                                    
+                                </div>
+                                <div class="text-primary">
                                     <h6 class="h6 font-weight-bold">Email<sup class="text-danger">(*)</sup></h6>
                                 </div>
                                 <div class="form-group" [ngClass]="{'has-error':f.submitted && !email.valid}">
@@ -73,7 +85,7 @@
                                     <div *ngIf="password.errors?.['minlength']" class="help-block text-danger">Mật khẩu tối thiểu 6 ký tự</div>
                                     <div *ngIf="password.errors?.['maxlength']" class="help-block text-danger">Mật khẩu tối đa 50 ký tự</div>
                                     <div *ngIf="password.errors?.['passwordvalid']" class="help-block text-danger">
-                                        Mật khẩu phải chứa ít nhất một chữ số, chữ hoa, chữ thường và ký tự đặc biệt (@$!%*?&)
+                                        Mật khẩu phải chứa ít nhất một chữ số, chữ hoa, chữ thường và ký tự đặc biệt ($!%*?&)
                                     </div>
                                     
                                 </div>

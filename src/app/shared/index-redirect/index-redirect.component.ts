@@ -26,7 +26,7 @@ export class IndexRedirectComponent implements OnInit {
           break;
       case "tenant":
           console.log("giao diện người thuê trọ");
-          
+          this._utility.navigate('/tenant/index');
           break;
       case "admin":
           console.log("giao diện admin");

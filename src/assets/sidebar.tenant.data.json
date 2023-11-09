@@ -1,49 +1,47 @@
 [
    
     {
-      "title": "Người thuê trọ",
+      "title": "Thông tin chung",
       "parentLink": "/tenant",
-      "awesomeIcon":"fas fa-fw fa-wrench",
+      "awesomeIcon":"fas fa-sliders-h",
       "type": "",
       "menu": false,
       "submenu": []
     },
     {
-      "title": "Codepens",
-      "parentLink": "",
-      "awesomeIcon":"fas fa-fw fa-wrench",
-      "type": "",
-      "menu": true,
-      "submenu": [
-        {
-          "childtitle": "Link 1",
-          "link": "https://codepen.io/UX_Dev/live/5c88e99d0e9a03834dc2d113c24f9daa",
-          "islink": true
-        },
-        {
-          "childtitle": "Link 2",
-          "link": "https://codepen.io/UX_Dev/pen/LmxqKa",
-          "islink": true
-        }
-      ]
-    },
-    {
-      "title": "Navigation",
-      "parentLink": "",
-      "awesomeIcon":"fas fa-fw fa-wrench",
+      "title": "Dánh sách hóa đơn",
+      "parentLink": "/tenant/invoice",
+      "awesomeIcon":"fas fa-file-invoice-dollar",
       "type": "",
       "menu": false,
       "submenu": [
-        {
-          "childtitle": "Pure CSS Menu",
-          "link": "https://codepen.io/UX_Dev/pen/VMwxmQ",
-          "islink": true
-        },
-        {
-          "childtitle": "User Selection",
-          "link": "https://codepen.io/UX_Dev/live/ZXYLyV",
-          "islink": true
-        }
+      ]
+    },
+    {
+      "title": "Danh sách hợp đồng",
+      "parentLink": "/tenant/contract",
+      "awesomeIcon":"fas fa-file-signature",
+      "type": "",
+      "menu": false,
+      "submenu": [
+      ]
+    },
+    {
+      "title": "Phản hồi-góp ý",
+      "parentLink": "/tenant/feedback",
+      "awesomeIcon":"fas fa-comments-dollar",
+      "type": "",
+      "menu": false,
+      "submenu": [
+      ]
+    },
+    {
+      "title": "Thống kê",
+      "parentLink": "/tenant/statistical",
+      "awesomeIcon":"fas fa-chart-pie",
+      "type": "",
+      "menu": false,
+      "submenu": [
       ]
     }
   ]
