@@ -27,8 +27,11 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   @ViewChild(DataTableDirective, { static: false }) dtElement: DataTableDirective;
 
-  @ViewChild('DetailModal') detailModal: TemplateRef<any>; // Note: TemplateRef
-  @ViewChild('EndContractModal') EndContractModal: TemplateRef<any>
+  @ViewChild('DetailModal') detailModal: TemplateRef<any>;
+  @ViewChild('EndContractModal') EndContractModal: TemplateRef<any>;
+  @ViewChild('LinkToTenantModal') LinkToTenantModal: TemplateRef<any>;
+  @ViewChild('ComfimToLinkModal') ComfimToLinkModal: TemplateRef<any>;
+
   public ContractDetailId: Number;
 
   datatableElement: any = DataTableDirective;
@@ -39,7 +42,8 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   public styleTable: string = "block";
 
   public currentCTDetail : ContractModel | any = {};
-
+ 
+  public searchTenantValue :any = {};
 
   ngOnInit(): void {
 
@@ -235,6 +239,61 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     
+  }
+
+  openLinkToTenantModal() {
+    this._modalService.open(this.LinkToTenantModal);
+  }
+  closeLinkToTenantModal() {
+    this._modalService.dismissAll(this.LinkToTenantModal);
+  }
+  openConfimToLinkModal() {
+    this._modalService.open(this.ComfimToLinkModal);
+  }
+  closeConfimToLinkModal() {
+    this._modalService.dismissAll(this.ComfimToLinkModal);
+  }
+
+  public tenant: any ={};
+  public tenantSearch(){
+
+    this._data.get("/api/contract/searchtenant?phone="+ this.searchTenantValue.phoneinput).subscribe(
+      {
+        next: res => { 
+          console.log("respone tenant", res);
+          this.tenant = res;
+        },
+        error: err => {console.log(err); this._data.handleError(err); },
+        complete: () => {
+            if(this.tenant.success == false){
+                this._notify.printErrorMessage('Không tìm thấy khách trọ nào !');
+            }
+
+         }, 
+      });
+  }
+
+
+  public LinkToTenant(){
+    console.log(this.currentContractId);
+    if(this.currentContractId >0){
+      this._data.post("/api/contract/linktotenant?contractid="+this.currentContractId+"&tenantid="+this.tenant.id ).subscribe(
+      {
+        next: (res:any) => { 
+          console.log(res);
+        },
+        error: err => {console.log(err); this._data.handleError(err); },
+
+        complete: () => {  
+          this.closeConfimToLinkModal() 
+          this._notify.printSuccessMessage("Liên kết với tài khoản thành công !");
+        }, 
+      });
+    }else{
+     
+      this._notify.printErrorMessage("Có lỗi xảy ra vui lòng thử lại !");
+    }
+
   }
 
 
