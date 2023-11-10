@@ -116,7 +116,11 @@
     </div>
     
     <div class="modal-footer">
-        <button type="button"  class="btn btn-primary"  (click)="openLinkToTenantModal()" >Liên kết với tài khoản khách trọ </button>
+        <button type="button" [disabled]="currentCTDetail.isLinkTenant==true || currentCTDetail.status=='Expirat'"  class="btn btn-primary"  (click)="openLinkToTenantModal()" >
+            <span *ngIf="currentCTDetail.isLinkTenant==false"> Liên kết với tài khoản khách trọ </span>
+            <span *ngIf="currentCTDetail.isLinkTenant==true"> Đã liên kết với tài khoản khách trọ </span>
+            
+        </button>
         <button type="button" [disabled]="currentCTDetail.status=='Expirat'" class="btn btn-danger"  (click)="openEndContractModal()" >Kết thúc hợp đồng </button>
         <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Đóng</button>
     </div>
