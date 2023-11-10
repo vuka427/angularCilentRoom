@@ -34,14 +34,7 @@
       "menu": false,
       "submenu": []
     },
-    {
-      "title": "Quản lý Điện nước",
-      "parentLink": "/landlord/utilites",
-      "awesomeIcon":"fas fa-charging-station",
-      "type": "",
-      "menu": false,
-      "submenu": []
-    },
+   
     {
       "title": "Quản lý giao dịch",
       "parentLink": "",

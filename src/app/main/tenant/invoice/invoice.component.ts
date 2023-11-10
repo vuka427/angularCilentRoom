@@ -19,6 +19,7 @@ import { InvoiceModel } from 'src/app/core/domain/invoice/invoice.model';
 export class InvoiceComponent {
 
   @ViewChild(DataTableDirective, {static: false}) dtElement: DataTableDirective ; 
+  @ViewChild('InvoiceDetailModal') InvoiceDetailModal : TemplateRef<any>; 
   datatableElement: any = DataTableDirective;
 
   public dtOptions: DataTables.Settings = {};
@@ -45,13 +46,16 @@ export class InvoiceComponent {
   public invoice :InvoiceModel | any = {};
 
 
+  listenerFn = () => {};
+
   ngAfterViewInit(): void {
     this.dtTrigger.next('');
 
-    this._render.listen('document', 'click', (event) => {
+    this.listenerFn = this._render.listen('document', 'click', (event) => {
       if (event.target.hasAttribute("invoiceid") && event.target.hasAttribute("detailbtn")) {
           let invoiceId = event.target.getAttribute("invoiceid") as number;
-         
+          this.loadDataToINvoice(invoiceId);
+          this.openInvoiceDetailModal();
           
       }else{
         if(event.target.hasAttribute("invoiceid") && event.target.hasAttribute("exportpdfbtn")){
@@ -62,13 +66,15 @@ export class InvoiceComponent {
   }
 
   ngOnDestroy(): void {
-   
+    this.dtTrigger.unsubscribe();
+    this.listenerFn();
   }
 
   ngOnInit() {
   
     this.dtOptions = {
-      serverSide: true,     // Set the flag 
+      serverSide: true,
+      searching: false,     
       ajax: (dataTablesParameters: any, callback) => {
         this._data.postForDataTable(
             '/api/invoice/tenant/invoicefordatatable?status='+this.status_filter+'&month='+this.month_filter+'&year='+this.year_filter,
@@ -90,11 +96,15 @@ export class InvoiceComponent {
       language: DataTableLanguage.vietnam_datatables,
       columns: [{
           title: 'STT',
-          data: 'id'
+          data: 'index'
+        },
+        {
+          title: 'Tháng',
+          data: 'month'
         }, 
         {
-          title: 'Người thuê',
-          data: 'lessee'
+          title: 'Năm',
+          data: 'year'
         }, 
         {
           title: 'Số phòng',
@@ -148,6 +158,31 @@ export class InvoiceComponent {
     });
   }
 
+
+  //mở đóng model 
+  public openInvoiceDetailModal(){
+    
+    this._modalService.open(this.InvoiceDetailModal, { size: 'lg', backdrop: 'static'});
+  }
+
+  public closeInvoiceDetailModal(){
+    this._modalService.dismissAll(this.InvoiceDetailModal);
+  }
+
+    // load data to invoice 
+    public loadDataToINvoice(invoiceid: number){
+      console.log("load invoice bai id : ",invoiceid);
+      this._data.get('/api/invoice/tenant/detail?invoiceid='+invoiceid).subscribe(
+        {
+          next: res => { 
+            console.log(res);
+            this.invoice = res;
+          },
+          error: err => { this._data.handleError(err); console.log(err); },
+          complete: () => { },
+        }
+      );
+    }
 
 
 

@@ -15,6 +15,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { HousetypePipe } from 'src/app/shared/pipe/housetype.pipe';
 import { FormatVndPipe } from 'src/app/shared/pipe/format.vnd.pipe';
+import { Imports_pipeModule } from 'src/app/shared/pipe/imports_pipe.module';
 
 @NgModule({
   declarations: [
@@ -24,8 +25,7 @@ import { FormatVndPipe } from 'src/app/shared/pipe/format.vnd.pipe';
     InvoiceComponent,
     FeedbackComponent,
     StatisticalComponent,
-    HousetypePipe,
-    FormatVndPipe,
+  
   ],
   imports: [
     CommonModule,
@@ -36,7 +36,8 @@ import { FormatVndPipe } from 'src/app/shared/pipe/format.vnd.pipe';
     NgbTooltipModule,
     CKEditorModule,
     NgxPrintModule,
-    NgbDropdownModule
+    NgbDropdownModule,
+    Imports_pipeModule
   ]
 })
 export class TenantModule { }

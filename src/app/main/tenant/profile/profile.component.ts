@@ -6,7 +6,7 @@ import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'app-tenant-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
   providers: [DatePipe]

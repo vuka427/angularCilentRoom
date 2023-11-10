@@ -58,12 +58,35 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                <div class="chart-pie pt-4 pb-2"  >
-                    <canvas id="myPieChart"></canvas>
+               
+                <div class="container-fluid" >
+                    <div class="row ">
+                            <div *ngFor="let room of rooms; index as i" class="card m-2" style="width: 230px;" >
+                                
+                                <div class="card-body" >
+                                    <p class="card-text"  placement="top" ngbTooltip="Giá cho thuê" [openDelay]="300" [closeDelay]="500">
+                                        <i class="fas fa-dollar-sign"></i> : {{room.price |FormatVndPipe}} 
+                                    </p>
+                                    <p class="card-text" placement="top" ngbTooltip="Số người ở tối đa" [openDelay]="300" [closeDelay]="500">
+                                        <i class="fas fa-users" ></i> : {{room.maxMember}}
+                                    </p>
+                                    <p class="card-text" placement="top" ngbTooltip="Trạng thái phòng" [openDelay]="300" [closeDelay]="500">
+                                        <i class="fas fa-toggle-on"></i> :
+                                        <span [ngClass]="{'text-secondary':(room.status=='Empty'),'text-primary':(room.status=='Inhabited'),'text-danger':(room.status=='Repair'),'text-info':(room.status=='Deposit')}">
+                                            {{room.status | roomstatus }}
+                                        </span> 
+                                    </p> 
+                                    <p class="card-text" placement="top" ngbTooltip="Diện tích" [openDelay]="300" [closeDelay]="500"> 
+                                        <i class="fas fa-ruler-combined"></i> : {{room.acreage }} m<sup>2</sup>
+                                    </p>
+                                    <p class="card-text" placement="top" ngbTooltip="Tên người thuê" [openDelay]="300" [closeDelay]="500"> 
+                                        <i class="fas fa-user"></i> : {{room.lessee }}
+                                    </p>
+                                </div>
+                            </div>
+                    </div>
                 </div>
-                <div class="mt-4 text-center small">
-                   
-                </div>
+
             </div>
         </div>
     </div>

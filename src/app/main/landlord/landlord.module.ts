@@ -23,6 +23,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { InvoiceTransactComponent } from './transact/invoice.transact/invoice.transact.component';
 import { FormatVndPipe } from 'src/app/shared/pipe/format.vnd.pipe';
 import {NgxPrintModule} from 'ngx-print';
+import { Imports_pipeModule } from 'src/app/shared/pipe/imports_pipe.module';
 
 
 
@@ -36,9 +37,7 @@ import {NgxPrintModule} from 'ngx-print';
     EmailhistoryComponent,
     UtilitesComponent,
     BranchComponent,
-    RoomstatusPipe,
-    HousetypePipe,
-    FormatVndPipe,
+    
     CreateTransactComponent,
     InvoiceTransactComponent
     
@@ -56,7 +55,8 @@ import {NgxPrintModule} from 'ngx-print';
     NgbTooltipModule,
     CKEditorModule,
     NgxPrintModule,
-    NgbDropdownModule
+    NgbDropdownModule,
+    Imports_pipeModule
   ]
   
 })
