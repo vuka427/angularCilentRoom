@@ -909,11 +909,12 @@
       </button>
     </div>
     
-    <div class="modal-body ">
+    <div class="modal-body "> 
+        <h5 class="text-center">Thông tin phòng</h5>
         <div class="row">
+           
             <div class="col-12 col-lg-6 p-0">
-                <div class="card m-2">
-                    <h5 class="text-center">Thông tin phòng</h5>
+               
                     <dl class="row m-3">
                         <dt class="col-sm-4  ">
                             Giá cho thuê :
@@ -933,6 +934,14 @@
                         <dd class="col-sm-8">
                             {{detailRoom.acreage}} m<sup>2</sup>
                         </dd>
+                       
+                    </dl>
+             
+            </div>
+
+            <div class="col-12 col-lg-6 p-0">
+                    <dl class="row m-3">
+                        
                         <dt class="col-sm-4 ">
                             Gác lửng :
                         </dt>
@@ -946,13 +955,45 @@
                             {{detailRoom.status | roomstatus }}
                         </dd>
                     </dl>
-                </div>
-            </div>
-
-            <div class="col-12 col-lg-6 p-0">
-                
+              
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-12 p-0">
+                <div class="card m-2">
+                    <h5 class="text-center">Hóa đơn </h5>
+                    <table class="table table-responsive-lg table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tháng</th>
+                                <th>Năm</th>
+                                <th>Trạng thái</th>
+                                <th>Tiền phòng</th>
+                                <th>Tác vụ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="roomInvoice.length > 0" >
+                               <tr *ngFor="let invoice of roomInvoice; index as i;">
+                                    <td>{{i+1}}</td>
+                                    <td>{{invoice.month}} </td>
+                                    <td>{{invoice.year}}</td>
+                                    <td>
+                                        <span *ngIf="!invoice.isApproved"  class="badge badge-pill badge-warning">Chờ thành toán</span>
+                                    </td>
+                                    <td class="text-danger">{{invoice.totalPrice | FormatVndPipe}}</td>
+                                    <td> <button  class="btn btn-sm btn-primary" (click)="openInvoiceDetailModal(invoice.id)" >Thanh toán</button></td>
+                                </tr> 
+                            </ng-container>
+                        </tbody>
+                    </table>
+                   
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-12 p-0">
                 <div class="card m-2">
@@ -976,7 +1017,7 @@
                                <tr *ngFor="let member of detailRoom.contracts.members; index as i;">
                                     <td>{{i+1}}</td>
                                     <td>{{member.fullName}} <br><small *ngIf="member.isRepresent==true" class="text-info">người đại diện </small></td>
-                                    <td>{{member.gender==true?"Nữ":"Nam"}}</td>
+                                    <td>{{member.gender==false?"Nữ":"Nam"}}</td>
                                     <td>{{member.dateOfBirth}}</td>
                                     <td>{{member.cccd}}</td>
                                     <td>{{member.permanentAddress}}</td>
@@ -1045,7 +1086,7 @@
                         <div class="form-group">
                             <div class="col-xs-6">
                                 <label for="fullname"><h5>Họ tên<sup class="text-danger">(*)</sup></h5></label>
-                                <input type="text" class="form-control form-control-user"  placeholder="Tên người thuê"
+                                <input type="text" class="form-control form-control-user"  placeholder="Tên thành viên"
                                 name="fullname" id="fullname"  formControlName="fullname"
                                 >
                             </div>
@@ -1229,4 +1270,132 @@
         <button type="submit" form="addMemberFrom" class="btn btn-primary">Thêm</button>
         <button type="reset" form="addMemberFrom" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
     </div>
+</ng-template>
+
+
+
+<!--modal chi tiết hóa đơn-->
+<ng-template #InvoiceDetailModal let-modal  >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteRoomModalLabel">Thông tin hóa đơn </h5>
+      <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div id="invoiceDetail_table" class="modal-body container-fluid">
+       
+       
+        <dl class="row ">
+            <div class="col-12 text-center">
+                <h4 class=""> Hóa đơn nhà trọ {{invoiceDetail.branchName}}</h4>
+                <p>DH/{{invoiceDetail.id}}</p>
+                <p>tháng {{invoiceDetail.month}}, năm {{invoiceDetail.year}}</p>
+            </div>
+            <dt class="col-sm-3  ">
+                Số phòng:
+            </dt>
+            <dd class = "col-sm-9">
+                {{invoiceDetail.roomNumber}}
+            </dd>
+            <dt class="col-sm-3 ">
+                Tên người thuê:
+            </dt>
+            <dd class="col-sm-9">
+               {{invoiceDetail.lessee}}
+            </dd>
+            <hr>
+            <table  class="table table-responsive-lg table-bordered table-striped ">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên dịch vụ</th>
+                        <th>Chỉ số đầu</th> 
+                        <th>Chỉ số đầu</th> 
+                        <th>Số lượng</th>
+                        <th >Đơn giá</th>
+                        <th >Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Tiền phòng</td>
+                        <td></td>
+                        <td></td>
+                        <td>1</td>
+                        <td class="text-right ">{{invoiceDetail.rentalPrice |FormatVndPipe}}</td>
+                        <td class="text-right text-primary">{{invoiceDetail.rentalPrice |FormatVndPipe}}</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Tiền điện</td>
+                        <td>{{invoiceDetail.oldElectricNumber}}</td>
+                        <td>{{invoiceDetail.newElectricNumber}}</td>
+                        <td>{{invoiceDetail.newElectricNumber-invoiceDetail.oldElectricNumber}} (Kwh)</td>
+                        <td class="text-right ">{{invoiceDetail.electricityCosts |FormatVndPipe}}</td>
+                        <td class="text-right text-primary">{{(invoiceDetail.newElectricNumber-invoiceDetail.oldElectricNumber)*invoiceDetail.electricityCosts |FormatVndPipe}} </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Tiền nước</td>
+                        <td>{{invoiceDetail.oldWaterNumber}}</td>
+                        <td>{{invoiceDetail.newWaterNumber}}</td>
+                        <td>{{invoiceDetail.newWaterNumber-invoiceDetail.oldWaterNumber}} (m<sup>2</sup>)</td>
+                        <td class="text-right ">{{invoiceDetail.waterCosts |FormatVndPipe}}</td>
+                        <td class="text-right text-primary">{{(invoiceDetail.newWaterNumber-invoiceDetail.oldWaterNumber)*invoiceDetail.waterCosts |FormatVndPipe}}</td>
+                    </tr>
+
+                    <tr *ngFor="let serviceItem of invoiceDetail.serviceItems; index as i">
+
+                        <td>{{i+4}}</td>
+                        <td>{{serviceItem.serviceName}}</td>
+                        <td colspan="2"><small>ghi chú :</small> {{serviceItem.description}} </td>
+                        
+                        <td>{{serviceItem.quantity}}</td>
+                        <td class="text-right">{{serviceItem.price |FormatVndPipe}}</td>
+                        <td class="text-right text-primary">{{serviceItem.price*serviceItem.quantity |FormatVndPipe}}</td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+
+            
+            <h4 class="col-12 text-right">
+                Tổng : <span class="text-danger">{{invoiceDetail.totalPrice |FormatVndPipe}} </span>
+            </h4>
+            
+        </dl>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" styleSheetFile="assets/css/sb-admin-2.min.css" printSectionId="invoiceDetail_table" ngxPrint>In</button>
+        <button type="button" *ngIf="!invoiceDetail.isApproved"  class="btn btn-primary" (click)="openInvoicePayModal(invoiceDetail.id)" >Thanh toán</button>
+        <button type="button"  class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+    </div>
+
+</ng-template>
+
+
+
+<!--modal xác nhận thanh toán-->
+<ng-template #InvoiceAgreeModal let-modalAgree  >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteRoomModalLabel">Xác nhận thanh toán</h5>
+        <button type="reset"  class="close" aria-label="Close" (click)="modalAgree.dismiss()">
+            <span class="text-light" aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    
+    <div class="modal-body container-fluid">
+        <h5>Bạn có chắc chắn thanh toán ?</h5> 
+    </div>
+    
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-danger" (click)=" AgreeToPayInvoice()" >Đồng ý</button>
+        <button type="reset"  class="btn btn-outline-primary" (click)="modalAgree.close()" >Hủy</button>
+    </div>
+
 </ng-template>

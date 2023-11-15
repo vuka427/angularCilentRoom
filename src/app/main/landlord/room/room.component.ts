@@ -31,6 +31,9 @@ export class RoomComponent implements OnInit{
   @ViewChild('editRoomModal') editRoomModal : TemplateRef<any>; 
   @ViewChild('createRoomModal') createRoomModal : TemplateRef<any>;
   @ViewChild('addMemberRoomModal') addMemberRoomModal : TemplateRef<any>; 
+  @ViewChild('InvoiceDetailModal') InvoiceDetailModal : TemplateRef<any>; 
+  @ViewChild('InvoiceAgreeModal') InvoiceAgreeModal : TemplateRef<any>; 
+
 
   constructor(
     private _data : DataService,
@@ -790,7 +793,7 @@ public closeEditRoomModal(){
     this.detailRoom.contracts = {};
     this.detailRoom.contracts.members ={};
     this.loadDetailRoom(roomId);
-    
+    this.loadInvoiceDetailRoom(roomId);
     this._modalService.open(this.detailRoomModal, { size: 'xl' });
   }
   public closeDetailRoomModal(){
@@ -799,6 +802,24 @@ public closeEditRoomModal(){
 
 
   public detailRoom : RoomModel | any = {};
+  public roomInvoice : any  =  [];
+// load data to room info
+public loadInvoiceDetailRoom(roomid: number){
+  console.log("load detail room id : ",roomid);
+  this._data.get('/api/invoice/room?roomid='+roomid).subscribe(
+    {
+      next: res => {
+        console.log(res);
+        this.roomInvoice = res;
+
+        
+      },
+      error: err => { this._data.handleError(err); console.log(err); },
+      complete: () => {  },
+    }
+  );
+}
+
 
 
   // load data to room info
@@ -912,6 +933,71 @@ public closeEditRoomModal(){
   }
 
 
+
+
+
+
+public invoiceDetail :InvoiceModel | any = {};
+
+//mở đóng model chi tiết hóa đơn
+public openInvoiceDetailModal(invoiceid: number){
+  this.loadDataToInvoice(invoiceid);
+  this._modalService.open(this.InvoiceDetailModal, { size: 'lg', backdrop: 'static'});
+}
+
+public closeInvoiceDetailModal(){
+  this._modalService.dismissAll(this.InvoiceDetailModal);
+}
+
+
+
+  // load data to invoice 
+public loadDataToInvoice(invoiceid: number){
+  console.log("load invoice bai id : ",invoiceid);
+  this._data.get('/api/invoice/detail?invoiceid='+invoiceid).subscribe(
+    {
+      next: res => { 
+        console.log(res);
+        this.invoiceDetail = res;
+      },
+      error: err => { this._data.handleError(err); console.log(err); },
+      complete: () => { },
+    }
+  );
+}
+
+
+
+//mở đóng model xác nhận thanh toán
+public openInvoicePayModal(invoiceid:number){
+  this.agreeInvoice =  invoiceid;
+  this._modalService.open(this.InvoiceAgreeModal,{ centered: true });
+}
+
+public closeInvoicePayModal(){
+  this.agreeInvoice = 0;
+  this._modalService.dismissAll(this.InvoiceAgreeModal);
+}
+public agreeInvoice:number=0;
+
+// Agree to pay invoice 
+public AgreeToPayInvoice(){
+  if(this.agreeInvoice!=0){
+    console.log("Agree to pay invoice : ",this.agreeInvoice);
+        this._data.post('/api/invoice/pay?invoiceid='+this.agreeInvoice).subscribe(
+          {
+            next: res => { 
+              console.log(res);
+             
+              
+            },
+            error: err => { this._data.handleError(err); console.log(err); },
+            complete: () => {},
+          }
+        );
+  }
+  this._modalService.dismissAll(this.InvoiceAgreeModal);
+}
 
 
 }
