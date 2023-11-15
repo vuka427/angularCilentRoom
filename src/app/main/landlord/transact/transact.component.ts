@@ -7,6 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { DataService } from 'src/app/core/services/data.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { ContractModel } from 'src/app/core/domain/contract/contract.model'
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { InvoiceModel } from 'src/app/core/domain/invoice/invoice.model';
 
 
 @Component({
@@ -31,6 +33,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('EndContractModal') EndContractModal: TemplateRef<any>;
   @ViewChild('LinkToTenantModal') LinkToTenantModal: TemplateRef<any>;
   @ViewChild('ComfimToLinkModal') ComfimToLinkModal: TemplateRef<any>;
+  @ViewChild('PayContractModal') PayContractModal: TemplateRef<any>;
 
   public ContractDetailId: Number;
 
@@ -44,6 +47,9 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   public currentCTDetail : ContractModel | any = {};
  
   public searchTenantValue :any = {};
+  
+  public frInvoice : FormGroup ;
+  public isValidInvoiceFormSubmitted :boolean | null = null;
 
   ngOnInit(): void {
 
@@ -124,8 +130,19 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
       ]
     };
 
+    this.frInvoice = new FormGroup({
+      roomid: new FormControl(0,Validators.required),
+      contractid: new FormControl(0,Validators.required),
+      newelectricnumber: new FormControl('',Validators.required),
+      newwaternumber: new FormControl('',Validators.required),
+      services: new FormArray([])
+    });
+
   }
 
+  get serviceItems() {
+    return this.frInvoice.get('services') as FormArray;
+  }
 
   listenerFn = () => {};
   ngAfterViewInit(): void {
@@ -295,6 +312,169 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
   }
+
+  
+  //mở đóng model lập hóa đơn
+  public openCreateInvoiceModal(roomid : number){
+    this.totalPrice =0;
+    this.elecPrice =0;
+    this.elecNumber =0;
+    this.wanterPrice =0;
+    this.wanterNumber =0;
+    let s = this.frInvoice.get('services') as FormArray;
+    s.clear()
+
+    this.loadDataToINvoice(roomid)
+    this._modalService.open(this.PayContractModal, { size: 'lg', backdrop: 'static' });
+  }
+
+  public offCreateInvoiceModal(){
+    this.totalPrice =0;
+    this.elecPrice=0;
+    this.elecNumber=0;
+    this.wanterPrice=0;
+    this.wanterNumber=0;
+    let s = this.frInvoice.get('services') as FormArray;
+    s.clear()
+    this._modalService.dismissAll(this.PayContractModal);
+  }
+ 
+
+  public invoice :InvoiceModel | any = {};
+  // load data to invoice 
+  public loadDataToINvoice(roomid: number){
+    console.log("load data to invoice room id : ",roomid);
+    this._data.get('/api/invoice/info?roomid='+roomid).subscribe(
+      {
+        next: res => { 
+          console.log(res);
+          this.invoice = res;
+
+          let s = this.frInvoice.get('services') as FormArray;
+          this.frInvoice.patchValue({
+            roomid: roomid,
+            contractid: this.invoice.contractId,
+            newelectricnumber: this.invoice.newElectricNumber,
+            newwaternumber: this.invoice.newWaterNumber
+
+          });
+
+          if(this.invoice.serviceItems!=null)
+          this.invoice.serviceItems.forEach((e:any)=> {
+            const group = new FormGroup({
+              servicename: new FormControl(e.serviceName,Validators.required),
+              price: new FormControl(e.price,Validators.required),
+              quantity: new FormControl(e.quantity,Validators.required),
+              description: new FormControl(e.description)
+            });
+            s.push(group);
+          });
+
+          this.setEUse();
+          this.setWUse();
+
+        },
+        error: err => { this._data.handleError(err); console.log(err); },
+        complete: () => { this.setTotalPrice(); },
+      }
+    );
+  }
+
+
+  // chỉnh lập hóa đơn
+  public onFormCreateInvoiceSubmit(){
+    console.log('submit invoice');
+
+    this.isValidInvoiceFormSubmitted = false;
+    
+    if (this.frInvoice.invalid) {
+      console.log("is invalid");
+      console.log(this.frInvoice.errors);
+      return;
+    }
+    this.isValidInvoiceFormSubmitted= true;
+
+    console.log('submited',this.frInvoice.value );
+
+    this._data.post('/api/invoice/create',this.frInvoice.value).subscribe(
+      {
+        next: res => { console.log("repone ", res);},
+        error: err => { this._data.handleError(err); console.log(err);},
+        complete: () => { 
+
+          this._notify.printSuccessMessage("Lặp hóa đơn thành công!"); 
+          this.offCreateInvoiceModal();
+
+        },
+      }
+    );
+  }
+
+  public totalPrice: number =0;
+  public elecNumber : number =0;
+  public wanterNumber : number =0;
+  public elecPrice : number =0;
+  public wanterPrice : number =0;
+
+
+  public setEUse(){
+    let en = this.frInvoice.get('newelectricnumber')?.value as number;
+    if(en!=null){
+      this.elecNumber = en - this.invoice.oldElectricNumber;
+      this.elecPrice=this.elecNumber *  this.invoice.electricityCosts;
+    }else {
+      this.elecPrice=0;
+      this.elecNumber=0;
+    }
+    this.setTotalPrice()
+  }
+
+  public setWUse(){
+    let wn = this.frInvoice.get('newwaternumber')?.value as number;
+    if(wn!=null){
+      this.wanterNumber = wn - this.invoice.oldWaterNumber;
+      this.wanterPrice=this.wanterNumber * this.invoice.waterCosts;
+    }else {
+      this.wanterPrice=0;
+      this.wanterNumber=0;
+    }
+    this.setTotalPrice()
+  }
+
+  public setTotalPrice(){
+    let serviceTotalPrice : number =0;
+    let s = this.frInvoice.get('services') as FormArray;
+    s.controls.forEach((element, index) => {
+      serviceTotalPrice += element.get('price')?.value * element.get('quantity')?.value;
+    });
+    this.totalPrice = this.invoice.rentalPrice + this.wanterPrice + this.elecPrice + serviceTotalPrice;
+  }
+
+ // invoice -> thêm dịch vụ
+  public addSevices(){
+    console.log("add service");
+    const group = new FormGroup({
+      servicename: new FormControl('',Validators.required),
+      price: new FormControl(0,Validators.required),
+      quantity: new FormControl(1,Validators.required),
+      description: new FormControl('')
+    });
+    
+    let s = this.frInvoice.get('services') as FormArray;
+    s.push(group);
+    console.log(this.frInvoice.value);
+    
+
+  }
+
+  // invoice -> xóa dịch vụ
+  public removeSevices(index:number){
+    console.log("remove services");
+    let s = this.frInvoice.get('services') as FormArray;
+    s.removeAt(index);
+    this.setTotalPrice();
+  }
+
 
 
 }
