@@ -3,7 +3,7 @@ import { AbstractControl, FormGroup, NG_VALIDATORS, ValidationErrors } from '@an
 
 @Directive({
   selector: '[appComToEnd]',
-  providers: [{provide: NG_VALIDATORS, useExisting: ValidComToEndDirective, multi: true}]
+  providers: [{provide: NG_VALIDATORS, useExisting: ValidComToEndDirective, multi: true}] 
 })
 export class ValidComToEndDirective {
   @Input('appComToEnd') dateComToEnd : string[] = [];

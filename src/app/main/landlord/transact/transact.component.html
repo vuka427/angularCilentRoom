@@ -196,7 +196,11 @@
     </div>
     
     <div class="modal-body container-fluid">
-        <form id="invoice-form"  novalidate  (ngSubmit)="onFormCreateInvoiceSubmit()" [formGroup]="frInvoice" #fi="ngForm"  >
+        <form id="invoice-form"  novalidate  
+        (ngSubmit)="onFormCreateInvoiceSubmit()" 
+        [appValidGreater]="['oldwaternumber', 'newwaternumber']"
+        [appValidGreaterTwo]="['oldelectricnumber', 'newelectricnumber']" 
+          [formGroup]="frInvoice" #fi="ngForm"  >
             <div class="row">
                 <div class="col-12">
                     <h5>Giá cho thuê : {{invoice.rentalPrice  |FormatVndPipe}}</h5>
@@ -205,10 +209,15 @@
             <hr>
             
             <div class="row">
-                <div class="form-group col-sm-2">
+                <div class="form-group col-sm-3">
                     <label > Số điện cũ</label>
-                    <p>{{invoice.oldElectricNumber}}</p>
-                    
+                    <input type="number"  class="form-control" 
+                    placeholder="Số điện cũ" appOnlyNumber required formControlName="oldelectricnumber" (change)="setEUse()"> 
+                    <div  *ngIf="frInvoice.controls['oldelectricnumber']?.hasError('required')
+                    && (frInvoice.controls['oldelectricnumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    >Vui lòng nhập chỉ số điện cũ !</div>
+
                 </div>
                 <div class="form-group col-sm-3">
                     <label > Số điện mới</label>
@@ -218,6 +227,12 @@
                     && (frInvoice.controls['newelectricnumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
                     class="help-block text-danger"
                     >Vui lòng nhập chỉ số điện !</div>
+
+                    <div  *ngIf="frInvoice.controls['newelectricnumber']?.hasError('greater')
+                    && (frInvoice.controls['newelectricnumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    >Chỉ số mới phải lớn hơn hoặc bằng chỉ số cũ !</div>
+
                 </div>
                 <div class="form-group col-sm-2">
                     <label > Số Kwh</label>
@@ -227,7 +242,7 @@
                     <label > Đơn giá</label>
                     <p>{{invoice.electricityCosts |FormatVndPipe}}</p>
                 </div>
-                <div class="form-group col-sm-3">
+                <div class="form-group col-sm-2">
                     <label >Tiền điện </label>
                     <p class="text-danger">{{elecPrice |FormatVndPipe}}</p>
                 </div>
@@ -235,9 +250,16 @@
 
             <hr>
             <div class="row">
-                <div class="form-group col-sm-2">
+                <div class="form-group col-sm-3">
                     <label > Số nước cũ</label>
-                    <p>{{invoice.oldWaterNumber}}</p>
+                    <input type="number" #electric  class="form-control" 
+                    placeholder="Số nước cũ" appOnlyNumber required formControlName="oldwaternumber" 
+                    (change)="setWUse()"
+                    >
+                    <div  *ngIf="frInvoice.controls['oldwaternumber']?.hasError('required')
+                    && (frInvoice.controls['oldwaternumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    > Vui lòng nhập chỉ số nước cũ !</div>
                     
                 </div>
                 <div class="form-group col-sm-3">
@@ -250,6 +272,10 @@
                     && (frInvoice.controls['newwaternumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
                     class="help-block text-danger"
                     > Vui lòng nhập chỉ số nước !</div>
+                    <div  *ngIf="frInvoice.controls['newwaternumber']?.hasError('greater')
+                    && (frInvoice.controls['newwaternumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    > Chỉ số mới phải lớn hơn hoặc bằng chỉ số cũ !</div>
                     
                 </div>
                 <div class="form-group col-sm-2">
@@ -258,11 +284,11 @@
                 </div>
                 <div class="form-group col-sm-2">
                     <label > Đơn giá</label>
-                    <p>{{invoice.waterCosts |FormatVndPipe}}</p>
+                    <p>{{invoice.waterCosts | FormatVndPipe}} </p>
                 </div>
-                <div class="form-group col-sm-3">
+                <div class="form-group col-sm-2">
                     <label > Tiền nước </label>
-                    <p class="text-danger">{{wanterPrice |FormatVndPipe }}</p>
+                    <p class="text-danger">{{wanterPrice | FormatVndPipe }}</p>
                 </div>
                 
             </div>
@@ -342,15 +368,25 @@
             </div>
             <hr>
             <div class="row">
-                <h5>Tổng thanh toán : <span class="text-danger">{{totalPrice | FormatVndPipe }}</span></h5>
-                <h5 *ngIf="!invoice.isApproved && invoice.id>0" class="text-info  ml-3"> Đã lập hóa đơn </h5>
-                <h5 *ngIf="invoice.isApproved && invoice.id>0" class="text-info  ml-3"> Đã thanh toán </h5>
+                <h5>Tiền trọ tháng {{invoice.month}}/{{invoice.year}}  : <span class="text-danger">{{totalPrice | FormatVndPipe }}</span></h5>
+                <h5 *ngIf="!invoice.isApproved && invoice.id>0" class="text-info ml-3"> Đã lập hóa đơn </h5>
+                <h5 *ngIf="invoice.isApproved && invoice.id>0" class="text-info ml-3"> Đã thanh toán </h5>
             </div>
+            <div class="row">
+                <h5>Tiền nợ : không</h5>
+            </div>
+            <hr>
+            <div class="row">
+                <h5>Tổng thanh toán : <span class="text-danger h4">{{totalPrice | FormatVndPipe }}</span></h5>
+               
+            </div>
+
+
         </form>
     </div>
     
     <div class="modal-footer">
-        <button type="button"  class="btn btn-danger"> Đồng ý </button>
+        <button type="button"  class="btn btn-danger"> Đồng ý kết thúc hợp đồng </button>
         <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Đóng</button>
     </div>
     

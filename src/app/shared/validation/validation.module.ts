@@ -10,11 +10,13 @@ import { ValidDateofbirthDirective } from './valid.dateofbirth.directive';
 import { OnlyNumberDirective } from './only.number.directive';
 import { ValidDateFutureDirective } from './valid.dateisfuture.directive';
 import { ValidComToEndDirective } from './valid.commingend.directive';
+import { ValidGreaterDirective } from './valid.greater.directive';
+import { ValidGreaterTwoDirective } from './valid.greater.two.directive';
 
 
 
 @NgModule({
-  declarations: [
+  declarations: [	
     ValidUsernameDirective,
     ValidEmailDirective,
     ValidPasswordDirective,
@@ -24,8 +26,10 @@ import { ValidComToEndDirective } from './valid.commingend.directive';
     ValidDateofbirthDirective,
     OnlyNumberDirective,
     ValidDateFutureDirective,
-    ValidComToEndDirective
-  ],
+    ValidComToEndDirective,
+    ValidGreaterDirective,
+    ValidGreaterTwoDirective
+   ],
   imports: [
     CommonModule
   ],
@@ -39,7 +43,9 @@ import { ValidComToEndDirective } from './valid.commingend.directive';
     ValidDateofbirthDirective,
     OnlyNumberDirective,
     ValidDateFutureDirective,
-    ValidComToEndDirective
+    ValidComToEndDirective,
+    ValidGreaterDirective,
+    ValidGreaterTwoDirective
 
   ]
 })
