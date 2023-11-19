@@ -196,8 +196,8 @@
     </div>
     
     <div class="modal-body container-fluid">
-        <form id="invoice-form"  novalidate  
-        (ngSubmit)="onFormCreateInvoiceSubmit()" 
+        <form id="invoice-end-form"  novalidate  
+        (ngSubmit)="endContract()" 
         [appValidGreater]="['oldwaternumber', 'newwaternumber']"
         [appValidGreaterTwo]="['oldelectricnumber', 'newelectricnumber']" 
           [formGroup]="frInvoice" #fi="ngForm"  >
@@ -210,16 +210,17 @@
             <div class="row">
                 <div class="form-group col-sm-3">
                     <label >Ngày trả phòng</label>
-                    <input type="date"  class="form-control" formControlName="stayday" (change)="setStayDay()"
-                    
-                    [max]="maxDay"  [min]="minDay"
-
+                    <input type="date"  class="form-control" formControlName="leaveday" (change)="setStayDay()"
+                    [appValidMaxMindate]="[maxDay, minDay]"
                     > 
-                    <div  *ngIf="frInvoice.controls['stayday']?.hasError('required')
-                    && (frInvoice.controls['stayday']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted ))" 
+                    <div  *ngIf="frInvoice.controls['leaveday']?.hasError('required')
+                    && (frInvoice.controls['leaveday']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted ))" 
                     class="help-block text-danger"
                     >Vui lòng ngày trả phòng!</div>
-                    
+                    <div  *ngIf="frInvoice.controls['leaveday']?.hasError('datemaxmininvalid')
+                    && (frInvoice.controls['leaveday']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    >Vui lòng chọn ngày kết thúc trong tháng hiện tại !</div>
 
                 </div>  
                 <div class="form-group col-sm-4">
@@ -417,29 +418,10 @@
     </div>
     
     <div class="modal-footer">
-        <button type="button"  class="btn btn-danger"> Đồng ý kết thúc hợp đồng </button>
+        <button type="submit" form="invoice-end-form"  class="btn btn-danger"> Đồng ý kết thúc hợp đồng </button>
         <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Đóng</button>
     </div>
     
 </ng-template>
 
 
-<ng-template #EndContractModal let-modal >
-
-    <div class="modal-header bg-primary">
-        <h5 class="modal-title text-light" id="exampleModalLabel">kết thúc hợp đồng </h5>
-      <button type="button" class="close" aria-label="Close" (click)="modal.close()">
-        <span class="text-light" aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    
-    <div class="modal-body">
-        <p>Bạn chắc chắn kết thúc hợp đồng ?</p>
-    </div>
-    
-    <div class="modal-footer">
-        <button type="button"  class="btn btn-danger" (click)="endContract()"> Đồng ý </button>
-        <button type="button" class="btn btn-outline-primary" (click)="modal.close()">Đóng</button>
-    </div>
-    
-</ng-template>

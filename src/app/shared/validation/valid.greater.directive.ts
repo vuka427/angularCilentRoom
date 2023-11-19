@@ -14,7 +14,7 @@ export class ValidGreaterDirective {
   }
 
   match(controlName: string, checkControlName: string) {
-    console.log("v1");
+
     return (formGroup: FormGroup) => {
       const control = formGroup.controls[controlName];
       const checkControl = formGroup.controls[checkControlName];

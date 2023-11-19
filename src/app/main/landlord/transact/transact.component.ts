@@ -133,7 +133,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
     this.frInvoice = new FormGroup({
       roomid: new FormControl(0,Validators.required),
       contractid: new FormControl(0,Validators.required),
-      stayday: new FormControl('',Validators.required),
+      leaveday: new FormControl('',Validators.required),
       newelectricnumber: new FormControl('',Validators.required),
       newwaternumber: new FormControl('',Validators.required),
       oldelectricnumber: new FormControl('',Validators.required),
@@ -237,29 +237,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public currentContractId :number ;
-  public endContract(){
-    console.log(this.currentContractId);
-    if(this.currentContractId >0){
-      this._data.post("/api/contract/end?contractid="+this.currentContractId).subscribe(
-      {
-        next: (res:any) => { 
-          console.log(res);
-        },
-        error: err => {console.log(err); this._data.handleError(err); },
 
-        complete: () => {  
-          this._notify.printSuccessMessage("Kết thúc hợp đồng thành công !");
-          this.closeEndContractModal(); 
-          this.rerender();
-        }, 
-      });
-    }else{
-      this.closeEndContractModal();
-      this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");
-    }
-
-    
-  }
 
   openLinkToTenantModal() {
     this._modalService.open(this.LinkToTenantModal);
@@ -373,6 +351,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
               description: new FormControl(e.description)
             });
             s.push(group);
+            
           });
 
           this.setEUse();
@@ -389,36 +368,32 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
     );
   }
 
-
-  // chỉnh lập hóa đơn
-  public onFormCreateInvoiceSubmit(){
-    console.log('submit invoice');
-
-    this.isValidInvoiceFormSubmitted = false;
-    
-    if (this.frInvoice.invalid) {
-      console.log("is invalid");
-      console.log(this.frInvoice.errors);
-      return;
-    }
-    this.isValidInvoiceFormSubmitted= true;
-
-    console.log('submited',this.frInvoice.value );
-
-    this._data.post('/api/invoice/create',this.frInvoice.value).subscribe(
+  public endContract(){
+    console.log(this.currentContractId);
+    if(this.currentContractId >0){
+      this._data.post("/api/contract/end?contractid="+this.currentContractId,this.frInvoice.value ).subscribe(
       {
-        next: res => { console.log("repone ", res);},
-        error: err => { this._data.handleError(err); console.log(err);},
-        complete: () => { 
-
-          this._notify.printSuccessMessage("Lặp hóa đơn thành công!"); 
-          this.offCreateInvoiceModal();
-
+        next: (res:any) => { 
+          console.log(res);
         },
-      }
-    );
+        error: err => {console.log(err); this._data.handleError(err); },
+
+        complete: () => {  
+          this._notify.printSuccessMessage("Kết thúc hợp đồng thành công !");
+          this.closeEndContractModal(); 
+          this.rerender();
+        }, 
+      });
+    }else{
+      this.closeEndContractModal();
+      this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");
+    }
+
   }
 
+
+
+  
   public totalPrice: number =0;
   public elecNumber : number =0;
   public wanterNumber : number =0;
@@ -458,7 +433,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public setStayDay(){
-    let staydate = this.frInvoice.get('stayday')?.value as number;
+    let staydate = this.frInvoice.get('leaveday')?.value as number;
     let stayday = new Date(staydate).getDate();
     let days = new Date(this.invoice.year, this.invoice.month, 0).getDate();
     
@@ -469,7 +444,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
       this.roomPrice =0;
       this.stayDays =0;
     }
-    
+    this.setTotalPrice()
   }
 
   public setTotalPrice(){
@@ -478,7 +453,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
     s.controls.forEach((element, index) => {
       serviceTotalPrice += element.get('price')?.value * element.get('quantity')?.value;
     });
-    this.totalPrice = this.invoice.rentalPrice + this.wanterPrice + this.elecPrice + serviceTotalPrice;
+    this.totalPrice = this.roomPrice + this.wanterPrice + this.elecPrice + serviceTotalPrice;
   }
 
  // invoice -> thêm dịch vụ

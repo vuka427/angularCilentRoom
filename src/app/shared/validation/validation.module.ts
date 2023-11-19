@@ -12,11 +12,13 @@ import { ValidDateFutureDirective } from './valid.dateisfuture.directive';
 import { ValidComToEndDirective } from './valid.commingend.directive';
 import { ValidGreaterDirective } from './valid.greater.directive';
 import { ValidGreaterTwoDirective } from './valid.greater.two.directive';
+import { ValidMaxminDateDirective } from './valid.maxmindate.directive';
+
 
 
 
 @NgModule({
-  declarations: [	
+  declarations: [		
     ValidUsernameDirective,
     ValidEmailDirective,
     ValidPasswordDirective,
@@ -28,7 +30,8 @@ import { ValidGreaterTwoDirective } from './valid.greater.two.directive';
     ValidDateFutureDirective,
     ValidComToEndDirective,
     ValidGreaterDirective,
-    ValidGreaterTwoDirective
+    ValidGreaterTwoDirective,
+    ValidMaxminDateDirective
    ],
   imports: [
     CommonModule
@@ -45,7 +48,8 @@ import { ValidGreaterTwoDirective } from './valid.greater.two.directive';
     ValidDateFutureDirective,
     ValidComToEndDirective,
     ValidGreaterDirective,
-    ValidGreaterTwoDirective
+    ValidGreaterTwoDirective,
+    ValidMaxminDateDirective
 
   ]
 })
