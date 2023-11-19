@@ -124,6 +124,8 @@ export class RoomComponent implements OnInit{
         contractid: new FormControl(0,Validators.required),
         newelectricnumber: new FormControl('',Validators.required),
         newwaternumber: new FormControl('',Validators.required),
+        oldelectricnumber: new FormControl('',Validators.required),
+        oldwaternumber: new FormControl('',Validators.required),
         services: new FormArray([])
       });
 
@@ -666,7 +668,9 @@ public closeEditRoomModal(){
             roomid: roomid,
             contractid: this.invoice.contractId,
             newelectricnumber: this.invoice.newElectricNumber,
-            newwaternumber: this.invoice.newWaterNumber
+            newwaternumber: this.invoice.newWaterNumber,
+            oldelectricnumber: this.invoice.oldElectricNumber,
+            oldwaternumber: this.invoice.oldWaterNumber,
 
           });
 
@@ -730,8 +734,9 @@ public closeEditRoomModal(){
 
   public setEUse(){
     let en = this.frInvoice.get('newelectricnumber')?.value as number;
+    let olden = this.frInvoice.get('oldelectricnumber')?.value as number;
     if(en!=null){
-      this.elecNumber = en - this.invoice.oldElectricNumber;
+      this.elecNumber = en - olden;
       this.elecPrice=this.elecNumber *  this.invoice.electricityCosts;
     }else {
       this.elecPrice=0;
@@ -742,8 +747,9 @@ public closeEditRoomModal(){
 
   public setWUse(){
     let wn = this.frInvoice.get('newwaternumber')?.value as number;
+    let oldWn = this.frInvoice.get('oldwaternumber')?.value as number;
     if(wn!=null){
-      this.wanterNumber = wn - this.invoice.oldWaterNumber;
+      this.wanterNumber = wn - oldWn;
       this.wanterPrice=this.wanterNumber * this.invoice.waterCosts;
     }else {
       this.wanterPrice=0;

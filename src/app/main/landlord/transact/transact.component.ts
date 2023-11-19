@@ -50,9 +50,9 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   
   public frInvoice : FormGroup ;
   public isValidInvoiceFormSubmitted :boolean | null = null;
+ 
 
   ngOnInit(): void {
-
     this.dtOptions = {
       serverSide: true,     // Set the flag 
       ajax: (dataTablesParameters: any, callback) => {
@@ -133,6 +133,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
     this.frInvoice = new FormGroup({
       roomid: new FormControl(0,Validators.required),
       contractid: new FormControl(0,Validators.required),
+      stayday: new FormControl('',Validators.required),
       newelectricnumber: new FormControl('',Validators.required),
       newwaternumber: new FormControl('',Validators.required),
       oldelectricnumber: new FormControl('',Validators.required),
@@ -376,6 +377,10 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
 
           this.setEUse();
           this.setWUse();
+          this.totalDays =  new Date(this.invoice.year, this.invoice.month, 0).getDate();
+
+          this.maxDay = this.invoice.year+'-'+ this.invoice.month+'-'+this.totalDays
+          this.minDay =  this.invoice.year+'-'+ this.invoice.month+'-1'
 
         },
         error: err => { this._data.handleError(err); console.log(err); },
@@ -419,7 +424,12 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
   public wanterNumber : number =0;
   public elecPrice : number =0;
   public wanterPrice : number =0;
+  public roomPrice : number =0 ;
+  public stayDays:number=0;
+  public totalDays:number=0;
 
+  public maxDay: any;
+  public minDay: any;
 
   public setEUse(){
     let en = this.frInvoice.get('newelectricnumber')?.value as number;
@@ -445,6 +455,21 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
       this.wanterNumber=0;
     }
     this.setTotalPrice()
+  }
+
+  public setStayDay(){
+    let staydate = this.frInvoice.get('stayday')?.value as number;
+    let stayday = new Date(staydate).getDate();
+    let days = new Date(this.invoice.year, this.invoice.month, 0).getDate();
+    
+    if(staydate!=null){
+      this.roomPrice = this.invoice.rentalPrice/days*stayday ;
+      this.stayDays = stayday;
+    }else {
+      this.roomPrice =0;
+      this.stayDays =0;
+    }
+    
   }
 
   public setTotalPrice(){

@@ -721,9 +721,6 @@
     </ng-template>
 
 
-
-
-
 <!--modal lập hóa đơn-->
 <ng-template #createInvoiceModal let-modal  >
 
@@ -735,7 +732,11 @@
     </div>
     
     <div class="modal-body container-fluid">
-        <form id="invoice-form"  novalidate  (ngSubmit)="onFormCreateInvoiceSubmit()" [formGroup]="frInvoice" #fi="ngForm"  >
+        <form id="invoice-form"  novalidate  
+        (ngSubmit)="onFormCreateInvoiceSubmit()" 
+        [appValidGreater]="['oldwaternumber', 'newwaternumber']"
+        [appValidGreaterTwo]="['oldelectricnumber', 'newelectricnumber']" 
+        [formGroup]="frInvoice" #fi="ngForm"  >
             <div class="row">
                 <div class="col-12">
                     <h5>Giá cho thuê : {{invoice.rentalPrice  |FormatVndPipe}}</h5>
@@ -746,7 +747,12 @@
             <div class="row">
                 <div class="form-group col-sm-2">
                     <label > Số điện cũ</label>
-                    <p>{{invoice.oldElectricNumber}}</p>
+                    <input type="number"  class="form-control" 
+                    placeholder="Số điện cũ" appOnlyNumber required formControlName="oldelectricnumber" (change)="setEUse()"> 
+                    <div  *ngIf="frInvoice.controls['oldelectricnumber']?.hasError('required')
+                    && (frInvoice.controls['oldelectricnumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    >Vui lòng nhập chỉ số điện cũ !</div>
                     
                 </div>
                 <div class="form-group col-sm-3">
@@ -757,6 +763,10 @@
                     && (frInvoice.controls['newelectricnumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
                     class="help-block text-danger"
                     >Vui lòng nhập chỉ số điện !</div>
+                    <div  *ngIf="frInvoice.controls['newelectricnumber']?.hasError('greater')
+                    && (frInvoice.controls['newelectricnumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    >Chỉ số mới phải lớn hơn hoặc bằng chỉ số cũ !</div>
                 </div>
                 <div class="form-group col-sm-2">
                     <label > Số Kwh</label>
@@ -776,7 +786,14 @@
             <div class="row">
                 <div class="form-group col-sm-2">
                     <label > Số nước cũ</label>
-                    <p>{{invoice.oldWaterNumber}}</p>
+                    <input type="number" #electric  class="form-control" 
+                    placeholder="Số nước cũ" appOnlyNumber required formControlName="oldwaternumber" 
+                    (change)="setWUse()"
+                    >
+                    <div  *ngIf="frInvoice.controls['oldwaternumber']?.hasError('required')
+                    && (frInvoice.controls['oldwaternumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    > Vui lòng nhập chỉ số nước cũ !</div>
                     
                 </div>
                 <div class="form-group col-sm-3">
@@ -789,6 +806,10 @@
                     && (frInvoice.controls['newwaternumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
                     class="help-block text-danger"
                     > Vui lòng nhập chỉ số nước !</div>
+                    <div  *ngIf="frInvoice.controls['newwaternumber']?.hasError('greater')
+                    && (frInvoice.controls['newwaternumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    > Chỉ số mới phải lớn hơn hoặc bằng chỉ số cũ !</div>
                     
                 </div>
                 <div class="form-group col-sm-2">

@@ -189,7 +189,7 @@
 <ng-template #PayContractModal let-modal >
 
     <div class="modal-header bg-primary">
-        <h5 class="modal-title text-light" id="exampleModalLabel">Thanh toán kết thúc hợp đồng </h5>
+        <h5 class="modal-title text-light" id="exampleModalLabel">Thanh toán kết thúc hợp đồng, tháng {{invoice.month}}/{{invoice.year}} </h5>
       <button type="button" class="close" aria-label="Close" (click)="modal.close()">
         <span class="text-light" aria-hidden="true">&times;</span>
       </button>
@@ -203,9 +203,40 @@
           [formGroup]="frInvoice" #fi="ngForm"  >
             <div class="row">
                 <div class="col-12">
-                    <h5>Giá cho thuê : {{invoice.rentalPrice  |FormatVndPipe}}</h5>
+                    <h5>Giá cho thuê phòng : {{invoice.rentalPrice  |FormatVndPipe}}</h5>
                 </div>
             </div>
+            <hr>
+            <div class="row">
+                <div class="form-group col-sm-3">
+                    <label >Ngày trả phòng</label>
+                    <input type="date"  class="form-control" formControlName="stayday" (change)="setStayDay()"
+                    
+                    [max]="maxDay"  [min]="minDay"
+
+                    > 
+                    <div  *ngIf="frInvoice.controls['stayday']?.hasError('required')
+                    && (frInvoice.controls['stayday']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted ))" 
+                    class="help-block text-danger"
+                    >Vui lòng ngày trả phòng!</div>
+                    
+
+                </div>  
+                <div class="form-group col-sm-4">
+                    <label >Ngày ở lại </label>
+                   <p>{{stayDays}}/{{totalDays}} ngày</p>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label >Giá thuê/ngày</label>
+                    <p>{{(invoice.rentalPrice/totalDays) |FormatVndPipe}}</p>
+                </div>
+              
+                <div class="form-group col-sm-2">
+                    <label >Tiền phòng </label>
+                    <p class="text-danger">{{roomPrice | FormatVndPipe}}</p>
+                </div>
+            </div> 
+
             <hr>
             
             <div class="row">
