@@ -88,6 +88,16 @@
       "submenu": [
         
       ]
+    },
+    {
+      "title": "Thống kê",
+      "parentLink": "/landlord/statistic",
+      "awesomeIcon":"fas fa-mail-bulk",
+      "type": "",
+      "menu": false,
+      "submenu": [
+        
+      ]
     }
   ]
   

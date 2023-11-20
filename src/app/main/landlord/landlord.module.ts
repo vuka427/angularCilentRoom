@@ -24,6 +24,7 @@ import { InvoiceTransactComponent } from './transact/invoice.transact/invoice.tr
 import { FormatVndPipe } from 'src/app/shared/pipe/format.vnd.pipe';
 import {NgxPrintModule} from 'ngx-print';
 import { Imports_pipeModule } from 'src/app/shared/pipe/imports_pipe.module';
+import { StatisticComponent } from './statistic/statistic.component';
 
 
 
@@ -37,7 +38,7 @@ import { Imports_pipeModule } from 'src/app/shared/pipe/imports_pipe.module';
     EmailhistoryComponent,
     UtilitesComponent,
     BranchComponent,
-    
+    StatisticComponent,
     CreateTransactComponent,
     InvoiceTransactComponent
     

@@ -11,6 +11,7 @@ import { UtilitesComponent } from './utilites/utilites.component';
 import { BranchComponent } from './room/branch/branch.component';
 import { CreateTransactComponent } from './transact/create.transact/create.transact.component';
 import { InvoiceTransactComponent } from './transact/invoice.transact/invoice.transact.component';
+import { StatisticComponent } from './statistic/statistic.component';
 
 
 const routes: Routes = [
@@ -26,7 +27,7 @@ const routes: Routes = [
   {path: 'utilites', component: UtilitesComponent },
   {path: 'branch', component: BranchComponent },
   {path: 'invoice', component: InvoiceTransactComponent},
- 
+  {path: 'statistic', component: StatisticComponent},
   
 ]
 @NgModule({
