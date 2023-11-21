@@ -33,7 +33,7 @@ export class StatisticComponent implements OnInit {
 
   public roomChart: any;
   public earningChart: any;
-  public electricityChart: any;
+  public Chart: any;
   public wanterChart: any;
 
   public statistic: any ={};
@@ -48,12 +48,13 @@ export class StatisticComponent implements OnInit {
 
    // load data to room info
    public loadData(){
-    this._data.get('/api/appstatistic/general').subscribe(
+    this._data.get('/api/appstatistic/branch?year='+this.year_filter+'&branchid='+this.branch_filter).subscribe(
       {
         next: res => {
           console.log(res);
           this.statistic = res;
           this.loadRoomChart()
+          this.loadEarningChart()
             
         },
         error: err => { this._data.handleError(err); console.log(err); },
@@ -114,7 +115,36 @@ export class StatisticComponent implements OnInit {
   }
 
   public loadEarningChart(){
-    
+    this.earningChart = new Chart("EarningChart", {
+      type: 'line', //this denotes tha type of chart
+
+      data: {// values on X-Axis
+        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12" ], 
+	       datasets: [
+          {
+            label: "doanh thu",
+            data: this.statistic.earning,
+            backgroundColor: 'blue',
+            borderColor: "#4e73df",
+          }
+          
+        ]
+      },
+      options: {
+        maintainAspectRatio: false,
+        layout: {
+            padding: {
+                left: 10,
+                right: 25,
+                top: 25,
+                bottom: 0
+            }
+        }
+        
+    }
+
+  });
+
 
   }
 
