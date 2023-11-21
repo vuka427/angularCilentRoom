@@ -16,9 +16,9 @@ import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 })
 export class BranchComponent implements OnInit,OnDestroy, AfterViewInit {
 
-  @ViewChild(DataTableDirective, {static: false}) dtElement: DataTableDirective ; 
+  @ViewChild(DataTableDirective, {static: false}) dtElement: DataTableDirective; 
 
-  @ViewChild('editModal') deleteModal : TemplateRef<any>; // Note: TemplateRef
+  @ViewChild('editModal') deleteModal: TemplateRef<any>;
   
   datatableElement: any = DataTableDirective;
 
