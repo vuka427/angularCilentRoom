@@ -37,20 +37,20 @@ export class BranchComponent implements OnInit,OnDestroy, AfterViewInit {
 
   public deleteBranchId: Number;
 
-constructor(
-  private _http : HttpClient,
-  private _data : DataService,
-  private _notify : NotificationService,
-  private _diagioi : DiagioihanhchinhService,
-  private _elementRef: ElementRef,
-  private _render: Renderer2,
-  private _modalService: NgbModal
-){
+  constructor(
+    private _http : HttpClient,
+    private _data : DataService,
+    private _notify : NotificationService,
+    private _diagioi : DiagioihanhchinhService,
+    private _elementRef: ElementRef,
+    private _render: Renderer2,
+    private _modalService: NgbModal
+  ){
 
   this._diagioi.getdata().subscribe((res) => {
        this.vietnamdata = res;
     });;
-}
+  }
  
 
   

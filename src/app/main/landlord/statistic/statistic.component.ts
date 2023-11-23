@@ -258,14 +258,15 @@ export class StatisticComponent implements OnInit {
           {
             label: "vào",
             data: this.statistic.memberIn,
-            backgroundColor: 'red',
-            borderColor: "red",
+            backgroundColor: 'blue',
+            borderColor: "#4e73df",
+            
           },
           {
             label: "ra",
             data: this.statistic.memberOut,
-            backgroundColor: 'yellow',
-            borderColor: "yellow",
+            backgroundColor: 'red',
+            borderColor: "red",
           }
           
         ]

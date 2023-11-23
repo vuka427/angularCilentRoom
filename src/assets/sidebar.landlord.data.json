@@ -61,22 +61,13 @@
     },
     
     {
-      "title": "Quản lý yêu cầu gớp ý",
-      "parentLink": "",
+      "title": "Quản lý yêu cầu góp ý",
+      "parentLink": "/landlord/feedback",
       "awesomeIcon":"fas fa-comment-dots",
       "type": "",
-      "menu": true,
+      "menu": false,
       "submenu": [
-        {
-          "childtitle": "DS các yêu cầu gớp ý",
-          "link": "#",
-          "islink": true
-        },
-        {
-          "childtitle": "Gửi thông báo",
-          "link": "#",
-          "islink": true
-        }
+       
       ]
     },
     {

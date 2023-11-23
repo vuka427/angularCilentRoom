@@ -1,1 +1,36 @@
-<p>feedback works!</p>
+
+<div class="card shadow p-3"   >
+    <h5>Danh sách phản hồi </h5>
+    
+    <div class="table-responsive p-1">
+        <table datatable [dtOptions]="dtOptions" class=" row-border hover display table"></table>
+    </div>
+</div>
+
+ <!--modal detail-->
+ <ng-template #detailEmailModal let-modal  >
+  
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="detailModalLabel">Chi tiết Email</h5>
+      <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div  class="modal-body container-fluid">
+       
+      <div class="form-group">
+        <div class="col-xs-6">
+            <label for=""><h5>Nội dung </h5></label>
+            <span class="emailcontent"  #emailcontent [innerHTML]="selectEmail.content"> </span>  
+
+        </div>
+    </div>
+    </div>
+    
+    <div class="modal-footer">
+        
+        <button type="button"  class="btn btn-primary" (click)="modal.close()" >Đóng</button>
+    </div>
+
+</ng-template>

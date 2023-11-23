@@ -15,4 +15,15 @@ export class CKEConfig {
             options: ['left', 'right', 'center', 'justify']
         },
     }
+    public static toolbarConfigOffAll = {
+        toolbar: {
+            items: [
+                
+            ],
+            shouldNotGroupWhenFull: true
+        },
+        alignment: {
+            options: ['left', 'right', 'center', 'justify']
+        },
+    }
   }
