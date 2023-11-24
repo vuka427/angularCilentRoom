@@ -1,1 +1,118 @@
-<p>feedback works!</p>
+<button class="btn btn-sm btn-primary" (click)="openAddAreaModal()">Thêm phản hồi góp ý</button>
+<hr>
+<div class="card shadow p-3"   >
+  
+
+    <h5>Lịch sử phản hồi </h5>
+    <div class="table-responsive p-1">
+        <table datatable [dtOptions]="dtOptions" class=" row-border hover display table"></table>
+    </div>
+</div>
+
+ <!--modal detail-->
+ <ng-template #detailEmailModal let-modal >
+  
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="detailModalLabel">Chi tiết Email</h5>
+        <button type="reset" form="area-form" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body container-fluid">
+      <div class="form-group">
+        <div class="col-xs-6">
+            <label for=""><h5>Nội dung </h5></label>
+            <span class="emailcontent"  #emailcontent > </span>  
+
+        </div>
+    </div>
+    </div>
+    
+    <div class="modal-footer">
+        
+        <button type="button"  class="btn btn-primary" (click)="modal.close()" >Đóng</button>
+    </div>
+</ng-template>
+
+
+
+
+<!-- chỉnh sửa phòng  -->
+<ng-template #FeedbackModal let-modal >
+
+    <div class="modal-header bg-primary">
+        <h4 class="modal-title text-light font-weight-bold" >Thêm phản hồi, góp ý</h4>
+      <button type="reset" form="editroomform"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body container-fluid justify-content-center  p-0 m-0 mb-3"  >
+        <div class="row  justify-content-center m-0">
+            <div class="col-12 card p-0 shadow border">
+                
+                <div class="card-body">
+                    <form class="form" id="editroomform" novalidate 
+                     (ngSubmit)="onFormFeedbackSubmit()" 
+                     [formGroup]="frFeedback" 
+                     #editroomform = "ngForm" >
+
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="contractid"><h5>Nơi nhận<sup class="text-danger">(*)</sup></h5></label>
+                                <select  class="form-control form-control-user"  placeholder="Nhà trọ"
+                                name="contractid" id="contractid"  formControlName="contractid"  
+                                >
+                                    <option value="" selected >Chọn nơi nhận</option>
+                                    <option *ngFor="let contract of  contracts; index as i"   [value]="contract.id" >{{contract.branchName}} - {{contract.branchAddress}} </option>
+                                </select>
+
+                                <div  *ngIf="frFeedback.controls['contractid']?.hasError('required')
+                                && (frFeedback.controls['contractid']?.touched || (isValidFeedbackFormSubmitted!= null && !isValidFeedbackFormSubmitted)) " 
+                                class="help-block text-danger"
+                                >Vui lòng chọn nơi nhận !</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="title"><h5>Chủ đề<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control form-control-user" placeholder="Chủ đề" 
+                                name="title" id="title" formControlName="title"
+                                >
+                                <div  *ngIf="frFeedback.controls['title']?.hasError('required')
+                                && (frFeedback.controls['title']?.touched 
+                                || (isValidFeedbackFormSubmitted != null 
+                                && !isValidFeedbackFormSubmitted ))" 
+                                class="help-block text-danger"
+                                > Vui lòng nhập chủ đề !</div>
+                            </div>
+                        </div>
+                
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="content"><h5>Nội dung<sup class="text-danger">(*)</sup></h5></label>
+                                <textarea type="text" class="form-control form-control-user" placeholder="Nội dung" 
+                                name="content" id="content" formControlName="content"
+                                 ></textarea>
+                                 <div  *ngIf="frFeedback.controls['content']?.hasError('required')
+                                 && (frFeedback.controls['content']?.touched 
+                                 || (isValidFeedbackFormSubmitted != null 
+                                 && !isValidFeedbackFormSubmitted )) " 
+                                 class="help-block text-danger"
+                                 > Vui lòng nhập nội dung !</div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="submit" form="editroomform" class="btn btn-danger">Cập nhật</button>
+        <button type="reset" form="editroomform" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+        
+    </div>
+</ng-template>

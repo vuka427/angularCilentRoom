@@ -7,7 +7,7 @@ import { ContractComponent } from './contract/contract.component';
 import { InvoiceComponent } from './invoice/invoice.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { StatisticalComponent } from './statistical/statistical.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ValidationModule } from 'src/app/shared/validation/validation.module';
 import { DataTablesModule } from 'angular-datatables';
 import {NgxPrintModule} from 'ngx-print';
@@ -30,6 +30,7 @@ import { Imports_pipeModule } from 'src/app/shared/pipe/imports_pipe.module';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     TenantRoutingModule,
     ValidationModule,
     DataTablesModule,
