@@ -21,7 +21,7 @@
                 <label>phòng</label>
               <select id='gBranch' [(ngModel)]="branch_filter" (change)="rerender()" class="form-control" placement="top" ngbTooltip="Nhà trọ" [openDelay]="300" [closeDelay]="500">
                   <option selected value='0'>-- tất cả phòng --</option>
-                  <option *ngFor="let item of branches, index as i" value='{{item.id}}' >phòng {{item.roomNumber}}-{{item.branchName}}</option>
+                  <option *ngFor="let item of branches, index as i" value='{{item.id}}' >phòng {{item.roomNumber}}-{{item.branchName}}-{{item.commencingOn}}</option>
               </select> 
             </li>
           

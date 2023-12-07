@@ -197,7 +197,7 @@
     
     <div class="modal-body container-fluid">
         <form id="invoice-end-form"  novalidate  
-        (ngSubmit)="endContract()" 
+        (ngSubmit)="endContract()"  
         [appValidGreater]="['oldwaternumber', 'newwaternumber']"
         [appValidGreaterTwo]="['oldelectricnumber', 'newelectricnumber']" 
           [formGroup]="frInvoice" #fi="ngForm"  >

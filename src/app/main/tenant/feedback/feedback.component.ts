@@ -54,7 +54,8 @@ export class FeedbackComponent {
     });
 
     this.dtOptions = {
-      serverSide: true,    
+      serverSide: true,   
+      searching: false,  
       ajax: (dataTablesParameters: any, callback) => {
         this._data.postForDataTable(
             '/api/feedback/tenant/all',
@@ -114,6 +115,18 @@ export class FeedbackComponent {
 
 
 
+  }
+
+  public rerender(): void {
+
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      //dtInstance.destroy();
+      dtInstance.ajax.reload();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next('');
+
+    });
   }
 
    // load dữ liệu ban đầu
@@ -194,6 +207,8 @@ export class FeedbackComponent {
       error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại !");console.log(err);},
       complete: () => { 
         this._notify.printSuccessMessage("Đã gửi góp ý !"); 
+       this.closeAddAreaModal();
+       this.rerender();
       },
     }
   );

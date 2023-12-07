@@ -381,7 +381,7 @@ export class TransactComponent implements OnInit, OnDestroy, AfterViewInit {
         complete: () => {  
           this._notify.printSuccessMessage("Kết thúc hợp đồng thành công !");
           this.closeEndContractModal(); 
-          this.rerender();
+          this.rerender(); 
         }, 
       });
     }else{
