@@ -111,7 +111,7 @@ export class InvoiceTransactComponent implements OnInit , OnDestroy, AfterViewIn
       },
       language: DataTableLanguage.vietnam_datatables,
       columns: [{
-          title: 'STT',
+          title: 'ID',
           data: 'id'
         }, 
         {

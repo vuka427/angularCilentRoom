@@ -4,7 +4,10 @@
     <h5>Thông kế theo nhà trọ </h5>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
       <h5 class="navbar-brand active mb-1">Bộ lọc</h5>
-        <div class="collapse navbar-collapse" id="navbarm">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="" role="button"><i class="fas fa-tools text-primary"></i></span>
+      </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             
             <li class="nav-item m-2">
@@ -76,6 +79,53 @@
         </div>
       </div>
     </div>
+    
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 m-0 p-0">
+           <div class="col-12 mb-4">
+               <div class="card border-left-primary shadow h-100 py-2">
+                   <div class="card-body">
+                       <div class="row no-gutters align-items-center">
+                           <div class="col mr-2">
+                               <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                   Tổng số khách trọ</div>
+                               <div class="h5 mb-0 font-weight-bold text-gray-800">{{statistic.totalMember}}</div>
+                           </div>
+                           <div class="col-auto">
+                               <i class="fas fa-user-friends fa-2x text-gray-300"></i>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+        </div>
+       
+
+      <!-- Area Chart -->
+      <div class="col-xl-9 ">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Lưu lượng khách trọ</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="MemberChart"></canvas>
+                </div>
+            </div>
+        </div>
+      </div>
+      
+    </div><!--End row Content Row -->
 
     <!-- Content Row -->
     <div class="row">
@@ -125,31 +175,6 @@
       
     </div><!--End row Content Row -->
 
-    <!-- Content Row -->
-    <div class="row">
-       <!-- Area Chart -->
-       <div class="col-12 ">
-         <div class="card shadow mb-4">
-             <!-- Card Header - Dropdown -->
-             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                 <h6 class="m-0 font-weight-bold text-primary">Lưu lượng khách trọ</h6>
-                 <div class="dropdown no-arrow">
-                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                         <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                     </a>
-                 </div>
-             </div>
-             <!-- Card Body -->
-             <div class="card-body">
-                 <div class="chart-area">
-                     <canvas id="MemberChart"></canvas>
-                 </div>
-             </div>
-         </div>
-       </div>
-       
-     </div><!--End row Content Row -->
    
 
   </div>

@@ -487,7 +487,7 @@
         </div>
         
         <div class="modal-footer">
-            <button type="submit" form="createroomform" class="btn btn-danger"  >Đồng ý</button>
+            <button type="submit" form="createroomform" class="btn btn-primary"  >Thêm</button>
             <button type="reset" form="createroomform" class="btn btn-outline-primary" (click)="closeCreateRoomModal()"  (click)="modal.close()" >Hủy</button>
             
         </div>
@@ -1084,7 +1084,7 @@
     </div>
     
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+        <button type="button" class="btn btn-outline-primary" (click)="modal.close()" >Đóng</button>
     </div>
 </ng-template>
 
@@ -1392,7 +1392,7 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-success" styleSheetFile="assets/css/sb-admin-2.min.css" printSectionId="invoiceDetail_table" ngxPrint>In</button>
         <button type="button" *ngIf="!invoiceDetail.isApproved"  class="btn btn-primary" (click)="openInvoicePayModal(invoiceDetail.id)" >Thanh toán</button>
-        <button type="button"  class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+        <button type="button"  class="btn btn-outline-primary" (click)="modal.close()" >Đóng</button>
     </div>
 
 </ng-template>

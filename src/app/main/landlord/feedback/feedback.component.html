@@ -13,7 +13,7 @@
  <ng-template #detailEmailModal let-modal  >
   
     <div class="modal-header bg-primary">
-        <h5 class="modal-title text-light" id="detailModalLabel">Chi tiết Email</h5>
+        <h5 class="modal-title text-light" id="detailModalLabel">Chi tiết phản hồi</h5>
       <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
         <span class="text-light" aria-hidden="true">&times;</span>
       </button>
@@ -24,7 +24,7 @@
       <div class="form-group">
         <div class="col-xs-6">
             <label for=""><h5>Nội dung </h5></label>
-            <span class="emailcontent"  #emailcontent [innerHTML]="selectEmail.content"> </span>  
+            <div class="emailcontent"  #emailcontent [innerHTML]="selectEmail.content"> </div>  
 
         </div>
     </div>

@@ -1,1 +1,111 @@
-<p>statistical works!</p>
+<h4>Thống kê chung</h4>
+<hr>
+<div class="card shadow p-3 container-fluid" >
+    <h5>Thông kế theo phòng</h5>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+      <h5 class="navbar-brand active mb-1">Bộ lọc</h5>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="" role="button"><i class="fas fa-tools text-primary"></i></span>
+      </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            
+            <li class="nav-item m-2">
+              <label>Năm </label>
+              <select id='gMonth2' [(ngModel)]="year_filter" (change)="rerender()" class="form-control" placement="top" ngbTooltip="Năm" [openDelay]="300" [closeDelay]="500">
+                  <option selected value='0'>-- chọn năm --</option>
+                  <option *ngFor="let item of [].constructor(10), index as i" value='{{i+2023}}' >{{i+2023}}</option>
+              </select> 
+            </li>
+            <li class="nav-item m-2">
+                <label>phòng</label>
+              <select id='gBranch' [(ngModel)]="branch_filter" (change)="rerender()" class="form-control" placement="top" ngbTooltip="Nhà trọ" [openDelay]="300" [closeDelay]="500">
+                  <option selected value='0'>-- tất cả phòng --</option>
+                  <option *ngFor="let item of branches, index as i" value='{{item.id}}' >phòng {{item.roomNumber}}-{{item.branchName}}</option>
+              </select> 
+            </li>
+          
+          </ul>
+        </div>
+    </nav>
+
+    <!-- Content Row -->
+    <div class="row">
+      <!-- Area Chart -->
+      <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Chi phí trọ</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="EarningChart"></canvas>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+    <!-- Content Row -->
+    <div class="row">
+       <!-- Area Chart -->
+       <div class="col-xl-6 col-lg-6">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Điện</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="ElectricityChart"></canvas>
+                </div>
+            </div>
+        </div>
+      </div>
+      
+      <!-- Area Chart -->
+      <div class="col-xl-6 col-lg-6 ">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Nước</h6>
+                <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <div class="chart-area">
+                    <canvas id="WanterChart"></canvas>
+                </div>
+            </div>
+        </div>
+      </div>
+      
+    </div><!--End row Content Row -->
+
+   
+
+  </div>
+
+

@@ -1,4 +1,4 @@
-<button class="btn btn-sm btn-primary" (click)="openAddAreaModal()">Thêm phản hồi góp ý</button>
+<button class="btn btn-sm btn-success" (click)="openAddAreaModal()">Thêm phản hồi góp ý</button>
 <hr>
 <div class="card shadow p-3"   >
   
@@ -12,8 +12,8 @@
  <!--modal detail-->
  <ng-template #detailEmailModal let-modal >
   
-    <div class="modal-header bg-primary">
-        <h5 class="modal-title text-light" id="detailModalLabel">Chi tiết Email</h5>
+    <div class="modal-header bg-success">
+        <h5 class="modal-title text-light" id="detailModalLabel">Chi tiết phản hồi</h5>
         <button type="reset" form="area-form" class="close" aria-label="Close" (click)="modal.dismiss()">
         <span class="text-light" aria-hidden="true">&times;</span>
       </button>
@@ -22,8 +22,9 @@
     <div class="modal-body container-fluid">
       <div class="form-group">
         <div class="col-xs-6">
-            <label for=""><h5>Nội dung </h5></label>
-            <span class="emailcontent"  #emailcontent > </span>  
+            <label for=""><h5>Nội dung</h5></label>
+            <hr>
+            <span> {{selectFeedback.content}} </span>  
 
         </div>
     </div>
@@ -41,7 +42,7 @@
 <!-- chỉnh sửa phòng  -->
 <ng-template #FeedbackModal let-modal >
 
-    <div class="modal-header bg-primary">
+    <div class="modal-header bg-success">
         <h4 class="modal-title text-light font-weight-bold" >Thêm phản hồi, góp ý</h4>
       <button type="reset" form="editroomform"  class="close" aria-label="Close" (click)="modal.dismiss()">
         <span class="text-light" aria-hidden="true">&times;</span>
@@ -111,8 +112,8 @@
     </div>
     
     <div class="modal-footer">
-        <button type="submit" form="editroomform" class="btn btn-danger">Cập nhật</button>
-        <button type="reset" form="editroomform" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+        <button type="submit" form="editroomform" class="btn btn-success">Gửi</button>
+        <button type="reset" form="editroomform" class="btn btn-outline-secondary" (click)="modal.close()" >Hủy</button>
         
     </div>
 </ng-template>

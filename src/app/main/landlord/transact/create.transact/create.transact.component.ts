@@ -12,12 +12,15 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 import {CKEConfig} from 'src/app/core/cke5/cke5.config'  ;
 import { UtilityService } from 'src/app/core/services/utility.service';
-
+import { LoggedInUser } from 'src/app/core/domain/loggedin.user';
+import { SystemConstants } from 'src/app/core/common/system.constants';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-create.transact',
   templateUrl: './create.transact.component.html',
-  styleUrls: ['./create.transact.component.css']
+  styleUrls: ['./create.transact.component.css'],
+  providers: [DatePipe]
 })
 export class CreateTransactComponent implements OnInit {
 
@@ -29,7 +32,8 @@ export class CreateTransactComponent implements OnInit {
     private _elementRef: ElementRef,
     private _render: Renderer2,
     private _modalService: NgbModal,
-    private _utility: UtilityService
+    private _utility: UtilityService,
+    private _datePipe : DatePipe
   ){}
 
 
@@ -88,6 +92,7 @@ export class CreateTransactComponent implements OnInit {
     });
 
     this.loadData();
+    this.loadDataLandlord();
    
   }
 
@@ -102,7 +107,47 @@ export class CreateTransactComponent implements OnInit {
         error: err => {console.log(err); this._data.handleError(err); },
         complete: () => { console.log("load all room"); }, 
       });
+
+
+      
   }
+
+  public currentUser? : LoggedInUser;
+  public userProfile: any = {
+    id: "",
+    userName: "",
+    fullName: "",
+    email: "",
+    avatarUrl: "#",
+    dateOfBirth: new Date,
+    phone: "",
+    ccccd: "",
+    address: ""
+   };
+  loadDataLandlord(): void{
+
+    this.currentUser = JSON.parse( localStorage.getItem(SystemConstants.CURRENT_USER)?? "" );
+    
+
+    this._data.get('/api/user/getuserprofile?userid='+this.currentUser?.userid).subscribe({
+    next: (res:Response)=>{
+        this.userProfile = res ;
+        this.userProfile.dateOfBirth = this._datePipe.transform(this.userProfile.dateOfBirth, "yyyy-MM-dd");
+        this.frcontract.patchValue({
+          a_lessor : this.userProfile.fullName,
+          a_dateofbirth : this.userProfile.dateOfBirth,
+          a_cccd: this.userProfile.ccccd,
+          a_permanentaddress : this.userProfile.address,
+          a_phone: this.userProfile.phone
+        });
+        console.log( this.userProfile);
+
+      },
+      error: this._data.handleError,
+      complete: () => {console.log("get user profile success !");} 
+    });
+  }
+
 
   public onSubmit(){
     console.log('submit');

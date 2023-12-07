@@ -1,6 +1,6 @@
 
-<div class="bg-gradient-primary h-100">
-    <div class="container " >
+<div class=" h-100">
+    <div class="container-fluid " >
         <!-- Outer Row -->
         <div class="row justify-content-center">
 
@@ -8,152 +8,168 @@
 
                 <div class="row o-hidden my-5  justify-content-center">
 
-                    <div class="card border-0 shadow-lg col-lg-6  ">
-                        <div class="card-body p-5">
+                    <div class="card border-0 shadow-lg  col-lg-6 ">
+                        <div class="card-body p-5 container-fluid">
+
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4 font-weight-bold">Đăng ký tài khoản chủ trọ</h1>
                             </div>
                             <hr>
-                            <div class="text-center">
-                                <h5 class="small text-primary" >Thông tin tài khoản</h5>
-                            </div>
-                          
                             <form class="user" name="form" (ngSubmit)="f.form.valid && register()" #f="ngForm" novalidate [appMatchPassword]="['password', 'confirmpassword']">
-                                <div class="text-primary">
-                                    <h6 class="h6 font-weight-bold">Tên tài khoản <sup class="text-danger">(*)</sup></h6>
+                            <div class="row">
+                                <div class=" col-lg-6">
+                                    <div class="text-center">
+                                        <h5 class="small text-primary" >Thông tin tài khoản</h5>
+                                    </div>
+                                    <div class="text-primary">
+                                        <h6 class="h6 font-weight-bold">Tên tài khoản <sup class="text-danger">(*)</sup></h6>
+                                    </div>
+                                    <div class="form-group" [ngClass]="{'has-error':f.submitted && !username.valid}">
+                                        <input type="text" class="form-control form-control-user"
+                                            id="username" aria-describedby="emailHelp"
+                                            placeholder="Tài khoản"
+                                            name="username" [(ngModel)]="model.username" #username="ngModel" required appValidUsername minlength="3" maxlength="256"
+                                            >
+                                        <div *ngIf="f.submitted && !username.valid " class="help-block text-danger">Vui lòng nhập tên tài khoản !</div>
+                                        <div *ngIf="username.errors?.['usernamevalid']" class="help-block text-danger">Tên tài khoản không hợp lệ !<br> Tài khoản hợp lệ chỉ chưa các ký tự a-z, A-Z, 0-9 </div>
+                                        <div *ngIf="username.errors?.['minlength']" class="help-block text-danger">Tên tài khoản tối thiểu 3 ký tự</div>
+                                        <div *ngIf="username.errors?.['maxlength']" class="help-block text-danger">Tên tài khoản tối đa 256 ký tự</div>
+                                    </div>
+                                    <div class="text-primary">
+                                        <h6 class="h6 font-weight-bold">Email <sup class="text-danger">(*)</sup></h6>
+                                    </div>
+                                    <div class="form-group" [ngClass]="{'has-error':f.submitted && !username.valid}">
+                                        <input type="email" class="form-control form-control-user"
+                                            id="email" aria-describedby="emailHelp"
+                                            placeholder="Địa chi email"
+                                            name="email" [(ngModel)]="model.email" #email="ngModel" required appValidEmail
+                                            >
+                                        <div *ngIf="f.submitted && !email.valid" class="help-block text-danger">Vui lòng nhập email !</div>
+                                        <div *ngIf="email.errors?.['emailvalid']" class="help-block text-danger">Địa chỉ email không hợp lệ !</div>
+                                    </div>
+                                    <div class="text-primary">
+                                        <h6 class="h6 font-weight-bold">Mật khẩu <sup class="text-danger">(*)</sup></h6>
+                                    </div>
+                                    <div class="form-group position-relative" [ngClass]="{'has-error':f.submitted && !password.valid}">
+                                        <input [type]="fieldTextType ? 'text' : 'password'" class="form-control form-control-user"
+                                            id="password" placeholder="Mật khẩu"
+                                            name="password" [(ngModel)]="model.password" #password="ngModel" required appValidPassword minlength="6" maxlength="50"
+                                            >
+                                            <span class="showpaswdbtn ">
+                                                <i class="fa"
+                                                [ngClass]="{
+                                                  'fa-eye-slash': !fieldTextType,
+                                                  'fa-eye': fieldTextType
+                                                }"
+                                                (click)="toggleFieldTextType()"></i>
+                                            </span>
+                                        <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập mật khẩu !</div>
+                                        <div *ngIf="password.errors?.['minlength']" class="help-block text-danger">Mật khẩu tối thiểu 6 ký tự</div>
+                                        <div *ngIf="password.errors?.['maxlength']" class="help-block text-danger">Mật khẩu tối đa 50 ký tự</div>
+                                        <div *ngIf="password.errors?.['passwordvalid']" class="help-block text-danger">
+                                            Mật khẩu phải chứa ít nhất một chữ số, chữ hoa, chữ thường và ký tự đặc biệt ($!%*?&)
+                                        </div>
+    
+                                    </div>
+                                    <div class="text-primary">
+                                        <h6 class="h6 font-weight-bold">Nhập lại mật khẩu <sup class="text-danger">(*)</sup></h6>
+                                    </div>
+                                    <div class="form-group position-relative" [ngClass]="{'has-error':f.submitted && !password.valid}">
+                                        <input [type]="fieldTextType ? 'text' : 'password'" class="form-control form-control-user"
+                                            id="confirmpassword" placeholder="Nhập lại mật khẩu"
+                                            name="confirmpassword" [(ngModel)]="model.confirmpassword" #confirmpassword="ngModel" required
+                                            >
+                                            <span class="showpaswdbtn ">
+                                                <i class="fa"
+                                                [ngClass]="{
+                                                  'fa-eye-slash': !fieldTextType,
+                                                  'fa-eye': fieldTextType
+                                                }"
+                                                (click)="toggleFieldTextType()"></i>
+                                            </span>
+                                        <div *ngIf="f.submitted && !confirmpassword.valid" class="help-block text-danger">Vui lòng nhập lại mật khẩu !</div>
+                                        <div *ngIf="confirmpassword.errors?.['matching']" class="help-block text-danger">Mật khẩu không khớp !</div>
+                                    </div>
                                 </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !username.valid}">
-                                    <input type="text" class="form-control form-control-user"
-                                        id="username" aria-describedby="emailHelp"
-                                        placeholder="Tài khoản"
-                                        name="username" [(ngModel)]="model.username" #username="ngModel" required appValidUsername minlength="3" maxlength="256"
-                                        >
-                                    <div *ngIf="f.submitted && !username.valid " class="help-block text-danger">Vui lòng nhập tên tài khoản !</div>
-                                    <div *ngIf="username.errors?.['usernamevalid']" class="help-block text-danger">Tên tài khoản không hợp lệ !<br> Tài khoản hợp lệ chỉ chưa các ký tự a-z, A-Z, 0-9 </div>
-                                    <div *ngIf="username.errors?.['minlength']" class="help-block text-danger">Tên tài khoản tối thiểu 3 ký tự</div>
-                                    <div *ngIf="username.errors?.['maxlength']" class="help-block text-danger">Tên tài khoản tối đa 256 ký tự</div>
-                                </div>
-                                <div class="text-primary">
-                                    <h6 class="h6 font-weight-bold">Email <sup class="text-danger">(*)</sup></h6>
-                                </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !username.valid}">
-                                    <input type="email" class="form-control form-control-user"
-                                        id="email" aria-describedby="emailHelp"
-                                        placeholder="Địa chi email"
-                                        name="email" [(ngModel)]="model.email" #email="ngModel" required appValidEmail
-                                        >
-                                    <div *ngIf="f.submitted && !email.valid" class="help-block text-danger">Vui lòng nhập email !</div>
-                                    <div *ngIf="email.errors?.['emailvalid']" class="help-block text-danger">Địa chỉ email không hợp lệ !</div>
-                                </div>
-                                <div class="text-primary">
-                                    <h6 class="h6 font-weight-bold">Mật khẩu <sup class="text-danger">(*)</sup></h6>
-                                </div>
-                                <div class="form-group position-relative" [ngClass]="{'has-error':f.submitted && !password.valid}">
-                                    <input [type]="fieldTextType ? 'text' : 'password'" class="form-control form-control-user"
-                                        id="password" placeholder="Mật khẩu"
-                                        name="password" [(ngModel)]="model.password" #password="ngModel" required appValidPassword minlength="6" maxlength="50"
-                                        >
-                                        <span class="showpaswdbtn ">
-                                            <i class="fa"
-                                            [ngClass]="{
-                                              'fa-eye-slash': !fieldTextType,
-                                              'fa-eye': fieldTextType
-                                            }"
-                                            (click)="toggleFieldTextType()"></i>
-                                        </span>
-                                    <div *ngIf="f.submitted && !password.valid" class="help-block text-danger">Vui lòng nhập mật khẩu !</div>
-                                    <div *ngIf="password.errors?.['minlength']" class="help-block text-danger">Mật khẩu tối thiểu 6 ký tự</div>
-                                    <div *ngIf="password.errors?.['maxlength']" class="help-block text-danger">Mật khẩu tối đa 50 ký tự</div>
-                                    <div *ngIf="password.errors?.['passwordvalid']" class="help-block text-danger">
-                                        Mật khẩu phải chứa ít nhất một chữ số, chữ hoa, chữ thường và ký tự đặc biệt ($!%*?&)
+
+                                <div class=" col-lg-6">
+                                    <div class="text-center">
+                                        <h5 class="small text-primary" >Thông tin cá nhân</h5>
+                                    </div>
+                                    <div class="text-primary">
+                                        <h6 class="h6 font-weight-bold">Họ tên <sup class="text-danger">(*)</sup></h6>
+                                    </div>
+                                    <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
+                                        <input type="text" class="form-control form-control-user"
+                                            id="fullname" placeholder="Họ và tên"
+                                            name="fullname" [(ngModel)]="model.fullname" #fullname="ngModel" required
+                                            >
+                                        <div *ngIf="f.submitted && !fullname.valid" class="help-block text-danger">Vui lòng nhập Họ tên !</div>
+                                    </div>
+                                    <div class="text-primary">
+                                        <h6 class="h6 font-weight-bold">Ngày sinh <sup class="text-danger">(*)</sup></h6>
+                                    </div>
+                                    <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
+                                        <input type="date" class="form-control form-control-user"
+                                            id="dateofbirth" placeholder="Ngày sinh"
+                                            name="dateofbirth" [(ngModel)]="model.dateofbirth" #dateofbirth="ngModel" required appValidDateofbirth
+                                            >
+                                        <div *ngIf="f.submitted && !dateofbirth.valid" class="help-block text-danger">Vui lòng nhập ngày sinh !</div>
+                                        <div *ngIf="dateofbirth.errors?.['dateofbirthinvalid']" class="help-block text-danger">Ngày sinh không hợp lệ !</div>
+                                    </div>
+                                    <div class="text-primary">
+                                        <h6 class="h6 font-weight-bold">Số điện thoại <sup class="text-danger">(*)</sup></h6>
+                                    </div>
+                                    <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
+                                        <input type="text" class="form-control form-control-user"
+                                            id="phone" placeholder="Số điện thoại"
+                                            name="phone" [(ngModel)]="model.phone" #phone="ngModel" required maxlength="10" minlength="10" appValidPhone appOnlyNumber
+                                            >
+                                        <div *ngIf="f.submitted && !phone.valid" class="help-block text-danger">Vui lòng nhập số điện thoại !</div>
+                                        <div *ngIf="phone.errors?.['maxlength'] || phone.errors?.['phoneinvalid'] || phone.errors?.['minlength']" class="help-block text-danger">Số điện thoại không hợp lệ !</div>
+                                        
+                                    </div>
+                                    <div class="text-primary">
+                                        <h6 class="h6 font-weight-bold">Căn cước công dân <sup class="text-danger">(*)</sup></h6>
+                                    </div>
+                                    <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
+                                        <input type="text" class="form-control form-control-user"
+                                            id="cccd" placeholder="Số căn cước công dân"
+                                            name="cccd" [(ngModel)]="model.cccd" #cccd="ngModel" required minlength="12" maxlength="12" appValidCccd appOnlyNumber
+                                            >
+                                        <div *ngIf="f.submitted && !cccd.valid" class="help-block text-danger">Vui lòng nhập số căn cước công dân !</div>
+                                        <div *ngIf="cccd.errors?.['maxlength'] || cccd.errors?.['minlength'] " class="help-block text-danger">Số căn cước công dân phải đủ 12 ký tự !</div>
+                                        <div *ngIf="cccd.errors?.['cccdinvalid']" class="help-block text-danger">Số căn cước công dân không hợp lệ !</div>
+                                    </div>
+                                   
+                                    <div class="text-primary">
+                                        <h6 class="h6 font-weight-bold">Địa chỉ <sup class="text-danger">(*)</sup></h6>
+                                    </div>
+                                    <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
+                                        <input type="text" class="form-control form-control-user"
+                                            id="address" placeholder="Địa chỉ"
+                                            name="address" [(ngModel)]="model.address" #address="ngModel" required
+                                            >
+                                        <div *ngIf="f.submitted && !address.valid" class="help-block text-danger">Vui lòng nhập địa chỉ !</div>
                                     </div>
 
                                 </div>
-                                <div class="text-primary">
-                                    <h6 class="h6 font-weight-bold">Nhập lại mật khẩu <sup class="text-danger">(*)</sup></h6>
-                                </div>
-                                <div class="form-group position-relative" [ngClass]="{'has-error':f.submitted && !password.valid}">
-                                    <input [type]="fieldTextType ? 'text' : 'password'" class="form-control form-control-user"
-                                        id="confirmpassword" placeholder="Nhập lại mật khẩu"
-                                        name="confirmpassword" [(ngModel)]="model.confirmpassword" #confirmpassword="ngModel" required
-                                        >
-                                        <span class="showpaswdbtn ">
-                                            <i class="fa"
-                                            [ngClass]="{
-                                              'fa-eye-slash': !fieldTextType,
-                                              'fa-eye': fieldTextType
-                                            }"
-                                            (click)="toggleFieldTextType()"></i>
-                                        </span>
-                                    <div *ngIf="f.submitted && !confirmpassword.valid" class="help-block text-danger">Vui lòng nhập lại mật khẩu !</div>
-                                    <div *ngIf="confirmpassword.errors?.['matching']" class="help-block text-danger">Mật khẩu không khớp !</div>
-                                </div>
+                            </div>
+
+
+                            
+                           
+                          
+                            
+                              
                                 <hr>
-                                <div class="text-center">
-                                    <h5 class="small text-primary" >Thông tin cá nhân</h5>
-                                </div>
-                                <div class="text-primary">
-                                    <h6 class="h6 font-weight-bold">Họ tên <sup class="text-danger">(*)</sup></h6>
-                                </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
-                                    <input type="text" class="form-control form-control-user"
-                                        id="fullname" placeholder="Họ và tên"
-                                        name="fullname" [(ngModel)]="model.fullname" #fullname="ngModel" required
-                                        >
-                                    <div *ngIf="f.submitted && !fullname.valid" class="help-block text-danger">Vui lòng nhập Họ tên !</div>
-                                </div>
-                                <div class="text-primary">
-                                    <h6 class="h6 font-weight-bold">Ngày sinh <sup class="text-danger">(*)</sup></h6>
-                                </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
-                                    <input type="date" class="form-control form-control-user"
-                                        id="dateofbirth" placeholder="Ngày sinh"
-                                        name="dateofbirth" [(ngModel)]="model.dateofbirth" #dateofbirth="ngModel" required appValidDateofbirth
-                                        >
-                                    <div *ngIf="f.submitted && !dateofbirth.valid" class="help-block text-danger">Vui lòng nhập ngày sinh !</div>
-                                    <div *ngIf="dateofbirth.errors?.['dateofbirthinvalid']" class="help-block text-danger">Ngày sinh không hợp lệ !</div>
-                                </div>
-                                <div class="text-primary">
-                                    <h6 class="h6 font-weight-bold">Số điện thoại <sup class="text-danger">(*)</sup></h6>
-                                </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
-                                    <input type="text" class="form-control form-control-user"
-                                        id="phone" placeholder="Số điện thoại"
-                                        name="phone" [(ngModel)]="model.phone" #phone="ngModel" required maxlength="10" minlength="10" appValidPhone appOnlyNumber
-                                        >
-                                    <div *ngIf="f.submitted && !phone.valid" class="help-block text-danger">Vui lòng nhập số điện thoại !</div>
-                                    <div *ngIf="phone.errors?.['maxlength'] || phone.errors?.['phoneinvalid'] || phone.errors?.['minlength']" class="help-block text-danger">Số điện thoại không hợp lệ !</div>
-                                    
-                                </div>
-                                <div class="text-primary">
-                                    <h6 class="h6 font-weight-bold">Căn cước công dân <sup class="text-danger">(*)</sup></h6>
-                                </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
-                                    <input type="text" class="form-control form-control-user"
-                                        id="cccd" placeholder="Số căn cước công dân"
-                                        name="cccd" [(ngModel)]="model.cccd" #cccd="ngModel" required minlength="12" maxlength="12" appValidCccd appOnlyNumber
-                                        >
-                                    <div *ngIf="f.submitted && !cccd.valid" class="help-block text-danger">Vui lòng nhập số căn cước công dân !</div>
-                                    <div *ngIf="cccd.errors?.['maxlength'] || cccd.errors?.['minlength'] " class="help-block text-danger">Số căn cước công dân phải đủ 12 ký tự !</div>
-                                    <div *ngIf="cccd.errors?.['cccdinvalid']" class="help-block text-danger">Số căn cước công dân không hợp lệ !</div>
-                                </div>
                                
-                                <div class="text-primary">
-                                    <h6 class="h6 font-weight-bold">Địa chỉ <sup class="text-danger">(*)</sup></h6>
-                                </div>
-                                <div class="form-group" [ngClass]="{'has-error':f.submitted && !password.valid}">
-                                    <input type="text" class="form-control form-control-user"
-                                        id="address" placeholder="Địa chỉ"
-                                        name="address" [(ngModel)]="model.address" #address="ngModel" required
-                                        >
-                                    <div *ngIf="f.submitted && !address.valid" class="help-block text-danger">Vui lòng nhập địa chỉ !</div>
-                                </div>
                                 <button [disabled]="loading" href="index.html" class="btn btn-primary btn-user btn-block font-weight-bold">
                                     Đăng Ký
                                 </button>
                                 <img class="text-center" *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
                                 />
-                                <hr>
+                               
                                
                             </form>
                             <hr>

@@ -32,7 +32,7 @@ export class FeedbackComponent {
 
   public dtOptions: DataTables.Settings = {};
  
-  public emailData:any = [];
+  public FeedbackData:any = [];
   public contracts :any = [];
 
   dtTrigger: Subject<any> = new Subject<any>();
@@ -57,13 +57,13 @@ export class FeedbackComponent {
       serverSide: true,    
       ajax: (dataTablesParameters: any, callback) => {
         this._data.postForDataTable(
-            '/api/feedback/all',
+            '/api/feedback/tenant/all',
             dataTablesParameters
           ).subscribe(
             {
               next: resp  => {
                 console.log("Respone=> ", resp)
-                this.emailData = resp.data;
+                this.FeedbackData = resp.data;
                 callback({
                   recordsTotal: resp.recordsTotal,
                   recordsFiltered: resp.recordsFiltered,
@@ -78,15 +78,7 @@ export class FeedbackComponent {
       columns: [{
           title: 'STT',
           data: 'index'
-        }, 
-        {
-          title: 'Tên người nhận',
-          data: 'receiverName'
-        }, 
-        {
-          title: 'Email',
-          data: 'emailReceiver'
-        }, 
+        },
         {
           title: 'Chủ đề',
           data: 'title'
@@ -97,15 +89,15 @@ export class FeedbackComponent {
         }, 
         {
           title: 'Ngày gửi',
-          data: 'dateSend'
+          data: 'createdDate'
         }, 
         {
           title: 'Trạng thái',
           data: null,
           defaultContent: '',
           render: function (data: any, type: any, row: any, full: any) {
-            if (row.status == 'Successed') return '<span class="badge badge-pill badge-success">Gửi thành công</span>';
-            if ( row.status == 'Failed' ) return '<span class="badge badge-pill badge-secondary">Gửi thất bại</span>';
+            if (row.status == 'Read') return '<span class="badge badge-pill badge-warning">Đang xử lý</span>';
+            if ( row.status == 'Unread' ) return '<span class="badge badge-pill badge-primary">Đã nhận</span>';
             return '';
           }
         }, 
@@ -114,7 +106,7 @@ export class FeedbackComponent {
           data: null,
           defaultContent: '',
           render: function (data: any, type: any,row: any, full: any) {
-            return '<button type="button" detailbtn emailindex="'+row.index+'" class="btn btn-sm btn-primary" >Chi tiết </button>';
+            return '<button type="button" detailbtn feedbackindex="'+row.index+'" class="btn btn-sm btn-success" >Chi tiết </button>';
           }
         }
       ]
@@ -142,28 +134,28 @@ export class FeedbackComponent {
 
     this.dtTrigger.next('');
     this.listenerFn =  this._render.listen('document', 'click', (event) => {
-      if (event.target.hasAttribute("emailindex") || event.target.hasAttribute("detailbtn")) {
+      if (event.target.hasAttribute("feedbackindex") || event.target.hasAttribute("detailbtn")) {
           //this.deleteBranch(event.target.getAttribute("branchid"));
-          let emailIndex = 0;
-          emailIndex = event.target.getAttribute("emailindex");
-          this.openModal(emailIndex);
+          let feedbackindex = 0;
+          feedbackindex = event.target.getAttribute("feedbackindex");
+          this.openModal(feedbackindex);
        
         }
       });
   }
 
 
-  public selectEmail:any = {};
+  public selectFeedback:any = {};
 
-  openModal(emailIndex : number){
+  openModal(feedbackindex : number){
  
-    console.log("data=> ",this.emailData);
-    this.selectEmail = {};
+    console.log("data=> ",this.FeedbackData);
+    this.selectFeedback = {};
 
-    this.emailData.forEach( (element :any ) => {
-      if( element.index == emailIndex){
-        this.selectEmail = element;
-        console.log(this.selectEmail);
+    this.FeedbackData.forEach( (element :any ) => {
+      if( element.index == feedbackindex){
+        this.selectFeedback = element;
+        console.log(this.selectFeedback);
       }
     });
     this._modalService.open(this.detailEmailModal, { size: 'lg'});

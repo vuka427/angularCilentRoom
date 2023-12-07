@@ -67,11 +67,7 @@ export class FeedbackComponent {
         {
           title: 'Tên người nhận',
           data: 'receiverName'
-        }, 
-        {
-          title: 'Email',
-          data: 'emailReceiver'
-        }, 
+        },
         {
           title: 'Chủ đề',
           data: 'title'
@@ -82,15 +78,16 @@ export class FeedbackComponent {
         }, 
         {
           title: 'Ngày gửi',
-          data: 'dateSend'
+          data: 'createdDate'
         }, 
         {
           title: 'Trạng thái',
           data: null,
           defaultContent: '',
           render: function (data: any, type: any, row: any, full: any) {
-            if (row.status == 'Successed') return '<span class="badge badge-pill badge-success">Gửi thành công</span>';
-            if ( row.status == 'Failed' ) return '<span class="badge badge-pill badge-secondary">Gửi thất bại</span>';
+            if (row.status == 'Received') return '<span class="badge badge-pill badge-primary">Chưa xử lý</span>';
+            if ( row.status == 'Process' ) return '<span class="badge badge-pill badge-warning">Đang xử lý</span>';
+            if ( row.status == 'Done' ) return '<span class="badge badge-pill badge-success">Đã xử lý</span>';
             return '';
           }
         }, 
