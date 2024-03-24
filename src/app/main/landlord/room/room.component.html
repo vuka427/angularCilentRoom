@@ -1,0 +1,1232 @@
+
+
+
+<div class="card shadow p-3"   >
+    <h5>Danh sách phòng trọ </h5>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+       
+        <div class="collapse navbar-collapse" id="navbarm">
+          <ul class="navbar-nav mr-auto">
+            <li class="navbar-brand ">Trạng thái </li>
+            <li class="nav-item">
+                <select class="form-control" [(ngModel)]="roomStatus" (change)="loadData()">
+                    <option value="none">-- Tất cả --</option>
+                    <option value="empty">Phòng trống</option>
+                    <option value="inhabited">Có người ở</option>
+                </select>
+            </li>
+           
+          </ul>
+          <!--
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i>Tìm kiếm</button>
+          </form>
+        --> 
+        </div>
+    </nav>
+    <!-- Result search -->
+    <div [ngClass]="{'d-none': isSearch}"> 
+
+    </div>
+
+    <!-- normal-->
+    <div [ngClass]="{'d-none': isSearch}">
+        <ul class="nav nav-tabs" id="example-tabs" role="tablist">
+        
+            <li *ngFor="let branch of branches; index as i " class="nav-item">
+                <a attr.id="tab{{i+1}}" [ngClass]="{'nav-link': true,'active' : i==0}" (click)="setCurrentBranch(branch.id, i)"  data-toggle="tab" role="tab"  attr.href="#pane-tab-{{i+1}}">{{(i+1)+'-'+ branch.branchName}}</a>
+            </li>
+        </ul>
+    
+        <div class="tab-content">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <h5 class="navbar-brand active mb-1">Tùy chọn</h5>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="" role="button"><i class="fas fa-tools text-primary"></i></span>
+                </button>
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item ">
+                        <button type="button" class="btn btn-sm btn-primary ml-1 mb-1" (click)="openCreateRoomModal(currentBranchId,null)" > + Thêm phòng</button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button"  class="btn btn-sm btn-primary ml-1 mb-1" (click)="openAddAreaModal()"> + Thêm dãy-tầng</button>
+                    </li>
+                   
+                    
+                  </ul>
+                </div>
+            </nav>
+            
+            <div *ngFor="let branch of branches; index as i " [ngClass]="{'tab-pane fade': true,'show active' : i==0}"  attr.id="pane-tab-{{i+1}}" role="tabpanel" attr.aria-labelledby="tab{{i+1}}">
+                <h5 class="h6 ml-3 mb-0  text-primary"><u>Địa chỉ : {{branch.address}}</u> </h5>
+                <hr>
+                <div *ngFor="let area of branch.areas;index as i ">
+                    
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                        <h5 class=" h6 navbar-brand active mb-1 font-weight-bold">
+                            {{branch.houseType| housetype : true }} - {{area.areaName}}
+                        </h5>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" attr.data-target="#navbarFloorContent-{{area.id}}" attr.aria-controls="navbarFloorContent-{{area.id}}" aria-expanded="false" aria-label="Toggle navigation">
+                          <span class="" role="button"><i class="fas fa-tools text-primary"></i></span>
+                        </button>
+                      
+                        <div class="collapse navbar-collapse" attr.id="navbarFloorContent-{{area.id}}">
+                          <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <button type="button" (click)="openCreateRoomModal(branch.id,area.id)" 
+                                    class="btn btn-sm btn-primary ml-1 mb-1" placement="top" ngbTooltip="Thêm Phòng" 
+                                    [openDelay]="300" [closeDelay]="500"> + Thêm phòng 
+                                </button>
+                            </li>
+                          </ul>
+                          <ul class="navbar-nav ">
+                            <li class="nav-item">
+                                <button type="button" (click)="openEditAreaModal(branch.id,area.id,area.areaName,area.description)"
+                                class="btn btn-sm btn-success ml-1 mb-1" placement="top" ngbTooltip="Chỉnh sửa {{branch.houseType| housetype: false }} " 
+                                [openDelay]="300" [closeDelay]="500"> Chỉnh sửa {{branch.houseType| housetype: false }} 
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button type="button" (click)="openDeleteAreaModal(area.areaName, branch.houseType, area.id)"
+                                class="btn btn-sm btn-danger ml-1 mb-1" placement="top" ngbTooltip="Xóa {{branch.houseType| housetype: false }} " 
+                                [openDelay]="300" [closeDelay]="500"> Xóa {{branch.houseType| housetype: false }} 
+                                </button>
+                            </li>
+                          </ul>
+    
+                        </div>
+                    </nav>
+    
+                    <div class="container-fluid" >
+                        <div class="row ">
+                                <div *ngFor="let room of area.rooms; index as i" class="card m-2" style="width: 230px;" >
+                                    <div  [ngClass]="{'card-header  text-light':true ,'bg-secondary':(room.status=='Empty'),'bg-primary':(room.status=='Inhabited'),'bg-danger':(room.status=='Repair'),'bg-info':(room.status=='Deposit')}"
+                                    >
+                                        <i class="fas fa-home"></i>
+                                        Phòng {{area.areaName}}.{{room.roomNumber}}
+
+                                        <div ngbDropdown class="d-inline-block float-right">
+                                            <a class="dropdown-toggle m-1"  attr.id="dropdownBasic-{{i}}"  ngbDropdownToggle placement="top" ngbTooltip="Tùy chọn" 
+                                            [openDelay]="300" [closeDelay]="500">
+                                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                            </a>
+                                            <div ngbDropdownMenu attr.aria-labelledby="dropdownBasic-{{i}}">
+                                                <button ngbDropdownItem type="button" class="" (click)="openDetailRoomModal(room.id)">Xem</button>
+                                                <button ngbDropdownItem type="button" class="" (click)="openEditRoomModal(room.id,branch.branchName,area.areaName)">Chỉnh sửa</button>
+                                                <button ngbDropdownItem type="button" [disabled]="room.status!='Inhabited'" class="" (click)="openAddMemberModal(room.id)" >Thêm thành viên</button>
+                                                <button ngbDropdownItem type="button" [disabled]="room.status!='Inhabited'" class="" (click)="openCreateInvoiceModal(room.id)" >Lập hóa đơn</button>
+                                                <button ngbDropdownItem type="button" class="text-danger" (click)="openDeleteRoomModal(area.areaName,room.roomNumber,room.id)">Xóa</button> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                    <div class="card-body" (click)="openDetailRoomModal(room.id)">
+                                        <p class="card-text"  placement="top" ngbTooltip="Giá cho thuê" [openDelay]="300" [closeDelay]="500">
+                                            <i class="fas fa-dollar-sign"></i> : {{room.price |FormatVndPipe}} 
+                                        </p>
+                                        <p class="card-text" placement="top" ngbTooltip="Số người ở tối đa" [openDelay]="300" [closeDelay]="500">
+                                            <i class="fas fa-users" ></i> : {{room.maxMember}}
+                                        </p>
+                                        <p class="card-text" placement="top" ngbTooltip="Trạng thái phòng" [openDelay]="300" [closeDelay]="500">
+                                            <i class="fas fa-toggle-on"></i> :
+                                            <span [ngClass]="{'text-secondary':(room.status=='Empty'),'text-primary':(room.status=='Inhabited'),'text-danger':(room.status=='Repair'),'text-info':(room.status=='Deposit')}">
+                                                {{room.status | roomstatus }}
+                                            </span> 
+                                        </p> 
+                                        <p class="card-text" placement="top" ngbTooltip="Diện tích" [openDelay]="300" [closeDelay]="500"> 
+                                            <i class="fas fa-ruler-combined"></i> : {{room.acreage }} m<sup>2</sup>
+                                        </p>
+                                        <p class="card-text" placement="top" ngbTooltip="Tên người thuê" [openDelay]="300" [closeDelay]="500"> 
+                                            <i class="fas fa-user"></i> : {{room.lessee }}
+                                        </p>
+                                    </div>
+                                    
+                                </div>
+                           
+                        </div>
+                    </div>
+    
+                </div>
+    
+            </div>
+            
+        </div>
+
+    </div>
+
+
+</div>
+<!--modal thêm khu vực-->
+<ng-template #addAreaModal let-modal  >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="exampleModalLabel">Thêm dãy-tầng mới</h5>
+      <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body"  >
+      
+       <form id="area-form" (ngSubmit)="onAreaSubmit()" [formGroup]="frArea" #areaform = "ngForm">
+        <div class="form-group">
+            <div class="col-xs-6">
+                <label for="areaname"><h5>Tên dãy-tầng</h5></label>
+                <input type="text" class="form-control form-control-user" 
+                name="areaname" id="areaname" formControlName="areaname"
+                placeholder="Nhập tên dãy-tầng"
+                 >
+                 <div *ngIf=" frArea.controls['areaname']?.hasError('required')
+                 && ( frArea.controls['areaname']?.touched || (isValidAreaFormSubmitted != null && !isValidAreaFormSubmitted) )" class="help-block text-danger"
+                 >Vui lòng nhập tên dãy-tầng !</div>
+            </div>
+            <div class="col-xs-6 mt-3">
+                <label for="description "><h5>Mô tả</h5></label>
+                <input type="text" class="form-control form-control-user" 
+                name="description" id="area-description" formControlName="description"
+                placeholder="Nhập mô tả"
+                 >
+                
+            </div>
+        </div>
+       </form>
+      
+    </div>
+    
+    <div class="modal-footer">
+        <button type="reset" form="area-form" class="btn btn-outline-danger" (click)="modal.close()" >Hủy</button>
+        <button type="submit" form="area-form" class="btn btn-primary" >Thêm</button>
+
+    </div>
+</ng-template>
+
+<!--modal chỉnh sửa khu vực-->
+<ng-template #editAreaModal let-modal  >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="editModalLabel">Chỉnh sữa thông tin dãy-tầng</h5>
+      <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body"  >
+      
+       <form id="area-form" (ngSubmit)="onEditAreaSubmit()" [formGroup]="frUpdateArea" #areaeditform = "ngForm">
+        <div class="form-group">
+            <div class="col-xs-6">
+                <label for="areaname"><h5>Tên dãy-tầng</h5></label>
+                <input type="text" class="form-control form-control-user" 
+                name="areaname" id="areaname" formControlName="areaname"
+                placeholder="Nhập tên dãy-tầng"
+                 >
+                 <div  *ngIf=" frUpdateArea.controls['areaname']?.hasError('required')
+                 && ( frUpdateArea.controls['areaname']?.touched || (isValidAreaFormSubmitted != null && !isValidAreaFormSubmitted) )" 
+                 class="help-block text-danger">Vui lòng nhập tên dãy-tầng !</div>
+            </div>
+            <div class="col-xs-6 mt-3">
+                <label for="description "><h5>Mô tả</h5></label>
+                <input type="text" class="form-control form-control-user" 
+                name="description" id="area-description" formControlName="description"
+                placeholder="Nhập mô tả"
+                >
+            </div>
+        </div>
+       </form>
+      
+    </div>
+    
+    <div class="modal-footer">
+        <button type="reset" form="area-form" class="btn btn-outline-danger" (click)="modal.close()" >Hủy</button>
+        <button type="submit" form="area-form" class="btn btn-primary" >Cập nhật</button>
+
+    </div>
+</ng-template>
+
+    <!--modal xóa khu vực-->
+<ng-template #deleteAreaModal let-modal  >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteModalLabel">Xóa {{areaNameDelete}} </h5>
+      <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body text-center"  >
+      <div class="modal-title">Bạn có chắc chắn xóa {{areaNameDelete}} ?</div>
+      <div class="modal-title text-danger">Bạn không thể khôi phục dữ liệu đã xóa ! </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="submit" form="area-form" class="btn btn-danger" (click)="onDeleteAreaSubmit()" >Đồng ý</button>
+        <button type="reset" form="area-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+        
+    </div>
+</ng-template>
+
+
+
+
+<!--modal thêm phòng  -->
+
+    <ng-template #createRoomModal let-modal  >
+
+        <div class="modal-header bg-primary ">
+            <div class=" "> <h4 class="modal-title text-light font-weight-bold" >Thêm phòng </h4> </div>
+           
+          <button type="reset" form="createroomform"  class="close" aria-label="Close" (click)="modal.dismiss()">
+            <span class="text-light" aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="modal-body container-fluid justify-content-center  p-0 m-0 mb-3"  >
+            <div class="row  justify-content-center m-0">
+                <div class="col-12 card p-0 shadow border ">
+                  
+                    <div class="card-body">
+                        <form class="form" id="createroomform" novalidate  (ngSubmit)="onFormCreateRoomSubmit()" [formGroup]="frRoom" #createroomform = "ngForm" #f="ngForm" >
+                            <div class="text-center">
+                                <h6 class=" text-primary" >Thông tin nhà trọ</h6>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="branchid"><h5>Nhà trọ<sup class="text-danger">(*)</sup></h5></label>
+                                    <select  class="form-control form-control-user"  placeholder="Nhà trọ"
+                                    name="branchid" id="branchid"  formControlName="branchid" (change)="setSelectArea($event)" 
+                                    >
+                                        <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn nhà trọ</option>
+                                        <option *ngFor="let branch of  branches; index as i"   [value]="branch.id">{{branch.branchName}} </option>
+                                    </select>
+                                    <div  *ngIf="frRoom.controls['branchid']?.hasError('required')
+                                    && (frRoom.controls['branchid']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                                    class="help-block text-danger"
+                                    >Vui lòng chọn nhà trọ !</div>
+        
+        
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="areaid"><h5>Dãy-tầng<sup class="text-danger">(*)</sup></h5></label>
+                                    <select class="form-control form-control-user"  placeholder="Tên nhà trọ"
+                                    name="areaid" id="areaid" formControlName="areaid"
+                                    >
+                                        <option [ngValue]="null" [defaultSelected]="true" disabled>Chọn dãy tầng</option>
+                                        <option  *ngFor="let area of  areaSelect; index as i" [value]="area.id"  >{{area.areaName}} </option>
+                                
+                                    </select>
+                                    <div  *ngIf="frRoom.controls['areaid']?.hasError('required')
+                                    && (frRoom.controls['areaid']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                                    class="help-block text-danger"
+                                    >Vui lòng chọn dãy-tầng !</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <h6 class=" text-primary " >Thông tin phòng</h6>
+                            </div>
+                            <hr >
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="roomnumber"><h5>Số phòng<sup class="text-danger">(*)</sup></h5></label>
+                                    <input type="number" class="form-control form-control-user" placeholder="Số phòng" appOnlyNumber
+                                    name="roomnumber" id="roomnumber" formControlName="roomnumber"
+                                     >
+                                     <div  *ngIf="frRoom.controls['roomnumber']?.hasError('required')
+                                     && (frRoom.controls['roomnumber']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                                     class="help-block text-danger"
+                                     > Vui lòng nhập số phòng !</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="ismezzanine"><h5>Phòng có gác lửng<sup class="text-danger">(*)</sup></h5></label>
+                                    <div>
+                                        <span>
+                                            <input type="radio" id="ismezzanine-true" name="ismezzanine" value="true" checked class="mr-1"
+                                            formControlName="ismezzanine"
+                                            >
+                                            <label for="ismezzanine-true" class="mr-3" >Có</label>
+                                        </span>
+                                        <span>
+                                            <input type="radio" id="ismezzanine-false" name="ismezzanine" value="false" class="mr-1"  
+                                            formControlName="ismezzanine"
+                                            >
+                                            <label for="ismezzanine-false" class="mr-3" >không</label>
+                                        </span>
+                                    </div>
+                                    <div  *ngIf="frRoom.controls['ismezzanine']?.hasError('required')
+                                        && (frRoom.controls['ismezzanine']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                                        class="help-block text-danger"
+                                        > Vui lòng chọn trạng thái gác !</div>
+                                    
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                  <label for="price"><h5>Giá cho thuê<sup class="text-danger">(*) </sup><sub>(vnđ/tháng)</sub></h5></label>
+                                    <input type="number" class="form-control" name="price" id="price" placeholder="Giá cho thuê" appOnlyNumber
+                                     formControlName="price"
+                                     >
+                                     <div  *ngIf="frRoom.controls['price']?.hasError('required')
+                                     && (frRoom.controls['price']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                                     class="help-block text-danger"
+                                     > Vui lòng nhập giá cho thuê !</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="imaxmember"><h5>Số người ở tối đa<sup class="text-danger">(*) </sup><sub>(người)</sub></h5></label>
+                                    <input type="number" class="form-control" name="maxmember" id="maxmember" placeholder="Số người ở tối đa" appOnlyNumber
+                                      formControlName="maxmember"
+                                    >
+                                    <div  *ngIf="frRoom.controls['maxmember']?.hasError('required')
+                                    && (frRoom.controls['maxmember']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                                    class="help-block text-danger"
+                                    > Vui lòng số người ở tối đa !</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="acreage"><h5>Diện tích<sup class="text-danger">(*)</sup><sub>(m<sup>2</sup>)</sub></h5></label>
+                                    <input type="number" class="form-control form-control-user" placeholder="Diện tích"
+                                    name="acreage" id="acreage" formControlName="acreage" appOnlyNumber
+                                     > 
+                                     <div  *ngIf="frRoom.controls['acreage']?.hasError('required')
+                                    && (frRoom.controls['acreage']?.touched || (isValidRoomFormSubmitted!= null && !isValidRoomFormSubmitted)) " 
+                                    class="help-block text-danger"
+                                    > Vui lòng nhập diện tích phòng !</div>
+                                </div>
+                               
+                            </div>
+                           
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="length"><h5>Hình ảnh <sub class="text-primary">(Thêm tối đa 6 tắm ảnh)</sub></h5></label>
+                                    
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div *ngFor="let imageItem of imagePreviewSrc; index as i" class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3  imgUp">
+                                                <div  class="imagePreview" [ngStyle]="{'background-image': 'url('+imageItem +')'}">
+                                                </div> 
+                                                <i class="fa fa-times del" (click)="removeImageUpload(i)"></i>
+                                            </div><!-- col-2 -->
+                                            <div>
+                                                <button *ngIf="imageNumber<6" type="button"  
+                                                    class=" text-center btn btn-sm btn-outline-primary" 
+                                                    (click)="fileUpload.click()"> + Thêm ảnh 
+                                                </button>
+                                                <h6 *ngIf="imageNumber>=6" class=" text-danger" >Số lượng ảnh đã đạt tối đa !</h6>
+                                            </div>
+                                        </div><!-- row -->
+                                    </div><!-- container -->
+        
+                                    <input type="file" accept="image/*" #fileUpload (change)="onFileSelected($event)"style="display: none;">
+                                    
+                                </div>
+                            </div>
+                           
+                            <div class="text-center">
+                                <h6 class=" text-primary" >Thiết bị trong phòng</h6>
+                            </div>
+                            <hr>
+        
+                            <ng-container formArrayName="devices">
+                                <div *ngFor="let deviceItem of devices.controls; index as i"  class="form-group">
+                                    <label for=""><h5>Thiết bị {{i+1}} <button type="button" (click)="removeDevices(i)"  class="btn btn-sm btn-danger" >Xóa</button></h5> </label>
+          
+                                  <ng-container [formGroupName]="i">
+                                    <div class="col-xs-6 mb-3">
+                                        <label for="">
+                                            <h5 class="h6" >Tên thiết bị<sup class="text-danger"> (*)</sup> </h5>
+                                        </label>
+                                        <input type="text" class="form-control"  formControlName="devicename" placeholder="Tên thiết bị" />
+                                        <div  *ngIf="devices.controls[i].get('devicename')?.hasError('required')
+                                            && (devices.controls[i].get('devicename')?.touched || (isValidRoomFormSubmitted != null && !isValidRoomFormSubmitted))" 
+                                            class="help-block text-danger"
+                                            >Vui lòng nhập tên thiết bị !</div>
+                                    </div>
+                                   
+        
+                                    <div class="col-xs-6  mb-3">
+                                        <label for=""><h5 class="h6" >Số lượng<sup class="text-danger"> (*)</sup></h5></label>
+                                        <input type="number" class="form-control" formControlName="quantity" placeholder="Số lượng" appOnlyNumber/>
+                                        <div  *ngIf="devices.controls[i].get('quantity')?.hasError('required')
+                                            && (devices.controls[i].get('quantity')?.touched|| (isValidRoomFormSubmitted != null && !isValidRoomFormSubmitted))" 
+                                            class="help-block text-danger"
+                                            >Vui lòng nhập số lượng !</div>
+                                    </div>
+                                    <div class="col-xs-6 ">
+                                        <label for="">
+                                            <h5 class="h6" >Mô tả</h5>
+                                        </label>
+                                        <input type="text" class="form-control"  formControlName="description" placeholder="Mô tả" />
+                                        
+                                    </div>
+                                  </ng-container>
+                                </div>
+                            </ng-container>
+        
+        
+                            <div class="form-group">
+                                <div class="col-xs-6 text-center">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="addDevices()">+ Thêm thiết bị</button>
+                                </div>
+                            </div>
+        
+                            
+                        </form>
+        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button type="submit" form="createroomform" class="btn btn-danger"  >Đồng ý</button>
+            <button type="reset" form="createroomform" class="btn btn-outline-primary" (click)="closeCreateRoomModal()"  (click)="modal.close()" >Hủy</button>
+            
+        </div>
+    </ng-template>
+
+
+
+
+ <!--modal xóa phòng-->
+ <ng-template #deleteRoomModal let-modal >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteRoomModalLabel">Xóa phòng {{roomNameDelete}} </h5>
+      <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body text-center"  >
+      <div class="modal-title">Bạn có chắc chắn xóa phòng {{roomNameDelete}} ?</div>
+      <div class="modal-title text-danger">Bạn không thể khôi phục dữ liệu đã xóa ! </div>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="submit" form="area-form" class="btn btn-danger" (click)="onDeleteRoomSubmit()"  >Đồng ý</button>
+        <button type="reset" form="area-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+        
+
+    </div>
+</ng-template>
+
+
+<!-- chỉnh sửa phòng  -->
+    <ng-template #editRoomModal let-modal  >
+
+        <div class="modal-header bg-primary">
+            <h4 class="modal-title text-light font-weight-bold" >Cập nhật thông tin phòng</h4>
+          <button type="reset" form="editroomform"  class="close" aria-label="Close" (click)="modal.dismiss()">
+            <span class="text-light" aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+        <div class="modal-body container-fluid justify-content-center  p-0 m-0 mb-3"  >
+            <div class="row  justify-content-center m-0">
+                <div class="col-12 card p-0 shadow border">
+                    
+                    <div class="card-body">
+                        <form class="form" id="editroomform" novalidate  (ngSubmit)="onFormUpdateRoomSubmit()" [formGroup]="frURoom" #editroomform = "ngForm"   >
+                            <div class="text-center">
+                                <h6 class="text-primary">Thông tin nhà trọ</h6>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="branchid"><h5>Nhà trọ</h5></label>
+                                    <input type="text" class="form-control form-control-user "
+                                    name="branchid" id="branchid"  formControlName="branchid" 
+                                     >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="areaid"><h5>Dãy-tầng</h5></label>
+                                    <input type="text" class="form-control form-control-user"
+                                    name="areaid" id="areaid" formControlName="areaid" 
+                                    >
+                                </div>
+                                
+                            </div>
+                            <div class="text-center">
+                                <h6 class=" text-primary " >Thông tin phòng</h6>
+                            </div>
+                            <hr >
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="roomnumber"><h5>Số phòng<sup class="text-danger">(*)</sup></h5></label>
+                                    <input type="number" class="form-control form-control-user" placeholder="Số phòng" appOnlyNumber
+                                    name="roomnumber" id="roomnumber" formControlName="roomnumber"
+                                     >
+                                     <div  *ngIf="frURoom.controls['roomnumber']?.hasError('required')
+                                     && (frURoom.controls['roomnumber']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                                     class="help-block text-danger"
+                                     > Vui lòng nhập số phòng !</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="ismezzanine"><h5>Phòng có gác<sup class="text-danger">(*)</sup></h5></label>
+                                    <div>
+                                        <span>
+                                            <input type="radio" id="ismezzanine-true" name="ismezzanine" value="true" checked class="mr-1"
+                                            formControlName="ismezzanine"
+                                            >
+                                            <label for="ismezzanine-true" class="mr-3" >Có</label>
+                                        </span>
+                                        <span>
+                                            <input type="radio" id="ismezzanine-false" name="ismezzanine" value="false" class="mr-1"  
+                                            formControlName="ismezzanine"
+                                            >
+                                            <label for="ismezzanine-false" class="mr-3" >không</label>
+                                        </span>
+                                    </div>
+                                    <div  *ngIf="frURoom.controls['ismezzanine']?.hasError('required')
+                                        && (frURoom.controls['ismezzanine']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                                        class="help-block text-danger"
+                                        >Vui lòng chọn trạng thái gác !</div>
+                                    
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                  <label for="price"><h5>Giá cho thuê<sup class="text-danger">(*) </sup><sub>(vnđ/tháng)</sub></h5></label>
+                                    <input type="number" class="form-control" name="price" id="price" placeholder="Giá cho thuê" appOnlyNumber
+                                     formControlName="price"
+                                     >
+                                     <div  *ngIf="frURoom.controls['price']?.hasError('required')
+                                     && (frURoom.controls['price']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                                     class="help-block text-danger"
+                                     > Vui lòng nhập giá cho thuê !</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="imaxmember"><h5>Số người ở tối đa<sup class="text-danger">(*) </sup><sub>(người)</sub></h5></label>
+                                    <input type="number" class="form-control" name="maxmember" id="maxmember" placeholder="Số người ở tối đa" appOnlyNumber
+                                      formControlName="maxmember"
+                                    >
+                                    <div  *ngIf="frURoom.controls['maxmember']?.hasError('required')
+                                    && (frURoom.controls['maxmember']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                                    class="help-block text-danger"
+                                    > Vui lòng số người ở tối đa !</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="acreage"><h5>Diện tích<sup class="text-danger">(*)</sup><sub>(m<sup>2</sup>)</sub></h5></label>
+                                    <input type="number" class="form-control form-control-user" placeholder="Diện tích"
+                                    name="acreage" id="acreage" formControlName="acreage" appOnlyNumber
+                                    > 
+                                     <div  *ngIf="frURoom.controls['acreage']?.hasError('required')
+                                    && (frURoom.controls['acreage']?.touched || (isValidRoomEditFormSubmitted != null && !isValidRoomEditFormSubmitted )) " 
+                                    class="help-block text-danger"
+                                    > Vui lòng nhập diện tích phòng !</div>
+                                </div>
+                               
+                            </div>
+                           
+                            <div class="form-group">
+                                <div class="col-xs-6">
+                                    <label for="length"><h5>Hình ảnh <sub class="text-primary">(Thêm tối đa 6 tắm ảnh)</sub></h5></label>
+                                    
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div *ngFor="let imageItem of imageRooms; index as i" class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-3  imgUp">
+                                                <div  class="imagePreview" [ngStyle]="{'background-image': 'url('+imageItem.url+')'}">
+                                                </div> 
+                                                <i class="fa fa-times del" (click)="deleteImageRoom(i,imageItem.id)"></i>
+                                            </div><!-- col-2 -->
+                                            <div>
+                                                <button *ngIf="indexEditImageRooms<6" type="button"  
+                                                    class=" text-center btn btn-sm btn-outline-primary" 
+                                                    (click)="editFileUpload.click()"> + Thêm ảnh 
+                                                </button>
+                                                <h6 *ngIf="indexEditImageRooms>=6" class=" text-danger" >Số lượng ảnh đã đạt tối đa !</h6>
+                                            </div>
+                                        </div><!-- row -->
+                                    </div><!-- container -->
+        
+                                    <input type="file" accept="image/*" #editFileUpload (change)="onUploadOnefile($event)"style="display: none;">
+                                    
+                                </div>
+                            </div>
+                           
+                            <div class="text-center">
+                                <h6 class=" text-primary" >Thiết bị trong phòng</h6>
+                            </div>
+                            <hr>
+        
+                            <ng-container [formGroup]="frURoom" formArrayName="devices">
+                                <div *ngFor="let deviceItem of udevices.controls; index as i"  class="form-group">
+                                    <label for=""><h5>Thiết bị {{i+1}} <button type="button" (click)="removeDevicesEditForm(i)"  class="btn btn-sm btn-danger" >Xóa</button></h5> </label>
+          
+                                  <ng-container [formGroupName]="i">
+                                    <div class="col-xs-6 mb-3">
+                                        <label for="">
+                                            <h5 class="h6" >Tên thiết bị<sup class="text-danger"> (*)</sup> </h5>
+                                        </label>
+                                        <input type="text" class="form-control"  formControlName="devicename" placeholder="Tên thiết bị" />
+                                        <div  *ngIf="udevices.controls[i].get('devicename')?.hasError('required')
+                                            && (udevices.controls[i].get('devicename')?.touched || (isValidRoomEditFormSubmitted  != null && !isValidRoomEditFormSubmitted ))" 
+                                            class="help-block text-danger"
+                                            >Vui lòng nhập tên thiết bị !</div>
+                                    </div>
+                                   
+        
+                                    <div class="col-xs-6  mb-3">
+                                        <label for=""><h5 class="h6" >Số lượng<sup class="text-danger"> (*)</sup></h5></label>
+                                        <input type="number" class="form-control" formControlName="quantity" placeholder="Số lượng" appOnlyNumber/>
+                                        <div  *ngIf="udevices.controls[i].get('quantity')?.hasError('required')
+                                            && (udevices.controls[i].get('quantity')?.touched|| (isValidRoomEditFormSubmitted  != null && !isValidRoomEditFormSubmitted ))" 
+                                            class="help-block text-danger"
+                                            >Vui lòng nhập số lượng !</div>
+                                    </div>
+                                    <div class="col-xs-6 ">
+                                        <label for="">
+                                            <h5 class="h6" >Mô tả</h5>
+                                        </label>
+                                        <input type="text" class="form-control"  formControlName="description" placeholder="Mô tả"/>
+                                    </div>
+                                  </ng-container>
+                                </div>
+                            </ng-container>
+        
+        
+                            <div class="form-group">
+                                <div class="col-xs-6 text-center">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="addDevicesEditForm()">+ Thêm thiết bị</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button type="submit" form="editroomform" class="btn btn-danger">Cập nhật</button>
+            <button type="reset" form="editroomform" class="btn btn-outline-primary" (click)="closeEditRoomModal()" (click)="modal.close()" >Hủy</button>
+            
+        </div>
+    </ng-template>
+
+
+
+
+
+<!--modal lập hóa đơn-->
+<ng-template #createInvoiceModal let-modal  >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteRoomModalLabel">Lập hóa đơn tháng {{invoice.month}} năm {{invoice.year}}</h5>
+      <button type="reset" form="area-form"  class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body container-fluid">
+        <form id="invoice-form"  novalidate  (ngSubmit)="onFormCreateInvoiceSubmit()" [formGroup]="frInvoice" #fi="ngForm"  >
+            <div class="row">
+                <div class="col-12">
+                    <h5>Giá cho thuê : {{invoice.rentalPrice  |FormatVndPipe}}</h5>
+                </div>
+            </div>
+            <hr>
+            
+            <div class="row">
+                <div class="form-group col-sm-2">
+                    <label > Số điện cũ</label>
+                    <p>{{invoice.oldElectricNumber}}</p>
+                    
+                </div>
+                <div class="form-group col-sm-3">
+                    <label > Số điện mới</label>
+                    <input type="number"  class="form-control" 
+                        placeholder="Số điện" appOnlyNumber required formControlName="newelectricnumber" (change)="setEUse()"> 
+                    <div  *ngIf="frInvoice.controls['newelectricnumber']?.hasError('required')
+                    && (frInvoice.controls['newelectricnumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    >Vui lòng nhập chỉ số điện !</div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label > Số Kwh</label>
+                    <p>{{elecNumber}}</p>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label > Đơn giá</label>
+                    <p>{{invoice.electricityCosts |FormatVndPipe}}</p>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label >Tiền điện </label>
+                    <p class="text-danger">{{elecPrice |FormatVndPipe}}</p>
+                </div>
+            </div> 
+
+            <hr>
+            <div class="row">
+                <div class="form-group col-sm-2">
+                    <label > Số nước cũ</label>
+                    <p>{{invoice.oldWaterNumber}}</p>
+                    
+                </div>
+                <div class="form-group col-sm-3">
+                    <label > Số nước mới</label>
+                    <input type="number" #electric  class="form-control" 
+                    placeholder="Số nước " appOnlyNumber required formControlName="newwaternumber" 
+                    (change)="setWUse()"
+                    >
+                    <div  *ngIf="frInvoice.controls['newwaternumber']?.hasError('required')
+                    && (frInvoice.controls['newwaternumber']?.touched || (isValidInvoiceFormSubmitted != null && !isValidInvoiceFormSubmitted )) " 
+                    class="help-block text-danger"
+                    > Vui lòng nhập chỉ số nước !</div>
+                    
+                </div>
+                <div class="form-group col-sm-2">
+                    <label > Số m<sup>2</sup></label>
+                    <p>{{wanterNumber}}</p>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label > Đơn giá</label>
+                    <p>{{invoice.waterCosts |FormatVndPipe}}</p>
+                </div>
+                <div class="form-group col-sm-3">
+                    <label > Tiền nước </label>
+                    <p class="text-danger">{{wanterPrice |FormatVndPipe }}</p>
+                </div>
+                
+            </div>
+
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                        <h5>Dịch vụ</h5>
+                </div>
+            </div>
+            <div class="row">
+                <table  class="table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên dịch vụ</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th> 
+                            <th>Thành tiền</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container formArrayName="services">
+                            <ng-container *ngFor="let serviceItem of serviceItems.controls; index as i">
+                                <ng-container [formGroupName]="i">
+                                    <tr >
+
+                                    <td for="">{{i+1}} </td>
+            
+                                    
+                                        <td >
+                                            <input type="text"  class="form-control"  formControlName="servicename" placeholder="Tên dịch vụ" />
+                                            <div  *ngIf="serviceItems.controls[i].get('servicename')?.hasError('required')
+                                                && (serviceItems.controls[i].get('servicename')?.touched || (isValidInvoiceFormSubmitted!= null && !isValidInvoiceFormSubmitted))" 
+                                                class="help-block text-danger"
+                                                >Vui lòng nhập tên dịch vụ !</div>
+                                        </td>
+                                        <td>
+                                            <input type="number"  class="form-control" formControlName="quantity"  placeholder="Số lượng" (change)="setTotalPrice()" />
+                                            <div  *ngIf="serviceItems.controls[i].get('quantity')?.hasError('required')
+                                            && (serviceItems.controls[i].get('quantity')?.touched|| (isValidInvoiceFormSubmitted!= null && !isValidInvoiceFormSubmitted))" 
+                                            class="help-block text-danger"
+                                            >Vui lòng nhập số lượng !</div>
+                                        </td>
+            
+                                        <td >
+                                            <input type="number"  class="form-control"  formControlName="price" placeholder="Giá dịch vụ" (change)="setTotalPrice()" />
+                                            <div  *ngIf="serviceItems.controls[i].get('price')?.hasError('required')
+                                                && (serviceItems.controls[i].get('price')?.touched|| (isValidInvoiceFormSubmitted!= null && !isValidInvoiceFormSubmitted))" 
+                                                class="help-block text-danger"
+                                                >Vui lòng nhập giá dịch vụ !</div>
+                                        </td>
+                                        <td class="text-danger"> {{(serviceItems.controls[i].get('price')?.value)*(serviceItems.controls[i].get('quantity')?.value) |FormatVndPipe }} </td>
+                                    
+                                    </tr>
+                                    <tr>
+                                        <td>Ghi chú</td>
+                                        <td colspan="3">
+                                            
+                                            <input type="text"  class="form-control" formControlName="description"    placeholder="Ghi chú"  />
+                                        </td>
+                                        <td>
+                                            <button type="button" [disabled]="invoice.isApproved && invoice.id>0" (click)="removeSevices(i)"  class="btn btn-sm btn-danger" >Xóa</button>
+                                        </td>
+
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                </table>
+                <div class="col-12">
+                    <div class=" text-center">
+                        <button type="button" [disabled]="invoice.isApproved && invoice.id>0" class="btn btn-sm btn-outline-primary" (click)="addSevices()">+ Thêm dịch vụ</button>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <h5>Tổng thanh toán : <span class="text-danger">{{totalPrice | FormatVndPipe }}</span></h5>
+                <h5 *ngIf="!invoice.isApproved && invoice.id>0" class="text-info  ml-3"> Đã lập hóa đơn </h5>
+                <h5 *ngIf="invoice.isApproved && invoice.id>0" class="text-info  ml-3"> Đã thanh toán </h5>
+            </div>
+        </form>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="submit" [disabled]="invoice.isApproved && invoice.id>0" form="invoice-form" class="btn btn-primary" > 
+            <span *ngIf="invoice.id==0">Lập hóa đơn</span>
+            <span *ngIf="invoice.id>0">Cập nhật hóa đơn</span>
+        </button>
+        <button type="reset" form="invoice-form" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+    </div>
+
+</ng-template>
+
+
+<!--modal chi tiết phòng -->
+<ng-template #detailRoomModal let-modal >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteRoomModalLabel" >Chi tiết phòng {{detailRoom.roomNumber}}</h5>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body ">
+        <div class="row">
+            <div class="col-12 col-lg-6 p-0">
+                <div class="card m-2">
+                    <h5 class="text-center">Thông tin phòng</h5>
+                    <dl class="row m-3">
+                        <dt class="col-sm-4  ">
+                            Giá cho thuê :
+                        </dt>
+                        <dd class = "col-sm-8">
+                            {{detailRoom.price | FormatVndPipe}}    
+                        </dd>
+                        <dt class="col-sm-4 ">
+                            Số người ở tối đa :
+                        </dt>
+                        <dd class="col-sm-8">
+                            {{detailRoom.maxMember}}
+                        </dd>
+                        <dt class="col-sm-4 ">
+                            Diện tích :
+                        </dt>
+                        <dd class="col-sm-8">
+                            {{detailRoom.acreage}} m<sup>2</sup>
+                        </dd>
+                        <dt class="col-sm-4 ">
+                            Gác lửng :
+                        </dt>
+                        <dd class="col-sm-8">
+                            {{detailRoom.isMezzanine==true? "có":"không"}}
+                        </dd>
+                        <dt class="col-sm-4 ">
+                            Trạng thái : 
+                        </dt>
+                        <dd  [ngClass]="{'col-sm-8':true,'text-secondary':(detailRoom.status=='Empty'),'text-primary':(detailRoom.status=='Inhabited'),'text-danger':(detailRoom.status=='Repair'),'text-info':(detailRoom.status=='Deposit')}">
+                            {{detailRoom.status | roomstatus }}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 p-0">
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 p-0">
+                <div class="card m-2">
+                    <h5 class="text-center">Thành viên</h5>
+                    <table class="table table-responsive-lg table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Họ tên</th>
+                                <th>Giới tính</th>
+                                <th>Ngày sinh</th>
+                                <th>CCCD</th>
+                                <th>Địa chỉ thường trú</th>
+                                <th>Nghề nghiệp</th>
+                                <th>Ngày đến</th>
+                                <th>Tác vụ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="detailRoom.contracts.members.length > 0" >
+                               <tr *ngFor="let member of detailRoom.contracts.members; index as i;">
+                                    <td>{{i+1}}</td>
+                                    <td>{{member.fullName}} <br><small *ngIf="member.isRepresent==true" class="text-info">người đại diện </small></td>
+                                    <td>{{member.gender==true?"Nữ":"Nam"}}</td>
+                                    <td>{{member.dateOfBirth}}</td>
+                                    <td>{{member.cccd}}</td>
+                                    <td>{{member.permanentAddress}}</td>
+                                    <td>{{member.job}}</td>
+                                    <td>{{member.commencingOn}}</td>
+                                    <td> <button [disabled]="member.isRepresent==true" (click)="memberLeave(detailRoom.id,member.id)" class="btn btn-sm btn-danger" >Rời đi</button></td>
+                                </tr> 
+                            </ng-container>
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                        <button [disabled]="detailRoom.status!='Inhabited'" class="btn btn-sm btn-outline-primary" (click)="openAddMemberModal(detailRoom.id)">  + thêm thành viên</button>
+                    </div>
+                    
+
+                </div>
+            </div>
+
+            <div class="col-12  p-0">
+                <div class="card m-2">
+                    <h5 class="text-center">Thiết bị</h5>
+                    <table  class="table table-responsive-lg table-bordered table-striped ">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên thiết bị</th>
+                                <th>Số lượng</th>
+                                <th>Ghi chú</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of detailRoom.devices; index as i">
+                                <td>{{i+1}}</td>
+                                <td>{{item.deviceName}}</td>
+                                <td>{{item.quantity}}</td>
+                                <td>{{item.description}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+    
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+    </div>
+</ng-template>
+
+<!-- modal thêm thành viên -->
+<ng-template #addMemberRoomModal let-modal >
+
+    <div class="modal-header bg-primary">
+        <h5 class="modal-title text-light" id="deleteRoomModalLabel">Thêm thành viên </h5>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+        <span class="text-light" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="modal-body ">
+        <form class="form" id="addMemberFrom" novalidate  (ngSubmit)=" onAddMemberSubmit()" [formGroup]="frMember"  #f="ngForm"  >
+            <div class="container-fluid p-0 m-0 ">
+                <div class="row">
+                    <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 ">
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="fullname"><h5>Họ tên<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control form-control-user"  placeholder="Tên người thuê"
+                                name="fullname" id="fullname"  formControlName="fullname"
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['fullname']?.hasError('required')
+                            && ( frMember.controls['fullname']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập Họ tên !</div>
+                        </div>
+            
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="dateofbirth"><h5>Ngày sinh<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="date" class="form-control" name="dateofbirth" id="dateofbirth" placeholder="Ngày sinh"
+                                formControlName="dateofbirth" appValidDateofbirth
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['dateofbirth']?.hasError('required')
+                            && ( frMember.controls['dateofbirth']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập ngày sinh !</div>
+                            <div *ngIf=" frMember.controls['dateofbirth']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày sinh không hợp lệ !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="internalregulation"><h5>Giới tính<sup class="text-danger">(*)</sup></h5></label>
+                                <div>
+                                    <span>
+                                        <input type="radio" id="male" name="gender" value="male" checked class="mr-1"
+                                        formControlName="gender"
+                                        >
+                                        <label for="house-row" class="mr-3" >Nam</label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" id="female" name="gender" value="female" class="mr-1"  
+                                        formControlName="gender"
+                                        >
+                                        <label for="house-floor" class="mr-3" >Nữ</label>
+                                    </span>
+                                </div>
+                                <div  *ngIf="frMember.controls['gender']?.hasError('required')
+                                    && (frMember.controls['gender']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted))" class="help-block text-danger"
+                                    >Vui lòng chọn giới tính !</div>
+                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="phone"><h5>Số điện thoại<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control" name="phone" id="phone" placeholder="Số điện thoại"
+                                formControlName="phone"  maxlength="10" minlength="10" appValidPhone 
+                                >
+                            </div>
+                            <div *ngIf=" frMember.controls['phone']?.hasError('required')
+                            && ( frMember.controls['phone']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập số điện thoại !</div>
+                            <div *ngIf="frMember.controls['phone']?.hasError('maxlength') || 
+                                        frMember.controls['phone']?.hasError('phoneinvalid') || 
+                                        frMember.controls['phone']?.hasError('minlength')" 
+                                        class="help-block text-danger">Số điện thoại không hợp lệ !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="job"><h5>Nghề nhiệp<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control" name="job" id="job" placeholder="nghề nghiệp"
+                                formControlName="job"  
+                                >
+                            </div>
+                            <div *ngIf=" frMember.controls['job']?.hasError('required')
+                            && ( frMember.controls['job']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập nghề nghiệp !</div>
+                        
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="commencingon"><h5>Ngày đến ở<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="date" class="form-control" name="commencingon" id="commencingon" placeholder="Ngày cấp cccd"
+                                formControlName="commencingon" 
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['commencingon']?.hasError('required')
+                            && ( frMember.controls['commencingon']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập ngày đến ở !</div>
+                            <div *ngIf=" frMember.controls['commencingon']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày đến ở không hợp lệ !</div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-12 col-lg-6 col-md-12 col-sm-12 col-xs-12 ">
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="cccd"><h5>Căn cước công dân<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control" name="cccd" id="cccd" placeholder="Căn cước công dân"
+                                formControlName="cccd" minlength="12" maxlength="12" appValidCccd appOnlyNumber
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['cccd']?.hasError('required')
+                            && ( frMember.controls['cccd']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập số căn cước công dân !</div>
+                            <div *ngIf="frMember.controls['cccd']?.hasError('maxlength') || frMember.controls['cccd']?.hasError('minlength')" class="help-block text-danger">Số căn cước công dân phải đủ 12 ký tự !</div>
+                            <div *ngIf="frMember.controls['cccd']?.hasError('cccdinvalid')" class="help-block text-danger">Số căn cước công dân không hợp lệ !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="dateofissuance"><h5>Ngày cấp cccd<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="date" class="form-control" name="dateofissuance" id="dateofissuance" placeholder="Ngày cấp cccd"
+                                formControlName="dateofissuance" appValidDateofbirth
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['dateofissuance']?.hasError('required')
+                            && ( frMember.controls['dateofissuance']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập ngày cấp căn cước công dân !</div>
+                            <div *ngIf=" frMember.controls['dateofissuance']?.hasError('dateofbirthinvalid')" class="help-block text-danger">Ngày cấp không hợp lệ !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="placeofissuance"><h5>Nơi cấp cccd<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control" name="placeofissuance" id="placeofissuance" placeholder="Nơi cấp cccd"
+                                formControlName="placeofissuance"
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['placeofissuance']?.hasError('required')
+                            && ( frMember.controls['placeofissuance']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập nơi cấp căn cước công dân !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="permanentaddress"><h5>Địa chỉ thường trú<sup class="text-danger">(*)</sup></h5></label>
+                                <input type="text" class="form-control" name="permanentaddress" id="permanentaddress" placeholder="Địa chỉ thường trú"
+                                formControlName="permanentaddress"
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['permanentaddress']?.hasError('required')
+                            && ( frMember.controls['permanentaddress']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập địa chỉ thường trú !</div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <label for="internalregulation"><h5>Đăng ký thường trú<sup class="text-danger">(*)</sup></h5></label>
+                                <div> 
+                                    <span>
+                                        <input type="radio" id="ispermanent_no" name="ispermanent" value="no" class="mr-1"  
+                                        formControlName="ispermanent" checked (change)="setPermanentDate()" 
+                                        >
+                                        <label for="ispermanent_no" class="mr-3">Chưa đăng ký</label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" id="ispermanent_id"  name="ispermanent" value="yes"  class="mr-1"
+                                        formControlName="ispermanent" (change)="setPermanentDate()" 
+                                        >
+                                        <label for="ispermanent_yes" class="mr-3" >Đã đăng ký</label>
+                                    </span>
+                                   
+                                </div>
+                                <div  *ngIf="frMember.controls['ispermanent']?.hasError('required')
+                                    && (frMember.controls['ispermanent']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted))" class="help-block text-danger"
+                                    >Vui lòng chọn trạng thái đăng ký thương trú !</div>
+                                
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                            <label for="permanentdate"><h5>Hạn đăng ký tạm trú<sup class="text-danger">(*)</sup></h5></label>
+                                <input  type="date" class="form-control" name="permanentdate" id="permanentdate" placeholder="Ngày cấp cccd"
+                                formControlName="permanentdate" appValidDateFuture
+                                >
+                            </div>
+                            <div  *ngIf=" frMember.controls['permanentdate']?.hasError('required')
+                            && ( frMember.controls['permanentdate']?.touched || (isValidMemberFormSubmitted != null && !isValidMemberFormSubmitted) )" class="help-block text-danger"
+                            >Vui lòng nhập hạn đăng ký tạm trú !</div>
+                            <div *ngIf=" frMember.controls['permanentdate']?.hasError('dateisfuturevalid')" class="help-block text-danger">Hạn đăng ký tạm trú không hợp lệ !</div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+            
+           
+        </form>
+    </div>
+    
+    <div class="modal-footer">
+        <button type="submit" form="addMemberFrom" class="btn btn-primary">Thêm</button>
+        <button type="reset" form="addMemberFrom" class="btn btn-outline-primary" (click)="modal.close()" >Hủy</button>
+    </div>
+</ng-template>

@@ -13,20 +13,17 @@ export class AuthenService {
   constructor(private _http: HttpClient) { }
 
   login(username: string, password:string){
-    let body = "Username="+ encodeURIComponent(username) +
-                "&Password="+ encodeURIComponent(password)+
-                "&grant_type=password";
-
+    
     let bodyj = {
-      Username : encodeURIComponent(username),
-      Password : encodeURIComponent(password)
+      Username : username,
+      Password : password
     }
     const headers = new HttpHeaders();
     headers.set('accept', '*/*');
     headers.set('Content-Type', 'application/json');
     headers.set("cache-control", "no-cache");
     let promise = new Promise((resolve, reject) => {
-        this._http.post(SystemConstants.BASE_API + '/api/Auth/login',  bodyj, {headers: headers})
+        this._http.post(SystemConstants.BASE_API + '/api/auth/login',  bodyj, {headers: headers})
           .subscribe( {
             
             next: (response: any) => {

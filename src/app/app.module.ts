@@ -5,34 +5,38 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from './shared/page-not-found/page-not-found.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { ValidUsernameDirective } from './shared/validation/valid.username.directive';
-import { ValidEmailDirective } from './shared/validation/valid.email.directive';
-import { ValidPasswordDirective } from './shared/validation/valid.password.directive';
-import { ValidMatchpasswordDirective } from './shared/validation/valid.matchpassword.directive';
-import { ValidPhoneDirective } from './shared/validation/valid.phone.directive';
-import { ValidCccdDirective } from './shared/validation/valid.cccd.directive';
-import { ValidDateofbirthDirective } from './shared/validation/valid.dateofbirth.directive';
-import { OnlyNumberDirective } from './shared/validation/only.number.directive';
+import { DataTablesModule } from "angular-datatables";
+import { SystemConstants } from './core/common/system.constants';
+import { JwtModule } from "@auth0/angular-jwt";
 
 
-
+export function tokenGetter() { 
+  return localStorage.getItem(localStorage.getItem(SystemConstants.CURRENT_USER)?? ""); 
+}
 
 @NgModule({
   declarations: [
     AppComponent,
     PageNotFoundComponent,
+    
+    
 
-    
-    
-    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:5135"],
+        disallowedRoutes: []
+      }
+    })
     
   
     

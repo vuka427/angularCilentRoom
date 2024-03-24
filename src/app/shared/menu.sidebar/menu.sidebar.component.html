@@ -16,14 +16,14 @@
         <span>{{item.title}}</span>
     </a>
 
-    <a *ngIf="!item.submenu.length" class="nav-link" href="{{item.parentLink}}">
+    <a *ngIf="!item.submenu.length" class="nav-link" routerLink="{{item.parentLink}}" >
         <i class="{{item.awesomeIcon}}"></i>
         <span>{{item.title}}</span>
     </a>
 
     <div *ngIf="item.submenu.length" id="collapse{{i}}" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-            <a *ngFor="let menu of result[i].submenu"  class="collapse-item" href="{{menu.link}}">{{menu.childtitle}}</a>
+            <a *ngFor="let menu of result[i].submenu"  class="collapse-item" routerLink="{{menu.link}}"  routerLinkActive="active" >{{menu.childtitle}}</a>
         </div>
     </div>
 </li>

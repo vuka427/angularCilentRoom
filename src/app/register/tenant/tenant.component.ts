@@ -16,26 +16,18 @@ export class TenantComponent {
   constructor(private _dataService : DataService, private _notify : NotificationService, private _utility: UtilityService){}
 
   public register(){
-    this._dataService.post('/api/Auth/registertenant',this.model).subscribe({
+    this._dataService.post('/api/auth/registertenant',this.model).subscribe({
       next: this.extractData,
-      error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại"); this.errorData(err) } ,
+      error: err => { this._notify.printErrorMessage("Có lỗi xây ra vui lòng thử lại");  } ,
       complete: () => { this._notify.printSuccessMessage(" Đăng ký tài khoản thành công!"); this._utility.navigateToLogin();} ,
     });
     console.log('result');
   }
 
   private extractData(res: Response) {
-
     return {};
   }
 
-  private errorData(err: any) {
-    console.log(err.error);
-    this._notify.printErrorMessage("kjk");
-    return err.error.errors || {};
-  }
-
-  
   toggleFieldTextType() {
     this.fieldTextType = !this.fieldTextType;
   }

@@ -12,25 +12,22 @@ import { ValidDateofbirthDirective } from '../shared/validation/valid.dateofbirt
 import { ValidCccdDirective } from '../shared/validation/valid.cccd.directive';
 import { ValidPhoneDirective } from '../shared/validation/valid.phone.directive';
 import { OnlyNumberDirective } from '../shared/validation/only.number.directive';
+import { ValidationModule } from '../shared/validation/validation.module';
 
 
 @NgModule({
   declarations: [
     LandlordComponent,
-    TenantComponent,
-    ValidUsernameDirective,
-    ValidEmailDirective,
-    ValidPasswordDirective,
-    ValidMatchpasswordDirective,
-    ValidPhoneDirective,
-    ValidCccdDirective,
-    ValidDateofbirthDirective,
-    OnlyNumberDirective,
+    TenantComponent
   ],
   imports: [
     CommonModule,
     RegisterRoutingModule,
-    FormsModule
+    FormsModule,
+    ValidationModule
+  ],
+  exports:[
+   
   ]
 })
 export class RegisterModule { }

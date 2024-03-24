@@ -1,0 +1,143 @@
+<div class="card shadow p-3"  >
+    <h5>Ghi số điện - nước </h5>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+       
+        <div class=" navbar-collapse" id="navbarm">
+          <ul class="navbar-nav mr-auto">
+            <li class="navbar-brand m-2">Thời gian </li>
+            <li class="nav-item m-2">
+                <select id='gMonth2' class="form-control" placement="top" ngbTooltip="Tháng" [openDelay]="300" [closeDelay]="500">
+                    <option selected value=''>--chọn tháng--</option>
+                    <option value='1'>Tháng 1</option>
+                    <option value='2'>Tháng 2</option>
+                    <option value='3'>Tháng 3</option>
+                    <option value='4'>Tháng 4</option>
+                    <option value='5'>Tháng 5</option>
+                    <option value='6'>Tháng 6</option>
+                    <option value='7'>Tháng 7</option>
+                    <option value='8'>Tháng 8</option>
+                    <option value='9'>Tháng 9</option>
+                    <option value='10'>Tháng 10</option>
+                    <option value='11'>Tháng 11</option>
+                    <option value='12'>Tháng 12</option>
+                </select> 
+            </li>
+            <li class="nav-item m-2">
+                <select id='gMonth2' class="form-control" placement="top" ngbTooltip="Năm" [openDelay]="300" [closeDelay]="500">
+                    <option selected value=''>--chọn năm--</option>
+                    <option *ngFor="let item of [].constructor(20), index as i" value='{{i+2000}}'>{{i+2023}}</option>
+                </select> 
+            </li>
+
+            <li class="nav-item m-2">
+                <button type="button" class="btn brn-sm btn-primary " (click)="loadData()"><i class="fas fa-redo-alt"></i> Tải lại</button>
+            </li>
+            
+          </ul>
+          <form class="form-inline m-2 my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"> <i class="fas fa-search"></i>Tìm kiếm</button>
+          </form>
+        </div>
+    </nav>
+    <!-- Result search -->
+    <div [ngClass]="{'d-none': isSearch}"> 
+
+    </div>
+
+    <!-- normal-->
+    <div [ngClass]="{'d-none': isSearch}">
+        <ul class="nav nav-tabs" id="example-tabs" role="tablist">
+        
+            <li *ngFor="let branch of branches; index as i " class="nav-item">
+                <a attr.id="tab{{i+1}}" [ngClass]="{'nav-link': true,'active' : i==0}" (click)="setCurrentBranch(branch.id, i)"  
+                data-toggle="tab" role="tab"  attr.href="#pane-tab-{{i+1}}"  placement="top" ngbTooltip="nhà trọ {{branch.branchName}}" [openDelay]="200" [closeDelay]="500"
+                >
+                {{(i+1)+'-'+ branch.branchName}}
+                </a>
+            </li>
+        </ul>
+    
+        <div class="tab-content">
+           
+            
+            <div *ngFor="let branch of branches; index as i " [ngClass]="{'tab-pane fade': true,'show active' : i==0}"  attr.id="pane-tab-{{i+1}}" role="tabpanel" attr.aria-labelledby="tab{{i+1}}">
+                <h5 class="h6 ml-3 mt-2 text-primary"><u>Địa chỉ : {{branch.address}}</u> </h5>
+                <hr>
+                <div *ngFor="let area of branch.areas;index as x ">
+                    <div class="card">
+                        <div class="card-header" attr.id="heading-{{x}}">
+                          <h5 class="mb-0">
+                            <button class="btn text-dark font-weight-bold" data-toggle="collapse" attr.data-target="#collapse-{{x}}"  aria-expanded="true" attr.aria-controls="collapse-{{x}}" >
+                                {{branch.houseType| housetype : true }} - {{area.areaName}}
+                            </button>
+                          </h5>
+                        </div>
+                    
+                        <div attr.id="collapse-{{x}}" [ngClass]="{'collapse':true, 'show': x==0 }" class=" " attr.aria-labelledby="heading-{{x}}" attr.data-parent="#pane-tab-{{i+1}}">
+                          <div class="card-body m-0 p-0">
+                            <div class="container-fluid m-0 p-0">
+                                <div class="row ">
+                                    <div *ngFor="let room of area.rooms, index as y " >
+                                        <div *ngIf="room.status" class="card m-2" style="width: 300px;">
+
+                                            <div class="card-header bg-primary text-light font-weight-bold">
+                                                <i class="fas fa-home"></i>
+                                                Phòng {{area.areaName}}.{{room.roomNumber}}
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="card-text" placement="top" ngbTooltip="Tên người thuê" [openDelay]="300" [closeDelay]="500"> 
+                                                    <i class="fas fa-user"></i> : {{room.tenantName}}
+                                                </p>
+                                                <hr>
+                                               
+                                                <div class="form-group">
+                                                    <div class="col-xs-6">
+                                                        <label for="price"><i class="fas fa-bolt"></i> Số điện (<small>Số cũ :</small>  <u class="text-primary">1312131</u>)</label>
+                                                       
+                                                        <input type="number" #electric  class="form-control" attr.name="electric-{{room.id}}" attr.id="electric-{{room.id}}" 
+                                                        placeholder="Số điện" appOnlyNumber required
+                                                         >
+                                                         <div *ngIf="electric.value==null || electric.value==''" class="help-block text-danger">Vui lòng nhập chỉ số điện !</div>
+                                                         <small class="text-success ">Cập nhật ngày : 7/10/2023</small>
+                                                    </div>
+                                                    <div class="text-right" > 
+                                                        <button type="button" class="btn btn-sm btn-primary mt-2"
+                                                        (click)="saveElectricNumber(room.id,electric.value)">Lưu</button>
+                                                    </div>
+                                                </div> 
+                                               
+                                                <hr>
+                                                <div class="form-group">
+                                                    <div class="col-xs-6">
+                                                        <label for="imaxmember"><i class="fas fa-tint"></i> Số nước (<small>Số cũ</small> : <u class="text-primary">1312131</u>) </label>
+                                                        
+                                                        <input type="number" #water class="form-control" attr.name="water-{{room.id}}" attr.id="water-{{room.id}}" 
+                                                        placeholder="Số nước" appOnlyNumber required
+                                                        >
+                                                        <div *ngIf="water.value==null || water.value==''" class="help-block text-danger">Vui lòng nhập chỉ số nước !</div>
+                                                        <small class="text-success ">Cập nhật ngày : 7/10/2023</small>
+                                                    </div>
+                                                    <div class="text-right" > 
+                                                        <button type="button" class="btn btn-sm btn-primary mt-2"
+                                                        (click)="saveWaterNumber(room.id,water.value)" >Lưu</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+    
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+    
+            </div>
+            
+        </div>
+
+    </div>
+</div>

@@ -1,48 +1,99 @@
 [
     {
-      "title": "Chủ trọ",
+      "title": "Thông tin chung",
       "parentLink": "/landlord",
-      "awesomeIcon":"fas fa-fw fa-wrench",
+      "awesomeIcon":"fas fa-sliders-h",
       "type": "",
       "menu": false,
       "submenu": []
     },
     {
-      "title": "Codepens",
-      "parentLink": "",
-      "awesomeIcon":"fas fa-fw fa-wrench",
+      "title": "Quản lý phòng",
+      "parentLink": "/landlord/room",
+      "awesomeIcon":"fas fa-home",
       "type": "",
       "menu": true,
       "submenu": [
         {
-          "childtitle": "Link 1",
-          "link": "https://codepen.io/UX_Dev/live/5c88e99d0e9a03834dc2d113c24f9daa",
+          "childtitle": "Danh sách phòng",
+          "link": "/landlord/room",
           "islink": true
         },
         {
-          "childtitle": "Link 2",
-          "link": "https://codepen.io/UX_Dev/pen/LmxqKa",
+          "childtitle": "Quản lý nhà trọ",
+          "link": "/landlord/branch",
           "islink": true
         }
       ]
     },
     {
-      "title": "Navigation",
-      "parentLink": "",
-      "awesomeIcon":"fas fa-fw fa-wrench",
+      "title": "Quản lý khách trọ",
+      "parentLink": "/landlord/customer",
+      "awesomeIcon":"fas fa-user-friends",
       "type": "",
       "menu": false,
+      "submenu": []
+    },
+    {
+      "title": "Quản lý Điện nước",
+      "parentLink": "/landlord/utilites",
+      "awesomeIcon":"fas fa-charging-station",
+      "type": "",
+      "menu": false,
+      "submenu": []
+    },
+    {
+      "title": "Quản lý giao dịch",
+      "parentLink": "",
+      "awesomeIcon":"fas fa-comments-dollar",
+      "type": "",
+      "menu": true,
       "submenu": [
         {
-          "childtitle": "Pure CSS Menu",
-          "link": "https://codepen.io/UX_Dev/pen/VMwxmQ",
+          "childtitle": "Thêm hợp đồng",
+          "link": "/landlord/room/transact/add",
           "islink": true
         },
         {
-          "childtitle": "User Selection",
-          "link": "https://codepen.io/UX_Dev/live/ZXYLyV",
+          "childtitle": "Danh sách hợp đồng",
+          "link": "/landlord/transact",
+          "islink": true
+        },
+        {
+          "childtitle": "Danh sách hóa đơn",
+          "link": "/landlord/invoice",
           "islink": true
         }
+      ]
+    },
+    
+    {
+      "title": "Quản lý yêu cầu gớp ý",
+      "parentLink": "",
+      "awesomeIcon":"fas fa-comment-dots",
+      "type": "",
+      "menu": true,
+      "submenu": [
+        {
+          "childtitle": "DS các yêu cầu gớp ý",
+          "link": "#",
+          "islink": true
+        },
+        {
+          "childtitle": "Gửi thông báo",
+          "link": "#",
+          "islink": true
+        }
+      ]
+    },
+    {
+      "title": "Xem lịch sử gửi mail",
+      "parentLink": "/landlord/emailhistory",
+      "awesomeIcon":"fas fa-mail-bulk",
+      "type": "",
+      "menu": false,
+      "submenu": [
+        
       ]
     }
   ]

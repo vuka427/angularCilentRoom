@@ -1,0 +1,125 @@
+<div class="container bootstrap snippet">
+   
+    <div class="row">
+  		<div class="col-sm-3"><!--left col-->
+              
+
+            <div class="text-center">
+
+                <img *ngIf="!fileName" src="../../../../assets/image/avatar_2x.png" class="avatar rounded-circle img-thumbnail" alt="avatar">
+                <img *ngIf="fileName" [src]="imageSrc" style="width: 200px; height: 200px;;" class="avatar rounded-circle img-thumbnail" alt="avatar">
+                <h6>Cập nhật ảnh đại diện</h6>
+                <input style="display:none;" type="file" class="text-center center-block file-upload" (change)="onFileSelected($event)" #fileUpload >
+                <button  class="btn btn-primary"
+                (click)="fileUpload.click()">Chọn ảnh đại diện</button>
+            </div>
+            <hr>
+            <br>
+        </div><!--/col-3-->
+
+    	<div class="col-sm-9">
+          
+          <div class="tab-content">
+            <div class="tab-pane active" id="home">
+                <div class="row">
+                    <div class="col-sm-10"><h3>Thông tin tài khoản</h3></div>
+                </div>
+                <hr>
+                  <form class="form" name="form" (ngSubmit)="f.form.valid && updateUserProfile()" #f="ngForm">
+                      <div class="form-group">
+                          <div class="col-xs-6">
+                              <label for="username"><h5>Tên tài khoản</h5></label>
+                              <input type="text" class="form-control form-control-user" 
+                              name="username" id="username" 
+                              [ngModel]="userProfile.userName" disabled
+                               >
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                            <label for="fullname"><h5>Họ tên <sup class="text-danger">(*)</sup></h5></label>
+                              <input type="text" class="form-control" name="fullname" id="fullname" placeholder="Họ tên"
+                              [(ngModel)]="userProfile.fullName" #fullname="ngModel" required
+                               >
+                          </div>
+                          <div *ngIf="f.submitted && !fullname.valid" class="help-block text-danger">Vui lòng nhập Họ tên !</div>
+                          
+                      </div>
+                      <div class="form-group">
+                          
+                        <div class="col-xs-6">
+                            <label for="dateofbirth"><h5>Ngày sinh <sup class="text-danger">(*)</sup></h5></label>
+                            <input type="date" class="form-control" name="dateofbirth" id="dateofbirth" placeholder="Ngày sinh"
+                            [(ngModel)]="userProfile.dateOfBirth" #dateofbirth="ngModel" required appValidDateofbirth
+                             >
+                             <div *ngIf="f.submitted && !dateofbirth.valid" class="help-block text-danger">Vui lòng nhập ngày sinh !</div>
+                             <div *ngIf="dateofbirth.errors?.['dateofbirthinvalid']" class="help-block text-danger">Ngày sinh không hợp lệ !</div>
+                        </div>
+                    </div>
+          
+                      <div class="form-group">
+                          
+                          <div class="col-xs-6">
+                              <label for="email"><h5>Email</h5></label>
+                              <input type="text" class="form-control" name="email" id="email" placeholder="địa chỉ email" 
+                              [ngModel]="userProfile.email" disabled
+                              >
+                          </div>
+                      </div>
+          
+                      <div class="form-group">
+                          <div class="col-xs-6">
+                             <label for="phone"><h5>Số điện thoại <sup class="text-danger">(*)</sup></h5></label>
+                              <input type="text" class="form-control" name="phone" id="phone" placeholder="Số điện thoại" 
+                              [(ngModel)]="userProfile.phone" #phone="ngModel" required maxlength="10" minlength="10" appValidPhone appOnlyNumber
+                              >
+                              <div *ngIf="f.submitted && !phone.valid" class="help-block text-danger">Vui lòng nhập số điện thoại !</div>
+                              <div *ngIf="phone.errors?.['maxlength'] || phone.errors?.['phoneinvalid'] || phone.errors?.['minlength']" class="help-block text-danger">Số điện thoại không hợp lệ !</div>
+
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <div class="col-xs-6">
+                              <label for="cccd"><h5>Số căn cước công dân <sup class="text-danger">(*)</sup></h5></label>
+                              <input type="text" class="form-control" name="cccd" id="cccd" placeholder="Số căn cước công dân" 
+                              [(ngModel)]="userProfile.ccccd" #cccd="ngModel" required minlength="12" maxlength="12" appValidCccd appOnlyNumber
+                              >
+                              <div *ngIf="f.submitted && !cccd.valid" class="help-block text-danger">Vui lòng nhập số căn cước công dân !</div>
+                              <div *ngIf="cccd.errors?.['maxlength'] || cccd.errors?.['minlength'] " class="help-block text-danger">Số căn cước công dân phải đủ 12 ký tự !</div>
+                              <div *ngIf="cccd.errors?.['cccdinvalid']" class="help-block text-danger">Số căn cước công dân không hợp lệ !</div>
+
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <div class="col-xs-6">
+                              <label for="address"><h5>Địa chỉ <sup class="text-danger">(*)</sup></h5></label>
+                              <input type="text" class="form-control" name="address" id="address" placeholder="Địa chỉ" 
+                              [(ngModel)]="userProfile.address" #address="ngModel" required
+                              >
+                              <div *ngIf="f.submitted && !address.valid" class="help-block text-danger">Vui lòng nhập địa chỉ !</div>
+
+                          </div>
+                      </div>
+                      <hr>
+                      
+                      <div class="form-group">
+                           <div class="col-xs-12">
+                                <br>
+                                <img class="text-center" *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                                />
+                              	<button [disabled]="loading" class="btn btn-lg btn-primary" type="submit"><i class="glyphicon glyphicon-ok-sign"></i> Cập nhật</button>
+                           
+                                <button type="button" class=" btn btn-lg text-primary ml-1" (click)="loadData()" > Đặt lại </button>
+                            </div>
+                      </div>
+              	</form>
+                  
+              
+              <hr>
+              
+              
+          </div><!--/tab-content-->
+
+        </div><!--/col-9-->
+    </div><!--/row-->
